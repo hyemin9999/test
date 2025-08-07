@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class BoardService {
+public class UserService {
 
 }
