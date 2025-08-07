@@ -35,4 +35,6 @@ public class Category {
 	private List<Board> boardList;
 
 	// 공지사항 - 게시글
+	@OneToMany
+	private List<Notice> noticeList;
 }

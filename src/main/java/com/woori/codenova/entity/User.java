@@ -7,37 +7,34 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class Notice {
-
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
-	// 제목
-	private String subject;
+	// 사용자 ID
+	@Column(unique = true) // 중복불가
+	private String userId;
 
-	// 내용
-	@Column(columnDefinition = "TEXT")
-	private String contents;
+	// 비밀번호
+	private String password;
 
-	// 조회수
-	private Integer viewCount;
+	@Email
+	@Column(unique = true) // 중복불가
+	private String email;
 
-	// 작성날짜
+	// 가입날짜
 	private LocalDateTime createDate;
 	// 수정날짜
 	private LocalDateTime modifyDate;
 
-	// 작성자
-
-	// 게시판(게시글 분류)
-	@ManyToOne
-	private Category category;
+//	// 일반 사용자 여부(false=관리자)
+//	private Boolean isUser;
 }
