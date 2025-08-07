@@ -7,14 +7,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class User {
+public class SiteUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -26,7 +25,6 @@ public class User {
 	// 비밀번호
 	private String password;
 
-	@Email
 	@Column(unique = true) // 중복불가
 	private String email;
 

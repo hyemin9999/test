@@ -31,10 +31,10 @@ public class Category {
 	private LocalDateTime modifyDate;
 
 	// 게시글 == board
-	@OneToMany
+	@OneToMany(mappedBy = "category")
 	private List<Board> boardList;
 
 	// 공지사항 - 게시글
-	@OneToMany
+	@OneToMany(mappedBy = "category")
 	private List<Notice> noticeList;
 }

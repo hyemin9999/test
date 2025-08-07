@@ -1,11 +1,13 @@
 package com.woori.codenova.entity;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,4 +30,7 @@ public class Role {
 	// 수정날짜
 	private LocalDateTime modifyDate;
 
+	// 권한
+	@ManyToMany
+	Set<SiteUser> authority;
 }
