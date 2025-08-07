@@ -1,38 +1,46 @@
 package com.woori.codenova.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class Category {
+public class Comment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	// 게시판 분류 이름
-	@Column(length = 50)
-	private String name;
+	// 내용
+	@Column(columnDefinition = "TEXT")
+	private String contents;
 
-	// 등록날짜
+	// 작성날짜
 	private LocalDateTime createDate;
 	// 수정날짜
 	private LocalDateTime modifyDate;
 
-	// 게시글 == board
-	@OneToMany
-	private List<Board> boardList;
+	// 삭제여부
+	private Boolean isDelete;
+	// 삭제 날짜
+	private LocalDateTime deleteDate;
 
-	// 공지사항 - 게시글
+	// 작성자
+
+	// 게시글
+	@ManyToOne
+	private Board board;
+
+	// 추천
+
+	// 북마크 (즐겨찾기)
 }

@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/comment")
 @RequiredArgsConstructor
-public class CategoryController {
+public class CommentController {
 
 }
