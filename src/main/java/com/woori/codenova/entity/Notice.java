@@ -36,6 +36,8 @@ public class Notice {
 	private LocalDateTime modifyDate;
 
 	// 작성자
+	@ManyToOne
+	private SiteUser author;
 
 	// 게시판(게시글 분류)
 	@ManyToOne
