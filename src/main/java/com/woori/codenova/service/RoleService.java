@@ -70,7 +70,9 @@ public class RoleService {
 
 	// 삭제
 	public void delete(Role item) {
-		roleReporitory.delete(item);
+
+		// 연동된 권한이나 사용자가 있을때 삭제처리 여부
+		// roleReporitory.delete(item);
 	}
 
 	// 검색

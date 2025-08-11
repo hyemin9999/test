@@ -1,5 +1,6 @@
 package com.woori.codenova.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.SiteUser;
@@ -26,6 +28,7 @@ public class UserService {
 	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
 
 	private final UserReporitory userReporitory;
+	private final PasswordEncoder passwordEncoder;
 
 	// 목록 - 페이징 - 검색
 	public Page<SiteUser> getList(int page, String kw) {
@@ -43,12 +46,47 @@ public class UserService {
 	}
 
 	// 조회 - 상세
+	public SiteUser getItem(Long id) {
+		return userReporitory.findById(id).orElse(null);
+	}
+
+	// 조회 - 아이디 찾기
+	public SiteUser getItem(String email) {
+		return userReporitory.findByEmail(email);
+	}
+
+	// 조회 - 아이디 / 비밀번호 찾기
+	public SiteUser getItem(String username, String email) {
+		return userReporitory.findByUsernameAndEmail(username, email);
+	}
 
 	// 등록
+	public SiteUser create(String username, String password, String email) {
 
-	// 수정
+		SiteUser item = new SiteUser();
+		item.setUsername(username);
+		item.setPassword(passwordEncoder.encode(password));
+		item.setEmail(email);
+		item.setCreateDate(LocalDateTime.now());
+
+		// Role - 일반사용자user(0), 슈퍼관리자(1) - 고정.수정삭제불가
+		return userReporitory.save(item);
+	}
+
+	// 수정 - 비밀번호 변경, 회원가입에 사용자ID, 비밀번호, email만 받으면, 수정할수있는게 비밀번호뿐.
+	public SiteUser modify(SiteUser item, String password) {
+		item.setPassword(passwordEncoder.encode(password));
+		item.setModifyDate(LocalDateTime.now());
+
+		return userReporitory.save(item);
+	}
 
 	// 삭제
+	public void delete(SiteUser item) {
+
+		// 작성한 게시글, 댓글, (관리자)공지사항 처리 여부
+		// roleReporitory.delete(item);
+	}
 
 	// 검색
 	private Specification<SiteUser> search(String kw) {

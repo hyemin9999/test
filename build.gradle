@@ -43,8 +43,12 @@ dependencies {
 	// devtools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	
+	
+	// H2 (사용 안 하면 제거 가능)
+	runtimeOnly 'com.h2database:h2'
+	
 	// MysqlDB
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	//runtimeOnly 'com.mysql:mysql-connector-j'
 	
 	// hibernate
 	implementation 'org.hibernate.orm:hibernate-core'

@@ -6,8 +6,10 @@ import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -57,16 +59,16 @@ public class Board {
 	// @ManyToOne(optional = false, fetch = FetchType.EAGER)
 	// 작성자
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "userId")
 	private SiteUser author;
 
 	// 게시판(게시글 분류)
 	@ManyToOne
-	@JoinColumn(name = "category_id", nullable = false)
+	@JoinColumn(name = "categoryId", nullable = false)
 	private Category category;
 
 	// 댓글
-	@OneToMany(mappedBy = "board")
+	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private List<Comment> commentList;
 
 	// 추천
