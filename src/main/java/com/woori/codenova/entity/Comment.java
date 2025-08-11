@@ -3,11 +3,14 @@ package com.woori.codenova.entity;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -23,30 +26,40 @@ public class Comment {
 	private Integer id;
 
 	// 내용
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String contents;
 
 	// 작성날짜
+	@Column(nullable = false)
 	private LocalDateTime createDate;
 	// 수정날짜
 	private LocalDateTime modifyDate;
 
 	// 삭제여부
+	@Column(nullable = false)
+	@ColumnDefault("false")
 	private boolean isDelete;
 	// 삭제 날짜
 	private LocalDateTime deleteDate;
 
+	// optional = false 작성자가 null일수 없다.
+	// @ManyToOne(optional = false, fetch = FetchType.EAGER)
 	// 작성자
-	@ManyToOne
+	@ManyToOne // (fetch = FetchType.EAGER) // 댓글 삭제시 작성자 정보가 없어도 될거같아서.
+	@JoinColumn(name = "user_id", nullable = false)
 	private SiteUser author;
 
 	// 게시글
+	// @ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@ManyToOne
+	@JoinColumn(name = "board_id", nullable = false)
 	private Board board;
 
 	// 추천
 	@ManyToMany
 	Set<SiteUser> voter;
 
-	// 북마크 (즐겨찾기)
+	// 즐겨찾기
+	@ManyToMany
+	Set<SiteUser> favorites;
 }
