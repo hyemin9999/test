@@ -1,5 +1,13 @@
 package com.woori.codenova.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +32,49 @@ public class NoticeService {
 	private final NoticeRepository noticeRepository;
 
 	// 목록 - 페이징 - 검색
+	public Page<Notice> getlist(int page, String kw) {
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.desc("createDate"));
+
+		Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
+
+		// 게시판 - 카테고리
+		Specification<Notice> spec = search(kw);
+
+		return noticeRepository.findAll(spec, pageable);
+	}
 
 	// 조회 - 상세
+	public Notice getitem(Integer id) {
+
+		return noticeRepository.findById(id).orElse(null);
+	}
 
 	// 등록
+	public void create(String subject, String contents, SiteUser uesr) {
+		Notice item = new Notice();
+		item.setSubject(subject);
+		item.setContents(contents);
+		item.setCreateDate(LocalDateTime.now());
+		item.setAuthor(uesr);
+
+		// 게시판 - 카테고리
+		noticeRepository.save(item);
+	}
 
 	// 수정
+	public void modify(Notice item, String subject, String content) {
+		item.setSubject(subject);
+		item.setContents(content);
+		item.setModifyDate(LocalDateTime.now());
+		noticeRepository.save(item);
+	}
 
 	// 삭제
+	public void delete(Notice item) {
+
+		noticeRepository.delete(item);
+	}
 
 	// 검색
 	private Specification<Notice> search(String kw) {

@@ -44,11 +44,11 @@ public class Notice {
 
 	// 작성자
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "userId")
 	private SiteUser author;
 
 	// 게시판(게시글 분류)
 	@ManyToOne
-	@JoinColumn(name = "category_id")
+	@JoinColumn(name = "categoryId")
 	private Category category;
 }
