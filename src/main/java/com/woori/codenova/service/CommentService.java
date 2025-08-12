@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.woori.codenova.entity.Board;
 import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
-import com.woori.codenova.repository.CommentReporitory;
+import com.woori.codenova.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,31 +18,31 @@ import lombok.RequiredArgsConstructor;
 public class CommentService {
 	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
 
-	private final CommentReporitory commentReporitory;
+	private final CommentRepository commentReporitory;
 
 	private final BoardRepository boardRepository;
 
 	// 목록
-	public List<Comment> getlist() {
+	public List<Comment> getList() {
 		return commentReporitory.findAll();
 	}
 
 	// 조회 - 상세
-	public Comment getitem(Integer id) {
+	public Comment getItem(Integer id) {
 
 		return commentReporitory.findById(id).orElse(null);
 	}
 
 	// 등록
-	public void create(String contents, SiteUser uesr) {
+	public Comment create(Board bitem, String contents, SiteUser uesr) {
 		Comment item = new Comment();
 
 		item.setContents(contents);
 		item.setCreateDate(LocalDateTime.now());
 		item.setAuthor(uesr);
+		item.setBoard(bitem);
 
-		// 게시판 - 카테고리
-		commentReporitory.save(item);
+		return commentReporitory.save(item);
 	}
 
 	// 수정
@@ -65,12 +66,15 @@ public class CommentService {
 
 	// 추천
 	public void vote(Comment item, SiteUser siteUser) {
+		// TODO :: 추천, 취소 처리
+
 		item.getVoter().add(siteUser);
 		commentReporitory.save(item);
 	}
 
 	// 즐겨찾기
 	public void favorites(Comment item, SiteUser siteUser) {
+		// TODO :: 즐겨찾기, 취소 처리
 		item.getFavorites().add(siteUser);
 		commentReporitory.save(item);
 	}

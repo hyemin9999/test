@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.Role;
-import com.woori.codenova.repository.RoleReporitory;
+import com.woori.codenova.repository.RoleRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -26,7 +26,7 @@ public class RoleService {
 
 	// 초기에 시스템 관리자와 일반 사용자의 역할이 저장되어야 하는게 아닐까??
 
-	private final RoleReporitory roleReporitory;
+	private final RoleRepository roleReporitory;
 
 	// 목록 - 페이징 - 검색
 	public Page<Role> getList(int page, String kw) {
@@ -71,7 +71,7 @@ public class RoleService {
 	// 삭제
 	public void delete(Role item) {
 
-		// 연동된 권한이나 사용자가 있을때 삭제처리 여부
+		// TODO :: 연동된 권한이나 사용자가 있을때 삭제처리 여부
 		// roleReporitory.delete(item);
 	}
 
@@ -86,7 +86,7 @@ public class RoleService {
 
 				q.distinct(true); // 중복을 제거
 
-				// 명칭, 등급
+				// TODO :: 명칭, 등급
 				return cb.or(cb.like(r.get("name"), "%" + kw + "%"), cb.like(r.get("grade"), "%" + kw + "%"));
 			}
 		};

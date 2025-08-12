@@ -10,7 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -46,13 +45,13 @@ public class Comment {
 	// @ManyToOne(optional = false, fetch = FetchType.EAGER)
 	// 작성자
 	@ManyToOne // (fetch = FetchType.EAGER) // 댓글 삭제시 작성자 정보가 없어도 될거같아서.
-	@JoinColumn(name = "userId")
+//	@JoinColumn(name = "userId")
 	private SiteUser author;
 
 	// 게시글
 	// @ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@ManyToOne
-	@JoinColumn(name = "boardId")
+//	@JoinColumn(name = "boardId", nullable = false)
 	private Board board;
 
 	// 추천

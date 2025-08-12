@@ -9,7 +9,6 @@
 		</div>
 		<div class="col-6">
 			<div class="input-group">
-				<!-- 상단 오른쪽에 검색어를 입력할 수 있는 텍스트 창을 생성 -->
 				<input type="text" id="search_kw" class="form-control"
 					th:value="${kw}">
 				<button class="btn btn-outline-secondary" type="button"
@@ -23,15 +22,28 @@
 			<tr class="text-center">
 				<th>번호</th>
 				<th style="whith: 50%">제목</th>
-				<th>글쓴이</th>
-				<th>작성일시</th>
+				<th>작성자</th>
+				<th>작성일</th>
 			</tr>
 		</thead>
 		<tbody>
+			<!-- 			<tr class="text-center" th:each="item, loop : ${list}"> -->
+			<!-- 				<td class="text-start"><a -->
+			<!-- 					th:href="@{|/board/detail/${item.id}|}" th:text="${item.subject}"></a> -->
+			<!-- 					<span class="text-danger small ms-2" -->
+			<!-- 					th:if="${#lists.size(item.commentList) > 0}" -->
+			<!-- 					th:text="${#lists.size(item.commentList)}"> </span></td> -->
+			<!-- 				<td><span th:if="${item.author != null}" -->
+			<!-- 					th:text="${item.author.username}"></span></td> -->
+			<!-- 				<td -->
+			<!-- 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td> -->
+			<!-- 			</tr> -->
 
-			<tr class="text-center" th:each="item, loop : ${list}">
-
-				
+			<tr th:if="${!paging.isEmpty()}" class="text-center"
+				th:each="item, loop : ${paging}">
+				<td
+					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
+				</td>
 				<td class="text-start"><a
 					th:href="@{|/board/detail/${item.id}|}" th:text="${item.subject}"></a>
 					<span class="text-danger small ms-2"
@@ -40,32 +52,14 @@
 
 				<td><span th:if="${item.author != null}"
 					th:text="${item.author.username}"></span></td>
-
 				<td
 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 			</tr>
-
-			<!-- 			<tr class="text-center" th:each="item, loop : ${paging}"> -->
-
-			<!-- 				<td -->
-			<!-- 					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"> -->
-			<!-- 				</td> -->
-			<!-- 				<td class="text-start"><a -->
-			<!-- 					th:href="@{|/board/detail/${item.id}|}" -->
-			<!-- 					th:text="${item.subject}"></a>  -->
-			<!-- 					<span class="text-danger small ms-2" -->
-			<!-- 					th:if="${#lists.size(item.commentList) > 0}" -->
-			<!-- 					th:text="${#lists.size(item.commentList)}"> </span></td> -->
-
-			<!-- 				<td><span th:if="${item.author != null}" -->
-			<!-- 					th:text="${item.author.username}"></span></td> -->
-
-			<!-- 				<td -->
-			<!-- 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td> -->
-			<!-- 			</tr> -->
+			<tr th:if="${paging.isEmpty()}">
+				<td colspan="4">게시글이 존재하지 않습니다.</td>
+			</tr>
 		</tbody>
 	</table>
-
 
 	<!-- 	<div th:if="${!paging.isEmpty()}"> -->
 	<!-- 		<ul class="pagination justify-content-center"> -->
@@ -87,10 +81,10 @@
 	<!-- 		</ul> -->
 	<!-- 	</div> -->
 
-<!-- 	<form th:action="@{/board/list}" method="get" id="searchForm"> -->
-<!-- 		<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input -->
-<!-- 			type="hidden" id="page" name="page" th:value="${paging.number}"> -->
-<!-- 	</form> -->
+	<!-- 	<form th:action="@{/board/list}" method="get" id="searchForm"> -->
+	<!-- 		<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input -->
+	<!-- 			type="hidden" id="page" name="page" th:value="${paging.number}"> -->
+	<!-- 	</form> -->
 </div>
 
 <script layout:fragment="script" type='text/javascript'>

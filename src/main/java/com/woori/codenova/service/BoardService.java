@@ -12,9 +12,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.Board;
+import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
+import com.woori.codenova.repository.CategoryRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -30,12 +32,13 @@ public class BoardService {
 	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
 
 	private final BoardRepository boardRepository;
+	private final CategoryRepository categoryRepository;
 
-	public List<Board> getlist() {
+	public List<Board> getList() {
 		return boardRepository.findAll();
 	}
 
-	public Page<Board> getlist(int page) {
+	public Page<Board> getList(int page) {
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 
@@ -45,7 +48,7 @@ public class BoardService {
 	}
 
 	// 목록 - 페이징 - 검색
-	public Page<Board> getlist(int page, String kw) {
+	public Page<Board> getList(int page, String kw) {
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 
@@ -58,7 +61,12 @@ public class BoardService {
 	}
 
 	// 조회 - 상세
-	public Board getitem(Integer id) {
+	public Board getItem(Integer id) {
+
+		// Board item = boardRepository.findById(id).orElse(null);
+		// 조회수 증가
+//		item.setViewCount(item.getViewCount() + 1);
+//		boardRepository.save(item);
 
 		return boardRepository.findById(id).orElse(null);
 	}
@@ -70,8 +78,11 @@ public class BoardService {
 		item.setContents(contents);
 		item.setCreateDate(LocalDateTime.now());
 		item.setAuthor(uesr);
+		item.setViewCount(0);
+		// TODO :: 게시판 - 카테고리 // 초기 게시판
+		Category citem = categoryRepository.findById(1).orElse(null);
+		item.setCategory(citem);
 
-		// 게시판 - 카테고리
 		boardRepository.save(item);
 	}
 
@@ -80,6 +91,11 @@ public class BoardService {
 		item.setSubject(subject);
 		item.setContents(content);
 		item.setModifyDate(LocalDateTime.now());
+
+		// TODO :: 게시판 - 카테고리 수정도 가능하도록
+		Category citem = categoryRepository.findById(1).orElse(null);
+		item.setCategory(citem);
+
 		boardRepository.save(item);
 	}
 
@@ -90,6 +106,9 @@ public class BoardService {
 		item.setDelete(true);
 		item.setDeleteDate(LocalDateTime.now());
 		item.setAuthor(null);
+
+		// TODO :: 게시글 삭제되어도 게시판과의 연결을 어떻게??
+
 		boardRepository.save(item);
 		// boardRepository.delete(item);
 	}
@@ -117,16 +136,22 @@ public class BoardService {
 
 				q.distinct(true); // 중복을 제거
 
+				// TODO :: entity class 수정여부에 따라 바뀌어야 할듯?
+
+//				Fetch<Board, Comment> cf = r.fetch("commentList", JoinType.LEFT);// 게시글과 댓글
+
 				Join<Board, SiteUser> u = r.join("author", JoinType.LEFT);// 게시글과 작성자
-				Join<Board, Comment> c = r.join("comment", JoinType.LEFT);// 게시글과 댓글
-				Join<Comment, SiteUser> u1 = r.join("author", JoinType.LEFT);// 댓글과 작성자
+				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);// 게시글과 작성자
+//				Join<Board, Comment> c = (Join<Board, Comment>) cf;// 게시글과 댓글
+				// Join<Board, Comment> c = cf;// 게시글과 댓글
+				Join<Comment, SiteUser> u1 = c.join("author", JoinType.LEFT);// 댓글과 작성자
 
 				// 제목, 내용, 작성자ID, 댓글(내용, 작성자ID)
 				return cb.or(cb.like(r.get("subject"), "%" + kw + "%"), // 게시글 제목
 						cb.like(r.get("content"), "%" + kw + "%"), // 댓글 내용
-						cb.like(u.get("userId"), "%" + kw + "%"), // 게시글 작성자
+						cb.like(u.get("username"), "%" + kw + "%"), // 게시글 작성자
 						cb.like(c.get("content"), "%" + kw + "%"), // 댓글 내용
-						cb.like(u1.get("userId"), "%" + kw + "%")); // 댓글 작성자
+						cb.like(u1.get("username"), "%" + kw + "%")); // 댓글 작성자
 			}
 		};
 	}

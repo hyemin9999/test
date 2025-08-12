@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.woori.codenova.entity.Comment;
 
-public interface CommentReporitory extends JpaRepository<Comment, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
 }

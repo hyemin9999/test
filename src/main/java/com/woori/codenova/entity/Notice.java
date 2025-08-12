@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,11 +43,11 @@ public class Notice {
 
 	// 작성자
 	@ManyToOne
-	@JoinColumn(name = "userId")
+//	@JoinColumn(name = "userId")
 	private SiteUser author;
 
 	// 게시판(게시글 분류)
-	@ManyToOne
-	@JoinColumn(name = "categoryId")
+	@ManyToOne // (fetch = FetchType.LAZY)
+//	@JoinColumn(name = "categoryId")
 	private Category category;
 }
