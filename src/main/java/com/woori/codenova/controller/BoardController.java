@@ -43,25 +43,25 @@ public class BoardController {
 //
 //	}
 
-	@GetMapping("/list")
-	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-		Page<Board> paging = this.boardService.getList(page);
-		model.addAttribute("paging", paging);
-		return "board_list";
-	}
-
 //	@GetMapping("/list")
-//	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-//			@RequestParam(value = "kw", defaultValue = "") String kw) {
-//		Page<Board> paging = boardService.getList(page, kw);
-//
-//		System.out.println(paging.isEmpty() + "::paging.isEmpty()::");
-//
+//	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+//		Page<Board> paging = this.boardService.getList(page);
 //		model.addAttribute("paging", paging);
-//		// 입력한 검색어를 화면에 그대로 유지
-//		model.addAttribute("kw", kw);
 //		return "board_list";
 //	}
+
+	@GetMapping("/list")
+	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw) {
+		Page<Board> paging = boardService.getList(page, kw);
+
+		System.out.println(paging.isEmpty() + "::paging.isEmpty()::");
+
+		model.addAttribute("paging", paging);
+		// 입력한 검색어를 화면에 그대로 유지
+		model.addAttribute("kw", kw);
+		return "board_list";
+	}
 
 	@GetMapping(value = "/detail/{id}")
 	public String detail(Model model, @PathVariable("id") Integer id, CommentForm commentForm) {

@@ -1,4 +1,4 @@
-plugins {
+ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.8'
 	id 'io.spring.dependency-management' version '1.1.7'
@@ -45,7 +45,7 @@ dependencies {
 	
 	
 	// H2 (사용 안 하면 제거 가능)
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2:2.3.232'
 	
 	// MysqlDB
 	//runtimeOnly 'com.mysql:mysql-connector-j'
@@ -66,7 +66,8 @@ dependencies {
 	
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	
-	
+	// p6spy
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 }
 
 tasks.named('test') {
