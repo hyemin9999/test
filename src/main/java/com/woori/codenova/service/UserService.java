@@ -12,8 +12,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.repository.UserReporitory;
+import com.woori.codenova.repository.RoleRepository;
+import com.woori.codenova.repository.UserRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -27,7 +29,8 @@ public class UserService {
 
 	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
 
-	private final UserReporitory userReporitory;
+	private final UserRepository userReporitory;
+	private final RoleRepository roleReporitory;
 	private final PasswordEncoder passwordEncoder;
 
 	// 목록 - 페이징 - 검색
@@ -50,14 +53,19 @@ public class UserService {
 		return userReporitory.findById(id).orElse(null);
 	}
 
+	// 조회 - 사용자ID
+	public SiteUser getItem(String username) {
+		return userReporitory.findByUsername(username).orElse(null);
+	}
+
 	// 조회 - 아이디 찾기
-	public SiteUser getItem(String email) {
-		return userReporitory.findByEmail(email);
+	public SiteUser getEmail(String email) {
+		return userReporitory.findByEmail(email).orElse(null);
 	}
 
 	// 조회 - 아이디 / 비밀번호 찾기
-	public SiteUser getItem(String username, String email) {
-		return userReporitory.findByUsernameAndEmail(username, email);
+	public SiteUser getitem(String username, String email) {
+		return userReporitory.findByUsernameAndEmail(username, email).orElse(null);
 	}
 
 	// 등록
@@ -69,7 +77,12 @@ public class UserService {
 		item.setEmail(email);
 		item.setCreateDate(LocalDateTime.now());
 
-		// Role - 일반사용자user(0), 슈퍼관리자(1) - 고정.수정삭제불가
+		// 일반사용자
+		Role ritem = roleReporitory.findById(1).orElse(null);
+		if (ritem != null) {
+			// Role - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
+			item.getAuthority().add(ritem);
+		}
 		return userReporitory.save(item);
 	}
 
@@ -84,7 +97,7 @@ public class UserService {
 	// 삭제
 	public void delete(SiteUser item) {
 
-		// 작성한 게시글, 댓글, (관리자)공지사항 처리 여부
+		// TODO :: 작성한 게시글, 댓글, (관리자)공지사항 처리 여부
 		// roleReporitory.delete(item);
 	}
 
@@ -99,7 +112,7 @@ public class UserService {
 
 				q.distinct(true); // 중복을 제거
 
-				// 사용자 ID, email
+				// TODO :: 사용자 ID, email
 				return cb.or(cb.like(r.get("userId"), "%" + kw + "%"), cb.like(r.get("email"), "%" + kw + "%"));
 			}
 		};

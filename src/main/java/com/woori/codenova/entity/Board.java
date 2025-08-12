@@ -6,14 +6,11 @@ import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -43,7 +40,7 @@ public class Board {
 	private Integer viewCount;
 
 	// 작성날짜
-	@Column(nullable = false)
+
 	private LocalDateTime createDate;
 	// 수정날짜
 	private LocalDateTime modifyDate;
@@ -59,16 +56,16 @@ public class Board {
 	// @ManyToOne(optional = false, fetch = FetchType.EAGER)
 	// 작성자
 	@ManyToOne
-	@JoinColumn(name = "userId")
+//	@JoinColumn(name = "userId")
 	private SiteUser author;
 
 	// 게시판(게시글 분류)
-	@ManyToOne
-	@JoinColumn(name = "categoryId", nullable = false)
+	@ManyToOne // (fetch = FetchType.LAZY)
+//	@JoinColumn(name = "categoryId", nullable = false)
 	private Category category;
 
 	// 댓글
-	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "board")
 	private List<Comment> commentList;
 
 	// 추천
