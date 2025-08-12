@@ -13,8 +13,4 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 	Page<Board> findAll(Specification<Board> specification, Pageable pageable);
 
 	Page<Board> findAll(Pageable pageable);
-
-//
-//	@Query("SELECT b FROM Board b LEFT JOIN FETCH b.comments WHERE b.id = :id")
-//	Optional<Board> findByIdWithComments(@Param("id") Integer id);
 }

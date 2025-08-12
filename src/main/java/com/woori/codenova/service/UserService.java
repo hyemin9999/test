@@ -59,12 +59,12 @@ public class UserService {
 	}
 
 	// 조회 - 아이디 찾기
-	public SiteUser getEmail(String email) {
+	public SiteUser getItemByEmail(String email) {
 		return userReporitory.findByEmail(email).orElse(null);
 	}
 
 	// 조회 - 아이디 / 비밀번호 찾기
-	public SiteUser getitem(String username, String email) {
+	public SiteUser getItem(String username, String email) {
 		return userReporitory.findByUsernameAndEmail(username, email).orElse(null);
 	}
 

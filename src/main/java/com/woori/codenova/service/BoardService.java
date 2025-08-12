@@ -63,12 +63,9 @@ public class BoardService {
 	// 조회 - 상세
 	public Board getItem(Integer id) {
 
-		// Board item = boardRepository.findById(id).orElse(null);
-		// 조회수 증가
-//		item.setViewCount(item.getViewCount() + 1);
-//		boardRepository.save(item);
-
-		return boardRepository.findById(id).orElse(null);
+		Board item = boardRepository.findById(id).orElse(null);
+		return item;
+		// return boardRepository.findById(id).orElse(null);
 	}
 
 	// 등록
@@ -96,6 +93,13 @@ public class BoardService {
 		Category citem = categoryRepository.findById(1).orElse(null);
 		item.setCategory(citem);
 
+		boardRepository.save(item);
+	}
+
+	// 수정 - 조회수 증가
+	public void modifyViewCount(Board item) {
+		int vcnt = item.getViewCount();
+		item.setViewCount(++vcnt);
 		boardRepository.save(item);
 	}
 
@@ -138,20 +142,18 @@ public class BoardService {
 
 				// TODO :: entity class 수정여부에 따라 바뀌어야 할듯?
 
-//				Fetch<Board, Comment> cf = r.fetch("commentList", JoinType.LEFT);// 게시글과 댓글
-
 				Join<Board, SiteUser> u = r.join("author", JoinType.LEFT);// 게시글과 작성자
 				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);// 게시글과 작성자
-//				Join<Board, Comment> c = (Join<Board, Comment>) cf;// 게시글과 댓글
-				// Join<Board, Comment> c = cf;// 게시글과 댓글
 				Join<Comment, SiteUser> u1 = c.join("author", JoinType.LEFT);// 댓글과 작성자
 
-				// 제목, 내용, 작성자ID, 댓글(내용, 작성자ID)
-				return cb.or(cb.like(r.get("subject"), "%" + kw + "%"), // 게시글 제목
-						cb.like(r.get("content"), "%" + kw + "%"), // 댓글 내용
+				Predicate orP = cb.or(cb.like(r.get("subject"), "%" + kw + "%"), // 게시글 제목
+						cb.like(r.get("contents"), "%" + kw + "%"), // 댓글 내용
 						cb.like(u.get("username"), "%" + kw + "%"), // 게시글 작성자
-						cb.like(c.get("content"), "%" + kw + "%"), // 댓글 내용
+						cb.like(c.get("contents"), "%" + kw + "%"), // 댓글 내용
 						cb.like(u1.get("username"), "%" + kw + "%")); // 댓글 작성자
+
+				// 제목, 내용, 작성자ID, 댓글(내용, 작성자ID)
+				return cb.and(cb.equal(r.get("isDelete"), false), orP); // 삭제여부 false인거중에 검색기능 처리
 			}
 		};
 	}
