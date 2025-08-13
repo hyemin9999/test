@@ -1,6 +1,7 @@
 package com.woori.codenova.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -43,5 +44,5 @@ public class SiteUser {
 
 	// 권한
 	@ManyToMany
-	Set<Role> authority;
+	Set<Role> authority = new HashSet<>();
 }

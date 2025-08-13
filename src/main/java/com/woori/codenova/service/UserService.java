@@ -76,22 +76,24 @@ public class UserService {
 		item.setPassword(passwordEncoder.encode(password));
 		item.setEmail(email);
 		item.setCreateDate(LocalDateTime.now());
+		userReporitory.save(item);
 
 		// 일반사용자
-		Role ritem = roleReporitory.findById(1).orElse(null);
-		if (ritem != null) {
-			// Role - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
-			item.getAuthority().add(ritem);
-		}
+		Role ritem = roleReporitory.findByGrade(0).orElse(null);
+
+		// Role : grade - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
+		item.getAuthority().add(ritem);
+
 		return userReporitory.save(item);
 	}
 
 	// 수정 - 비밀번호 변경, 회원가입에 사용자ID, 비밀번호, email만 받으면, 수정할수있는게 비밀번호뿐.
-	public SiteUser modify(SiteUser item, String password) {
+	public void modify(SiteUser item, String password) {
+
 		item.setPassword(passwordEncoder.encode(password));
 		item.setModifyDate(LocalDateTime.now());
 
-		return userReporitory.save(item);
+		userReporitory.save(item);
 	}
 
 	// 삭제
