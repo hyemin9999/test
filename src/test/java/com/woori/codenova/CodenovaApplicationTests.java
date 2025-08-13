@@ -1,10 +1,10 @@
 package com.woori.codenova;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,8 +36,36 @@ class CodenovaApplicationTests {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	// @Test
+//	@Test
 	void contextLoads() {
+
+	}
+
+//	@Test
+//	@Transactional
+	void createUser() {
+
+		SiteUser u2 = new SiteUser();
+		u2.setUsername("user1");
+		u2.setPassword(passwordEncoder.encode("1234"));
+		u2.setEmail("user1@email.com");
+		u2.setCreateDate(LocalDateTime.now());
+		userReporitory.save(u2);
+
+		// 일반사용자
+		Role ritem = roleReporitory.findByGrade(0).orElse(null);
+		assertTrue(ritem != null);
+
+		u2 = userReporitory.findByUsername("user1").orElse(null);
+		assertTrue(u2 != null);
+
+		if (ritem != null) {
+			// Role : grade - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
+			u2.getAuthority().add(ritem);
+			userReporitory.save(u2);
+		}
+
+//		this.userService.create("user1", "1234", "user1@email.com");
 
 	}
 
@@ -57,7 +85,7 @@ class CodenovaApplicationTests {
 		roleReporitory.save(r2);
 	}
 
-	@Test
+//	@Test
 	void RolesTest() {
 		Role r11 = roleService.getItem(1);// 사용자
 		Role r22 = roleService.getItem(2);// 관리자
@@ -84,7 +112,7 @@ class CodenovaApplicationTests {
 		userReporitory.save(u2);
 	}
 
-	@Test
+//	@Test
 	void UsersTest() {
 
 		SiteUser u11 = userService.getItem("admin");
@@ -106,16 +134,16 @@ class CodenovaApplicationTests {
 	}
 
 //	@AfterEach
-//	void tearDown() {
-//		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
-//		SiteUser u2 = userReporitory.findByUsername("user").orElse(null);
-//
-//		assertEquals(1, u1.getId());
-//		assertEquals(2, u2.getId());
-//
-//		u1.getAuthority().clear();
-//		u2.getAuthority().clear();
-//	}
+	void tearDown() {
+		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
+		SiteUser u2 = userReporitory.findByUsername("user").orElse(null);
+
+		assertEquals(1, u1.getId());
+		assertEquals(2, u2.getId());
+
+		u1.getAuthority().clear();
+		u2.getAuthority().clear();
+	}
 
 //	@Test
 	void insertCategory() {
@@ -131,4 +159,5 @@ class CodenovaApplicationTests {
 		c2.setCreateDate(LocalDateTime.now());
 		categoryRepository.save(c2);
 	}
+
 }

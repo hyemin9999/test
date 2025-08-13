@@ -8,9 +8,11 @@ input[type=submit] {
 }
 
 .container .table {
-	th:last-child, td:last-child {     
+	th:last-child, 
+	td:last-child {
 		width: 150px;
-	text-align: center;}
+		text-align: center;
+	}
 }
 /* .card d-flex>div { */
 /* 	min-width: 100px; */
@@ -27,4 +29,12 @@ input[type=submit] {
 
 .placeholder {
 	background-color: inherit;
+}
+
+.pwd {
+	display: block;
+}
+
+.pwdchange {
+	display: none;
 }
