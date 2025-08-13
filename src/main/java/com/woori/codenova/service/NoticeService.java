@@ -81,7 +81,7 @@ public class NoticeService {
 
 		// TODO :: 공지사항 삭제시 연결된 게시글과의 관계 제거 필!!!
 
-		// noticeRepository.delete(item);
+		noticeRepository.delete(item);
 	}
 
 	// 검색

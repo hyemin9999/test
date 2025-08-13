@@ -17,6 +17,7 @@ import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CategoryRepository;
+import com.woori.codenova.repository.CommentRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -33,6 +34,7 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 	private final CategoryRepository categoryRepository;
+	private final CommentRepository commentRepository;
 
 	public List<Board> getList() {
 		return boardRepository.findAll();
@@ -63,9 +65,19 @@ public class BoardService {
 	// 조회 - 상세
 	public Board getItem(Integer id) {
 
-		Board item = boardRepository.findById(id).orElse(null);
-		return item;
-		// return boardRepository.findById(id).orElse(null);
+//		Board item = boardRepository.findByIdAndNotDelete(id).orElse(null);
+//
+////		if (item != null) {
+////			List<Comment> cList = item.getCommentList();
+////
+////			if (!cList.isEmpty()) {
+////
+////			}
+////		}
+//
+//		return item;
+//		return boardRepository.findByIdAndNotDelete(id).orElse(null);
+		return boardRepository.findById(id).orElse(null);
 	}
 
 	// 등록
@@ -105,16 +117,19 @@ public class BoardService {
 
 	// 삭제 - 실제 item 삭제를 안하고, 제목, 작성자, 내용의 데이터를 날림.
 	public void delete(Board item) {
-		item.setSubject("");
-		item.setContents("");
-		item.setDelete(true);
-		item.setDeleteDate(LocalDateTime.now());
-		item.setAuthor(null);
+//		item.setSubject("");
+//		item.setContents("");
+//		item.setDelete(true);
+//		item.setDeleteDate(LocalDateTime.now());
+//		item.setAuthor(null);
+//
+//		// TODO :: 게시글 삭제되어도 게시판과의 연결을 어떻게??
+//
+//		boardRepository.save(item);
 
-		// TODO :: 게시글 삭제되어도 게시판과의 연결을 어떻게??
+		// isDelete 값 false인것만 가지고 처리하는게 힘들어서 그냥 연결된거 일단 다 날림^^
 
-		boardRepository.save(item);
-		// boardRepository.delete(item);
+		boardRepository.delete(item);
 	}
 
 	// 추천

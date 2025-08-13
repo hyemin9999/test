@@ -64,9 +64,11 @@ public class CategoryService {
 
 	// 삭제
 	public void delete(Category item) {
-		// 게시판 삭제시 연결된 공지사항, 게시글(+ 댓글) 처리를 어떻게 해야하는지...
+		// TODO :: 게시판 삭제시 연결된 공지사항, 게시글(+ 댓글) 처리를 어떻게 해야하는지...
 		// 게시글이 있는 게시판은 삭제하지 못하도록 처리??
 		// this.categoryRepository.delete(item);
+		// isDelete 처리가 복잡하니 일단 다 날림^^
+		this.categoryRepository.delete(item);
 	}
 
 	// 즐겨찾기

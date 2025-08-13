@@ -72,7 +72,7 @@ public class RoleService {
 	public void delete(Role item) {
 
 		// TODO :: 연동된 권한이나 사용자가 있을때 삭제처리 여부
-		// roleReporitory.delete(item);
+		roleReporitory.delete(item);
 	}
 
 	// 검색

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,19 +15,21 @@ import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.CategoryRepository;
 import com.woori.codenova.repository.RoleRepository;
 import com.woori.codenova.repository.UserRepository;
+import com.woori.codenova.service.RoleService;
+import com.woori.codenova.service.UserService;
 
 @SpringBootTest
 class CodenovaApplicationTests {
 
 	@Autowired
 	private RoleRepository roleReporitory;
-//	@Autowired
-//	private RoleService roleService;
+	@Autowired
+	private RoleService roleService;
 
 	@Autowired
 	private UserRepository userReporitory;
-//	@Autowired
-//	private UserService userService;
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -40,7 +41,7 @@ class CodenovaApplicationTests {
 
 	}
 
-	// @Test
+//	@Test
 	void insertRoles() {
 		// 역할 초기값 ==> 일반사용자(0), 관리자(1) insert
 		Role r1 = new Role();
@@ -56,7 +57,16 @@ class CodenovaApplicationTests {
 		roleReporitory.save(r2);
 	}
 
-	// @Test
+	@Test
+	void RolesTest() {
+		Role r11 = roleService.getItem(1);// 사용자
+		Role r22 = roleService.getItem(2);// 관리자
+
+		assertEquals("사용자", r11.getName());
+		assertEquals("관리자", r22.getName());
+	}
+
+//	@Test
 	void insertUsers() {
 		// 사용자 초기값 ==> 사용자(user), 관리자(admin) insert
 		SiteUser u1 = new SiteUser();
@@ -75,39 +85,37 @@ class CodenovaApplicationTests {
 	}
 
 	@Test
+	void UsersTest() {
+
+		SiteUser u11 = userService.getItem("admin");
+		SiteUser u22 = userService.getItem("user");
+
+		assertEquals(1, u11.getId());
+		assertEquals(2, u22.getId());
+	}
+
+//	@Test
 //	@Transactional
 	void insertAuthoritys() {
 
-		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
-		SiteUser u2 = userReporitory.findByUsername("user").orElse(null);
-
-		assertEquals(1, u1.getId());
-		assertEquals(2, u2.getId());
-
-		Role r1 = roleReporitory.findById(1).orElse(null);// 사용자
-		Role r2 = roleReporitory.findById(2).orElse(null);// 관리자
-
-		assertEquals("사용자", r1.getName());
-		assertEquals("관리자", r2.getName());
-
-		u1.getAuthority().add(r2);
-		userReporitory.save(u1);
-
-		u2.getAuthority().add(r1);
-		userReporitory.save(u2);
+//		u1.getAuthority().add(r2);
+//		userReporitory.save(u1);
+//
+//		u2.getAuthority().add(r1);
+//		userReporitory.save(u2);
 	}
 
-	@AfterEach
-	void tearDown() {
-		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
-		SiteUser u2 = userReporitory.findByUsername("user").orElse(null);
-
-		assertEquals(1, u1.getId());
-		assertEquals(2, u2.getId());
-
-		u1.getAuthority().clear();
-		u2.getAuthority().clear();
-	}
+//	@AfterEach
+//	void tearDown() {
+//		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
+//		SiteUser u2 = userReporitory.findByUsername("user").orElse(null);
+//
+//		assertEquals(1, u1.getId());
+//		assertEquals(2, u2.getId());
+//
+//		u1.getAuthority().clear();
+//		u2.getAuthority().clear();
+//	}
 
 //	@Test
 	void insertCategory() {
