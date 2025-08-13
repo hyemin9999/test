@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -65,7 +66,7 @@ public class Board {
 	private Category category;
 
 	// 댓글
-	@OneToMany(mappedBy = "board")
+	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
 	private List<Comment> commentList;
 
 	// 추천

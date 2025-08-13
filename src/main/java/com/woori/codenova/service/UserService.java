@@ -98,7 +98,7 @@ public class UserService {
 	public void delete(SiteUser item) {
 
 		// TODO :: 작성한 게시글, 댓글, (관리자)공지사항 처리 여부
-		// roleReporitory.delete(item);
+		userReporitory.delete(item);
 	}
 
 	// 검색

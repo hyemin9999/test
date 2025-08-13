@@ -56,12 +56,15 @@ public class CommentService {
 	// 삭제 - 실제 item 삭제를 안하고, 작성자, 내용의 데이터를 날림.
 	public void delete(Comment item) {
 
-		item.setContents("");
-		item.setDelete(true);
-		item.setDeleteDate(LocalDateTime.now());
-		item.setAuthor(null);
-		commentReporitory.save(item);
-		// commentReporitory.delete(item);
+//		item.setContents("");
+//		item.setDelete(true);
+//		item.setDeleteDate(LocalDateTime.now());
+//		item.setAuthor(null);
+//		commentReporitory.save(item);
+
+		// TODO :: repository로 isdelete 체크하는게 좀 까다로움
+
+		commentReporitory.delete(item);
 	}
 
 	// 추천
