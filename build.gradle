@@ -66,10 +66,29 @@ dependencies {
 	
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	
+	//Slf4j - log
+	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+    // mybatis
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+	
 	// p6spy
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+
+def profile = project.hasProperty("profile") ? project.property("profile").toString() : "local"
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java"]
+        }
+        resources {
+            srcDirs = ["src/main/resources", "src/main/resources-${profile}"]
+        }
+    }
 }
