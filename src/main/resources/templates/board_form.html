@@ -4,7 +4,7 @@
 	<div layout:fragment="content" class="container">
 		<form method="post" th:object="${boardForm}">
 			<input type="hidden" th:name="${_csrf.parameterName}"
-				th:value="${_csrf.token}" />
+				th:value="${_csrf.token}" id="_csrf" />
 			<div th:replace="~{form_errors :: formErrorsFragment}"></div>
 			<div class="mb-3">
 				<label for="subject" class="form-label">제목</label> <input
@@ -39,15 +39,26 @@
 		                    const formData = new FormData();
 		                    formData.append('image', blob);
 
+		                    
+		                    console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDD :: ");
+		                    
+		                    //?${_csrf.parameterName}=${_csrf.token}
 		                    // 2. FileApiController - uploadEditorImage 메서드 호출
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',
 		                        body : formData,
+		                        headers: {
+		                        	 'X-CSRF-Token':  $('#_csrf').attr('value')
+		                        }, // 추가된 헤더 적용
 		                    });
 
 		                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
 		                    const filename = await response.text();
-		                    console.log('서버에 저장된 파일명 : ', filename);
+		                    
+		                    console.log("filename :: " + filename);
+		                    
+		                
+// 		                    console.log('서버에 저장된 파일명 : ', filename);
 
 		                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
 		                    const imageUrl = `/tui-editor/image-print?filename=${filename}`;
