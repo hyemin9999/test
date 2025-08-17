@@ -41,8 +41,8 @@ public class Board {
 	private Integer viewCount;
 
 	// 작성날짜
-
 	private LocalDateTime createDate;
+
 	// 수정날짜
 	private LocalDateTime modifyDate;
 
@@ -68,6 +68,10 @@ public class Board {
 	// 댓글
 	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
 	private List<Comment> commentList;
+
+	// 업로드 파일
+	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+	private List<UploadFile> uploadFils;
 
 	// 추천
 	@ManyToMany

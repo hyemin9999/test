@@ -45,10 +45,10 @@ dependencies {
 	
 	
 	// H2 (사용 안 하면 제거 가능)
-	//runtimeOnly 'com.h2database:h2:2.3.232'
+	runtimeOnly 'com.h2database:h2:2.3.232'
 	
 	// MysqlDB
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	//runtimeOnly 'com.mysql:mysql-connector-j'
 	
 	// hibernate
 	implementation 'org.hibernate.orm:hibernate-core'
@@ -79,16 +79,3 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-
-def profile = project.hasProperty("profile") ? project.property("profile").toString() : "local"
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ["src/main/java"]
-        }
-        resources {
-            srcDirs = ["src/main/resources", "src/main/resources-${profile}"]
-        }
-    }
-}

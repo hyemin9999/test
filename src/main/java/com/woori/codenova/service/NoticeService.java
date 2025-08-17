@@ -34,7 +34,7 @@ public class NoticeService {
 	private final CategoryRepository categoryRepository;
 
 	// 목록 - 페이징 - 검색
-	public Page<Notice> getlist(int page, String kw) {
+	public Page<Notice> getList(int page, String kw) {
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 
@@ -47,7 +47,9 @@ public class NoticeService {
 	}
 
 	// 조회 - 상세
-	public Notice getitem(Integer id) {
+	public Notice getItem(Integer id) {
+
+		// TODO :: 조회수 처리
 
 		return noticeRepository.findById(id).orElse(null);
 	}
@@ -59,8 +61,11 @@ public class NoticeService {
 		item.setContents(contents);
 		item.setCreateDate(LocalDateTime.now());
 		item.setAuthor(uesr);
+		item.setViewCount(0);
 
 		// TODO :: 게시판 - 카테고리 -넘겨받은 게시판으로 저장하기
+		Category citem = categoryRepository.findById(1).orElse(null);
+		item.setCategory(citem);
 
 		noticeRepository.save(item);
 	}
@@ -99,8 +104,8 @@ public class NoticeService {
 				Join<Notice, Category> c = r.join("category", JoinType.LEFT);// 공지와 게시판
 
 				// TODO:: 제목, 내용, 작성자ID
-				return cb.or(cb.like(r.get("subject"), "%" + kw + "%"), cb.like(r.get("content"), "%" + kw + "%"),
-						cb.like(u.get("userId"), "%" + kw + "%"));
+				return cb.or(cb.like(r.get("subject"), "%" + kw + "%"), cb.like(r.get("contents"), "%" + kw + "%"),
+						cb.like(u.get("username"), "%" + kw + "%"));
 			}
 		};
 	}

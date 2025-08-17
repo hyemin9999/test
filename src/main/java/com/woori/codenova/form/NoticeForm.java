@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BoardForm {
+public class NoticeForm {
 	@NotEmpty(message = "제목은 필수항목입니다.")
 	@Size(max = 200) // 크기
 	private String subject;
