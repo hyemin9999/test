@@ -3,7 +3,6 @@ package com.woori.codenova.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -39,31 +38,23 @@ public class FileApiController {
 	@PostMapping("/image-upload")
 	public String uploadEditorImage(@RequestParam(value = "image") final MultipartFile image) {
 
-		System.out.format("DDDDDDDDDDDDDDDDDDDDDDDDDDDD :: ");
 		if (image.isEmpty()) {
 			return "";
 		}
 
 		String orgFilename = image.getOriginalFilename(); // 원본 파일명
-
 		String uuid = UUID.randomUUID().toString().replaceAll("-", ""); // 32자리 랜덤 문자열
-
 		String extension = orgFilename.substring(orgFilename.lastIndexOf(".") + 1); // 확장자
-
 		String saveFilename = uuid + "." + extension; // 디스크에 저장할 파일명
-
-		String fileFullPath = Paths.get(uploadDir + uploadDirImages, saveFilename).toString(); // 디스크에 저장할 파일의 전체 경로
-
-		System.out.format("fileFullPath={}%s\n", fileFullPath);
+		// String fileFullPath = Paths.get(uploadDir + uploadDirImages,
+		// saveFilename).toString(); // 디스크에 저장할 파일의 전체 경로
 
 		// uploadDir에 해당되는 디렉터리가 없으면, uploadDir에 포함되는 전체 디렉터리 생성
-		File dir = new File(uploadDir + uploadDirImages);
-
-		System.out.format("DDDDDDDDDDD :: 디렉토리 :: DDDDDDDDDDDDDDDDD :: " + dir.toString());
+		String absolutePath = new File("").getAbsolutePath() + "\\";
+		String path = uploadDir + uploadDirImages;
+		File dir = new File(path);
 
 		if (dir.exists() == false) {
-
-			System.out.format("\nDDDDDDDDDDD :: 디렉토리 없지 :: DDDDDDDDDDDDDDDDD :: ");
 
 			if (dir.mkdirs()) {
 				System.out.println("디렉토리 생성 성공: " + dir.getAbsolutePath());
@@ -73,10 +64,9 @@ public class FileApiController {
 
 		}
 
-		System.out.format("\nDDDDDDDDDDD :: 디렉토리 있지 :: DDDDDDDDDDDDDDDDD :: " + fileFullPath);
 		try {
 			// 파일 저장 (write to disk)
-			File uploadFile = new File(fileFullPath);
+			File uploadFile = new File(absolutePath + "/" + path + "/" + saveFilename);
 			image.transferTo(uploadFile);
 			return saveFilename;
 
@@ -96,14 +86,15 @@ public class FileApiController {
 			MediaType.IMAGE_PNG_VALUE })
 	public byte[] printEditorImage(@RequestParam(value = "filename") final String filename) {
 		// 업로드된 파일의 전체 경로
-		String fileFullPath = Paths.get(uploadDir + uploadDirImages, filename).toString();
+//		String fileFullPath = Paths.get(uploadDir + uploadDirImages, filename).toString();
+
+		String absolutePath = new File("").getAbsolutePath() + "\\";
+		String path = uploadDir + uploadDirImages;
 
 		// 파일이 없는 경우 예외 throw
-		File uploadedFile = new File(fileFullPath);
+		File uploadedFile = new File(absolutePath + "/" + path + "/" + filename);
 
 		if (uploadedFile.exists() == false) {
-
-			System.out.format("\nDDDDDDDDDDD :: 파일이 없고 ::  DDDDDDDDDDDDDDDDD :: ");
 
 			throw new RuntimeException();
 		}
@@ -111,8 +102,6 @@ public class FileApiController {
 		try {
 			// 이미지 파일을 byte[]로 변환 후 반환
 			byte[] imageBytes = Files.readAllBytes(uploadedFile.toPath());
-
-			System.out.format("\nDDDDDDDDDDD :: 파일이 있고 ::  DDDDDDDDDDDDDDDDD ::");
 
 			return imageBytes;
 

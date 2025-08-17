@@ -77,6 +77,9 @@ public class BoardService {
 //
 //		return item;
 //		return boardRepository.findByIdAndNotDelete(id).orElse(null);
+
+		// TODO :: 조회수 처리
+
 		return boardRepository.findById(id).orElse(null);
 	}
 
@@ -124,7 +127,7 @@ public class BoardService {
 //		item.setAuthor(null);
 //
 //		// TODO :: 게시글 삭제되어도 게시판과의 연결을 어떻게??
-//
+//		// TODO :: 게시글 삭제시 파일 삭제
 //		boardRepository.save(item);
 
 		// isDelete 값 false인것만 가지고 처리하는게 힘들어서 그냥 연결된거 일단 다 날림^^
