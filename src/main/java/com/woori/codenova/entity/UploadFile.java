@@ -30,6 +30,9 @@ public class UploadFile {
 	private String storedFilepath;
 
 	@Column(nullable = false)
+	private String extension;
+
+	@Column(nullable = false)
 	private Long fileSize;
 
 	@Column(nullable = false)
