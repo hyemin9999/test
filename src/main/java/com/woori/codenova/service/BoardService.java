@@ -151,7 +151,7 @@ public class BoardService {
 	private Specification<Board> search(String kw) {
 		return new Specification<>() {
 
-			private static final long seriaVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<Board> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
