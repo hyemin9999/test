@@ -1,5 +1,8 @@
 package com.woori.codenova.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -13,4 +16,6 @@ public class BoardForm {
 	private String subject;
 	@NotEmpty(message = "내용은 필수항목입니다.")
 	private String content;
+
+	private List<String> filenames = new ArrayList<>();
 }

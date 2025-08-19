@@ -107,7 +107,7 @@ public class UserService {
 	private Specification<SiteUser> search(String kw) {
 		return new Specification<>() {
 
-			private static final long seriaVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<SiteUser> r, CriteriaQuery<?> q, CriteriaBuilder cb) {

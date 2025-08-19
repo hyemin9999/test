@@ -1,38 +1,70 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
-<body>
-	<div layout:fragment="content" class="container">
-		<form method="post" th:object="${boardForm}">
-			<input type="hidden" th:name="${_csrf.parameterName}"
-				th:value="${_csrf.token}" />
-			<div th:replace="~{form_errors :: formErrorsFragment}"></div>
-			<div class="mb-3">
-				<label for="subject" class="form-label">제목</label> <input
-					type="text" th:field="*{subject}" class="form-control">
-			</div>
-			<div class="mb-3">
-				<label for="content" class="form-label">내용</label>
-				<div id="content" name="content" class="form-control"></div>
-				<input type="textarea" name="content" id="ecp" hidden> <input
-					type="hidden" id="ecp1" th:field="*{content}">
-			</div>
-			<input type="submit" value="저장" class="btn btn-primary my-2">
-		</form>
-	</div>
-	<script layout:fragment="script" type="text/javascript"
-		th:inline="javascript">
+
+<div layout:fragment="content" class="container">
+	<h5 class="my-3 border-bottom pb-2">게시판</h5>
+	<form method="post" th:object="${boardForm}">
+		<input type="hidden" th:name="${_csrf.parameterName}"
+			th:value="${_csrf.token}" id="_csrf" />
+		<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+
+		<div class="mb-3">
+			<label for="subject" class="form-label">제목</label><input type="text"
+				th:field="*{subject}" class="form-control">
+		</div>
+		<div class="mb-3">
+			<label for="content" class="form-label">내용</label>
+			<div id="content" name="content" class="form-control"></div>
+			<input type="textarea" name="content" id="ecp" hidden><input
+				type="hidden" id="ecp1" th:field="*{content}">
+		</div>
+		<input type="submit" value="저장" class="btn btn-info my-2"> <input
+			type="hidden" id="mode" value="${mode}"><input type="hidden"
+			id="id" value="${id}">
+	</form>
+</div>
+<script layout:fragment="script" type="text/javascript"
+	th:inline="javascript">
+
+	var files;
 		const editor = new toastui.Editor({
-			el : document.querySelector('#content'), // 에디터를 적용할 요소 (컨테이너)
-			height : '500px', // 에디터 영역의 높이 값 (OOOpx || auto)
-			initialEditType : 'markdown', // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+			el : document.querySelector('#content'),
+			height : '500px', 
+			initialEditType : 'markdown', 
 			initialValue : '',
-			previewStyle : 'vertical', // 마크다운 프리뷰 스타일 (tab || vertical)
-			addImageBlobHook : null,
-			toolbarItems : [ [ 'heading', 'bold', 'italic', 'strike' ],
-					[ 'hr', 'quote' ],
-					[ 'ul', 'ol', 'task', 'indent', 'outdent' ],
-					[ 'table', 'link' ], [ 'code', 'codeblock' ] ],
+			previewStyle : 'vertical',
 			placeholder : '내용을 입력해 주세요.',
+			  hooks: {
+				   async addImageBlobHook(blob, callback) { 
+					   try {
+		                    const formData = new FormData();
+		                    formData.append('image', blob);
+		                    formData.append('type', "board");
+		                    formData.append('mode', [(mode)]);
+
+		                    console.log('image :: '+ blob);
+
+		                    const response = await fetch('/tui-editor/image-upload', {
+		                        method : 'POST',
+		                        body : formData,
+		                        headers: {
+		                        	 'X-CSRF-Token':  $('#_csrf').attr('value')
+		                        }, 
+		                    });
+
+		                    const json = await response.json();		                 
+		                    //console.log("filename :: "+json.saveFilename);
+		                    
+		                    // TODO :: 업로드한 파일정보를 게시글 저장/수정 시 연결해야함.
+		                    
+		                    const imageUrl = `/tui-editor/image-print?filename=${json.saveFilename}`;
+		                    callback(imageUrl, 'image alt attribute');
+
+		                } catch (error) {
+		                    console.error('업로드 실패 : ', error);
+		                }
+			      },
+			    },
 		});
 
 		editor.setMarkdown(document.querySelector('#ecp1').value);
@@ -47,5 +79,5 @@
 					document.querySelector('#ecp').value = encodedC;
 				});
 	</script>
-</body>
+
 </html>
