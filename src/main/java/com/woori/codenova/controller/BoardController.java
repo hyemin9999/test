@@ -41,8 +41,6 @@ public class BoardController {
 			@RequestParam(value = "kw", defaultValue = "") String kw) {
 		Page<Board> paging = boardService.getList(page, kw);
 
-		System.out.println(paging.isEmpty() + "::paging.isEmpty()::");
-
 		model.addAttribute("paging", paging);
 		// 입력한 검색어를 화면에 그대로 유지
 		model.addAttribute("kw", kw);
