@@ -81,7 +81,7 @@ public class CategoryService {
 	private Specification<Category> search(String kw) {
 		return new Specification<>() {
 
-			private static final long seriaVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<Category> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
