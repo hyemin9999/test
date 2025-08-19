@@ -7,13 +7,10 @@ input[type=submit] {
 	margin-top: 10px;
 }
 
-.container .table {
-	th: last-child, td:last-child{ 
-		width: 150px;
-	text-align: center;
+.viewer{
+	min-height: 300px;
 }
 
-}
 /* .card d-flex>div { */
 /* 	min-width: 100px; */
 /* 	width: 200px; */
