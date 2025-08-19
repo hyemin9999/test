@@ -39,8 +39,6 @@ public class NoticeController {
 			@RequestParam(value = "kw", defaultValue = "") String kw) {
 		Page<Notice> paging = noticeService.getList(page, kw);
 
-		System.out.println(paging.isEmpty() + "::paging.isEmpty()::");
-
 		model.addAttribute("paging", paging);
 		// 입력한 검색어를 화면에 그대로 유지
 		model.addAttribute("kw", kw);
@@ -51,7 +49,11 @@ public class NoticeController {
 	public String detail(Model model, @PathVariable("id") Integer id) {
 
 		Notice item = this.noticeService.getItem(id);
-		model.addAttribute("item", item);
+		if (item != null) {
+			this.noticeService.setViewCount(item);
+
+			model.addAttribute("item", item);
+		}
 		return "notice_detail";
 
 	}

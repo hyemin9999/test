@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-
+	<h5 class="my-3 border-bottom pb-2">공지사항</h5>
 	<div class="row my-3">
 		<div class="col-6">
 			<a th:href="@{/notice/create}" class="btn btn-primary">등록</a>
@@ -20,26 +20,27 @@
 		<thead class="table-light">
 			<tr class="text-center">
 				<th>번호</th>
-				<th style="whith: 50%">제목</th>
+				<th>제목</th>
 				<th>작성자</th>
 				<th>작성일</th>
+				<th>조회수</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:if="${!paging.isEmpty()}" class="text-center"
 				th:each="item, loop : ${paging}">
 				<td
-					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
-				</td>
+					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
 				<td class="text-start"><a
 					th:href="@{|/notice/detail/${item.id}|}" th:text="${item.subject}"></a></td>
 				<td><span th:if="${item.author != null}"
 					th:text="${item.author.username}"></span></td>
 				<td
 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+				<td th:text="${item.viewCount}"></td>
 			</tr>
 			<tr th:if="${paging.isEmpty()}">
-				<td colspan="4">게시글이 존재하지 않습니다.</td>
+				<td colspan="5">공지사항이 존재하지 않습니다.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -75,7 +76,6 @@
 		element.addEventListener('click', function() {
 			document.getElementById('page').value = this.dataset.page;
 			document.getElementById('searchForm').submit();
-			z
 		});
 	});
 	const btn_search = document.getElementById("btn_search");

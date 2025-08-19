@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-
+	<h5 class="my-3 border-bottom pb-2">게시판</h5>
 	<div class="row my-3">
 		<div class="col-6">
 			<a th:href="@{/board/create}" class="btn btn-primary">등록</a>
@@ -20,24 +20,12 @@
 		<thead class="table-light">
 			<tr class="text-center">
 				<th>번호</th>
-				<th style="whith: 50%">제목</th>
+				<th>제목</th>
 				<th>작성자</th>
 				<th>작성일</th>
 			</tr>
 		</thead>
 		<tbody>
-			<!-- 			<tr class="text-center" th:each="item, loop : ${list}"> -->
-			<!-- 				<td class="text-start"><a -->
-			<!-- 					th:href="@{|/board/detail/${item.id}|}" th:text="${item.subject}"></a> -->
-			<!-- 					<span class="text-danger small ms-2" -->
-			<!-- 					th:if="${#lists.size(item.commentList) > 0}" -->
-			<!-- 					th:text="${#lists.size(item.commentList)}"> </span></td> -->
-			<!-- 				<td><span th:if="${item.author != null}" -->
-			<!-- 					th:text="${item.author.username}"></span></td> -->
-			<!-- 				<td -->
-			<!-- 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td> -->
-			<!-- 			</tr> -->
-
 			<tr th:if="${!paging.isEmpty()}" class="text-center"
 				th:each="item, loop : ${paging}">
 				<td
