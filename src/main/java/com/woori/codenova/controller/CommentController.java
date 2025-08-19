@@ -41,7 +41,7 @@ public class CommentController {
 		Board bitem = this.boardService.getItem(bid);
 		SiteUser author = this.userService.getItem(principal.getName());
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("bitem", bitem);
+			model.addAttribute("item", bitem);
 
 			return "board_detail";
 		}
