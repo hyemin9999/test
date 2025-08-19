@@ -1,8 +1,5 @@
 package com.woori.codenova;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -45,43 +42,15 @@ class CodenovaApplicationTests {
 
 	}
 
-//	@Test
-//	@Transactional
-	void createUser() {
-
-		SiteUser u2 = new SiteUser();
-		u2.setUsername("user1");
-		u2.setPassword(passwordEncoder.encode("1234"));
-		u2.setEmail("user1@email.com");
-		u2.setCreateDate(LocalDateTime.now());
-		userReporitory.save(u2);
-
-		// 일반사용자
-		Role ritem = roleReporitory.findByGrade(0).orElse(null);
-		assertTrue(ritem != null);
-
-		u2 = userReporitory.findByUsername("user1").orElse(null);
-		assertTrue(u2 != null);
-//
-//		if (ritem != null) {
-//			// Role : grade - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
-//			u2.getAuthority().add(ritem);
-//			userReporitory.save(u2);
-//		}
-
-//		this.userService.create("user1", "1234", "user1@email.com");
-
-	}
-
 	@Test
 	void insertRoles() {
 		// 역할 초기값 ==> 슈퍼 관리자(1) insert
 
-//		Role r2 = new Role();
-//		r2.setName("관리자");
-//		r2.setGrade(1);
-//		r2.setCreateDate(LocalDateTime.now());
-//		roleReporitory.save(r2);
+		Role r2 = new Role();
+		r2.setName("관리자");
+		r2.setGrade(1);
+		r2.setCreateDate(LocalDateTime.now());
+		roleReporitory.save(r2);
 
 		Role r3 = new Role();
 		r3.setName("매니저");
@@ -90,7 +59,7 @@ class CodenovaApplicationTests {
 		roleReporitory.save(r3);
 	}
 
-//	@Test
+	@Test
 	void insertUsers() {
 		// 사용자 초기값 ==> 사용자(user), 관리자(admin) insert
 		SiteUser u1 = new SiteUser();
@@ -108,71 +77,19 @@ class CodenovaApplicationTests {
 		userReporitory.save(u2);
 	}
 
-//	@Test
+	@Test
 	void insertCategory() {
 		// 게시판 초기값 - 공지사항
-		Category c1 = new Category();
-		c1.setName("공지사항");
-		c1.setCreateDate(LocalDateTime.now());
-		categoryRepository.save(c1);
+//		Category c1 = new Category();
+//		c1.setName("공지사항");
+//		c1.setCreateDate(LocalDateTime.now());
+//		categoryRepository.save(c1);
 
 		// 자유게시판
 		Category c2 = new Category();
 		c2.setName("자유게시판");
 		c2.setCreateDate(LocalDateTime.now());
 		categoryRepository.save(c2);
-	}
-
-//	@Test
-//	@Transactional
-	void insertAuthoritys() {
-
-//		u1.getAuthority().add(r2);
-//		userReporitory.save(u1);
-//
-//		u2.getAuthority().add(r1);
-//		userReporitory.save(u2);
-	}
-
-//	@AfterEach
-	void tearDown() {
-		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
-		SiteUser u2 = userReporitory.findByUsername("user").orElse(null);
-
-		assertEquals(1, u1.getId());
-		assertEquals(2, u2.getId());
-
-		u1.getAuthority().clear();
-		u2.getAuthority().clear();
-	}
-
-//	@Test
-	void RolesTest() {
-//		Role r11 = roleService.getItem(1);// 사용자
-		Role r22 = roleService.getItem(2);// 관리자
-
-//		assertEquals("사용자", r11.getName());
-		assertEquals("관리자", r22.getName());
-	}
-
-//	@Test
-	void UsersTest() {
-
-		SiteUser u11 = userService.getItem("admin");
-		SiteUser u22 = userService.getItem("user");
-
-		assertEquals(1, u11.getId());
-		assertEquals(2, u22.getId());
-	}
-
-//	@Test
-	void CategoryTest() {
-
-		Category c11 = categoryService.getitem(1);
-		Category c22 = categoryService.getitem(2);
-
-		assertEquals("공지사항", c11.getName());
-		assertEquals("자유게시판", c22.getName());
 	}
 
 }

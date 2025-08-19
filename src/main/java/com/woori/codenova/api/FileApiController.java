@@ -28,9 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FileApiController {
 
-	// 파일을 업로드할 디렉터리 경로
-	// private final String uploadDir = Paths.get("C:", "tui-editor",
-	// "upload").toString();
 	@Value("${upload.path}")
 	private String uploadDir;
 	private final String uploadDirImages = "images";
@@ -45,28 +42,26 @@ public class FileApiController {
 	 */
 	@PostMapping("/image-upload")
 	public UploadFile uploadEditorImage(Model model, @RequestParam(value = "image") final MultipartFile image,
-			@RequestParam(value = "category") final String category, @RequestParam(value = "mode") final String mode) {
+			@RequestParam(value = "type") final String type, @RequestParam(value = "mode") final String mode) {
 
 		if (image.isEmpty()) {
 			return null;
 		}
 
-		String orgFilename = image.getOriginalFilename(); // 원본 파일명
-		String uuid = UUID.randomUUID().toString().replaceAll("-", ""); // 32자리 랜덤 문자열
-		String extension = orgFilename.substring(orgFilename.lastIndexOf(".") + 1); // 확장자
-		String saveFilename = uuid + "." + extension; // 디스크에 저장할 파일명
-		// String fileFullPath = Paths.get(uploadDir + uploadDirImages,
-		// saveFilename).toString(); // 디스크에 저장할 파일의 전체 경로
+		log.info("image :: " + image);
+
+		String orgFilename = image.getOriginalFilename();
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		String extension = orgFilename.substring(orgFilename.lastIndexOf(".") + 1);
+		String saveFilename = uuid + "." + extension;
 
 		log.info("image :: " + image);
-		log.info("category :: " + category);
+		log.info("type :: " + type);
 		log.info("mode :: " + mode);
 
-		// uploadDir에 해당되는 디렉터리가 없으면, uploadDir에 포함되는 전체 디렉터리 생성
 		String absolutePath = new File("").getAbsolutePath() + "\\";
 		String path = uploadDir + uploadDirImages;
 		File dir = new File(path);
-
 		if (dir.exists() == false) {
 			if (dir.mkdirs()) {
 				System.out.println("디렉토리 생성 성공: " + dir.getAbsolutePath());
@@ -76,14 +71,13 @@ public class FileApiController {
 		}
 
 		try {
-			// 파일 저장 (write to disk)
 			File uploadFile = new File(absolutePath + "/" + path + "/" + saveFilename);
 			image.transferTo(uploadFile);
 
 			UploadFile item = new UploadFile();
 
 			if (mode == "mofidy") { // 수정일때
-				if (category == "board") {// 게시글일때
+				if (type == "board") {// 게시글일때
 					item.setBoard(null);
 				} else { // 공지사항일때
 					item.setNotice(null);
@@ -100,7 +94,6 @@ public class FileApiController {
 			item.setStoredFilepath(path);
 			item.setUploadDate(LocalDateTime.now());
 
-			// return saveFilename;
 			return uploadFileRepository.save(item);
 
 		} catch (IOException e) {
@@ -118,26 +111,20 @@ public class FileApiController {
 	@GetMapping(value = "/image-print", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
 			MediaType.IMAGE_PNG_VALUE })
 	public byte[] printEditorImage(@RequestParam(value = "filename") final String filename) {
-		// 업로드된 파일의 전체 경로
-//		String fileFullPath = Paths.get(uploadDir + uploadDirImages, filename).toString();
 
 		String absolutePath = new File("").getAbsolutePath() + "\\";
 		String path = uploadDir + uploadDirImages;
 
 		// 파일이 없는 경우 예외 throw
 		File uploadedFile = new File(absolutePath + "/" + path + "/" + filename);
-
 		if (uploadedFile.exists() == false) {
-
 			throw new RuntimeException();
 		}
 
 		try {
 			// 이미지 파일을 byte[]로 변환 후 반환
 			byte[] imageBytes = Files.readAllBytes(uploadedFile.toPath());
-
 			return imageBytes;
-
 		} catch (IOException e) {
 			// 예외 처리는 따로 해주는 게 좋습니다.
 			throw new RuntimeException(e);

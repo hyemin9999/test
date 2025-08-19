@@ -79,7 +79,7 @@ public class RoleService {
 	private Specification<Role> search(String kw) {
 		return new Specification<>() {
 
-			private static final long seriaVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<Role> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
