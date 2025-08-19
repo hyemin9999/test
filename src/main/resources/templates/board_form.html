@@ -18,63 +18,45 @@
 			<input type="textarea" name="content" id="ecp" hidden><input
 				type="hidden" id="ecp1" th:field="*{content}">
 		</div>
-		<input type="submit" value="저장" class="btn btn-primary my-2">
-		<input type="hidden" id="mode" value="${mode}"><input
-			type="hidden" id="id" value="${id}">
-		<!-- 				<input type="hidden" -->
-		<!-- 				id="filenames" th:field=*{filenames}> -->
+		<input type="submit" value="저장" class="btn btn-info my-2"> <input
+			type="hidden" id="mode" value="${mode}"><input type="hidden"
+			id="id" value="${id}">
 	</form>
 </div>
 <script layout:fragment="script" type="text/javascript"
 	th:inline="javascript">
 
-	
 	var files;
 		const editor = new toastui.Editor({
-			el : document.querySelector('#content'), // 에디터를 적용할 요소 (컨테이너)
-			height : '500px', // 에디터 영역의 높이 값 (OOOpx || auto)
-			initialEditType : 'markdown', // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+			el : document.querySelector('#content'),
+			height : '500px', 
+			initialEditType : 'markdown', 
 			initialValue : '',
-			previewStyle : 'vertical', // 마크다운 프리뷰 스타일 (tab || vertical)
-// 			 events: {
-// 		            change: function () {
-// 		                console.log(editor.getMarkdown());
-// 		            }
-// 		        },
+			previewStyle : 'vertical',
+			placeholder : '내용을 입력해 주세요.',
 			  hooks: {
-				   async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+				   async addImageBlobHook(blob, callback) { 
 					   try {
-		                    /*
-		                     * 1. 에디터에 업로드한 이미지를 FormData 객체에 저장
-		                     *    (이때, 컨트롤러 uploadEditorImage 메서드의 파라미터인 'image'와 formData에 append 하는 key('image')값은 동일해야 함)
-		                     */
 		                    const formData = new FormData();
 		                    formData.append('image', blob);
 		                    formData.append('type', "board");
 		                    formData.append('mode', [(mode)]);
 
 		                    console.log('image :: '+ blob);
-		                    
-		                    //?${_csrf.parameterName}=${_csrf.token}
-		                    // 2. FileApiController - uploadEditorImage 메서드 호출
+
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',
 		                        body : formData,
 		                        headers: {
 		                        	 'X-CSRF-Token':  $('#_csrf').attr('value')
-		                        }, // 추가된 헤더 적용
+		                        }, 
 		                    });
 
-		                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
-		                  //  const filename = await response.text();
-		   
-		                    const json = await response.json();
-		                    
-		                    console.log("filename :: "+json.saveFilename);
+		                    const json = await response.json();		                 
+		                    //console.log("filename :: "+json.saveFilename);
 		                    
 		                    // TODO :: 업로드한 파일정보를 게시글 저장/수정 시 연결해야함.
 		                    
-// 		                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
 		                    const imageUrl = `/tui-editor/image-print?filename=${json.saveFilename}`;
 		                    callback(imageUrl, 'image alt attribute');
 
@@ -83,7 +65,6 @@
 		                }
 			      },
 			    },
-			placeholder : '내용을 입력해 주세요.',
 		});
 
 		editor.setMarkdown(document.querySelector('#ecp1').value);

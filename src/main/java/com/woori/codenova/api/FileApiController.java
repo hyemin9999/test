@@ -55,10 +55,6 @@ public class FileApiController {
 		String extension = orgFilename.substring(orgFilename.lastIndexOf(".") + 1);
 		String saveFilename = uuid + "." + extension;
 
-		log.info("image :: " + image);
-		log.info("type :: " + type);
-		log.info("mode :: " + mode);
-
 		String absolutePath = new File("").getAbsolutePath() + "\\";
 		String path = uploadDir + uploadDirImages;
 		File dir = new File(path);

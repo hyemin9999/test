@@ -18,7 +18,9 @@
 			<input type="textarea" name="content" id="ecp" hidden><input
 				type="hidden" id="ecp1" th:field="*{content}">
 		</div>
-		<input type="submit" value="저장" class="btn btn-primary my-2">
+		<input type="submit" value="저장" class="btn btn-info my-2"> <input
+			type="hidden" id="mode" value="${mode}"><input type="hidden"
+			id="id" value="${id}">
 	</form>
 </div>
 <script layout:fragment="script" type="text/javascript"
@@ -45,11 +47,11 @@
 						headers: {'X-CSRF-Token':  $('#_csrf').attr('value')}});
 					
 					const json = await response.json();
-					 console.log("filename :: "+json.saveFilename);
+					// console.log("filename :: "+json.saveFilename);
 		                    
 					// TODO :: 업로드한 파일정보를 공지사항 저장/수정 시 연결해야함.
 					
-					const imageUrl = '/tui-editor/image-print?filename=${json.saveFilename}';
+					const imageUrl = `/tui-editor/image-print?filename=${json.saveFilename}`;
 					callback(imageUrl, 'image alt attribute');
 					} catch (error) {
 						console.error('업로드 실패 : ', error);
@@ -61,7 +63,7 @@
 	document.querySelector('form').addEventListener('submit', function(event) {
 		document.querySelector('#ecp1').value = '';
 		const encodedC = encodeURIComponent(editor.getMarkdown());
-		document.querySelector('#ecp1').value = encodedC;
+		document.querySelector('#ecp').value = encodedC;
 		});
 	</script>
 </html>
