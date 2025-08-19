@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{admin/layout}">
 <body>
 	<div layout:fragment="content" class="container my-3">
-		<form th:action="@{/user/info}" th:object="${userModifyForm}"
-			method="post">
+		<form th:object="${userModifyForm}" method="post"
+			th:action="@{|/admin/user/detail/${item.id}|}">
 			<div class="mb-3">
 				<label class="form-label">사용자ID</label> <label class="form-control">[[*{username}]]</label>
 			</div>
@@ -71,7 +71,6 @@
 			pwd_el.style.display = 'none';
 			doDisply(true);
 		}
-		// 			alert(mode);
 	</script>
 
 </body>

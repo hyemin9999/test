@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html layout:decorate="~{admin/layout}">
+<body>
+	<div layout:fragment="content" class="container my-3 signup"
+		style="max-width: 512px; margin: 0 auto;">
+		<div class="my-3 border-bottom">
+			<div>
+				<h4>회원 관리</h4>
+			</div>
+		</div>
+		<form th:action="@{/admin/user/create}" th:object="${adminUserForm}"
+			method="post">
+			<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+			<div class="mb-3">
+				<label for="username" class="form-label">사용자ID</label> <input
+					type="text" th:field="*{username}" class="form-control"></input>
+			</div>
+			<div class="mb-3">
+				<label for="password1" class="form-label">비밀번호</label><input
+					type="password" th:field="*{password1}" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label for="email" class="form-label">이메일</label><input type="email"
+					th:field="*{email}" class="form-control" />
+			</div>
+			<button type="submit" class="btn btn-primary">등록</button>
+		</form>
+	</div>
+</body>
+</html>

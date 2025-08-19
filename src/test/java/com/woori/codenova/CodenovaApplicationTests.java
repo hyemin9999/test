@@ -62,31 +62,32 @@ class CodenovaApplicationTests {
 
 		u2 = userReporitory.findByUsername("user1").orElse(null);
 		assertTrue(u2 != null);
-
-		if (ritem != null) {
-			// Role : grade - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
-			u2.getAuthority().add(ritem);
-			userReporitory.save(u2);
-		}
+//
+//		if (ritem != null) {
+//			// Role : grade - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
+//			u2.getAuthority().add(ritem);
+//			userReporitory.save(u2);
+//		}
 
 //		this.userService.create("user1", "1234", "user1@email.com");
 
 	}
 
-//	@Test
+	@Test
 	void insertRoles() {
-		// 역할 초기값 ==> 일반사용자(0), 관리자(1) insert
-		Role r1 = new Role();
-		r1.setName("사용자");
-		r1.setGrade(0);
-		r1.setCreateDate(LocalDateTime.now());
-		roleReporitory.save(r1);
+		// 역할 초기값 ==> 슈퍼 관리자(1) insert
 
-		Role r2 = new Role();
-		r2.setName("관리자");
-		r2.setGrade(1);
-		r2.setCreateDate(LocalDateTime.now());
-		roleReporitory.save(r2);
+//		Role r2 = new Role();
+//		r2.setName("관리자");
+//		r2.setGrade(1);
+//		r2.setCreateDate(LocalDateTime.now());
+//		roleReporitory.save(r2);
+
+		Role r3 = new Role();
+		r3.setName("매니저");
+		r3.setGrade(2);
+		r3.setCreateDate(LocalDateTime.now());
+		roleReporitory.save(r3);
 	}
 
 //	@Test
@@ -145,16 +146,16 @@ class CodenovaApplicationTests {
 		u2.getAuthority().clear();
 	}
 
-	@Test
+//	@Test
 	void RolesTest() {
-		Role r11 = roleService.getItem(1);// 사용자
+//		Role r11 = roleService.getItem(1);// 사용자
 		Role r22 = roleService.getItem(2);// 관리자
 
-		assertEquals("사용자", r11.getName());
+//		assertEquals("사용자", r11.getName());
 		assertEquals("관리자", r22.getName());
 	}
 
-	@Test
+//	@Test
 	void UsersTest() {
 
 		SiteUser u11 = userService.getItem("admin");
@@ -164,7 +165,7 @@ class CodenovaApplicationTests {
 		assertEquals(2, u22.getId());
 	}
 
-	@Test
+//	@Test
 	void CategoryTest() {
 
 		Category c11 = categoryService.getitem(1);

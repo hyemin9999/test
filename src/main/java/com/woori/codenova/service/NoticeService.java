@@ -54,6 +54,15 @@ public class NoticeService {
 		return noticeRepository.findById(id).orElse(null);
 	}
 
+	// 조회 - 상세
+	public void setViewCount(Notice item) {
+
+		// TODO :: 조회수 처리
+		int viewCount = item.getViewCount();
+		item.setViewCount(viewCount + 1);
+		noticeRepository.save(item);
+	}
+
 	// 등록
 	public void create(String subject, String contents, SiteUser uesr) {
 		Notice item = new Notice();
