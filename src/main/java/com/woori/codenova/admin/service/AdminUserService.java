@@ -1,4 +1,4 @@
-package com.woori.codenova.service;
+package com.woori.codenova.admin.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,9 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class UserService {
-
-	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
+public class AdminUserService {
 
 	private final UserRepository userReporitory;
 	private final RoleRepository roleReporitory;
@@ -50,22 +48,8 @@ public class UserService {
 
 	// 조회 - 상세
 	public SiteUser getItem(Long id) {
-		return userReporitory.findById(id).orElse(null);
-	}
 
-	// 조회 - 사용자ID
-	public SiteUser getItem(String username) {
-		return userReporitory.findByUsername(username).orElse(null);
-	}
-
-	// 조회 - 아이디 찾기
-	public SiteUser getItemByEmail(String email) {
-		return userReporitory.findByEmail(email).orElse(null);
-	}
-
-	// 조회 - 아이디 / 비밀번호 찾기
-	public SiteUser getItem(String username, String email) {
-		return userReporitory.findByUsernameAndEmail(username, email).orElse(null);
+		return userReporitory.findById(id).orElseThrow(() -> new RuntimeException("존재하지않는 회원입니다."));
 	}
 
 	// 등록
@@ -78,11 +62,13 @@ public class UserService {
 		item.setCreateDate(LocalDateTime.now());
 		userReporitory.save(item);
 
-		// 일반사용자
-		Role ritem = roleReporitory.findByGrade(0).orElse(null);
+		System.out.println("user insert :: " + item.getId());
 
-		// Role : grade - 일반사용자(0), 슈퍼관리자(1) - 고정.수정삭제불가
-		item.getAuthority().add(ritem);
+		// 관리자 페이지에서 등록한 사용자는 매니저 권한을 기본으로 가지고 있음.
+		Role role = this.roleReporitory.findByGrade(2).orElse(null);
+		if (role != null) {
+			item.getAuthority().add(role);
+		}
 
 		return userReporitory.save(item);
 	}
@@ -106,7 +92,6 @@ public class UserService {
 	// 검색
 	private Specification<SiteUser> search(String kw) {
 		return new Specification<>() {
-
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -115,7 +100,7 @@ public class UserService {
 				q.distinct(true); // 중복을 제거
 
 				// TODO :: 사용자 ID, email
-				return cb.or(cb.like(r.get("userId"), "%" + kw + "%"), cb.like(r.get("email"), "%" + kw + "%"));
+				return cb.or(cb.like(r.get("username"), "%" + kw + "%"), cb.like(r.get("email"), "%" + kw + "%"));
 			}
 		};
 	}

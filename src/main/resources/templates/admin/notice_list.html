@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-	<h5 class="my-3 border-bottom pb-2">게시판</h5>
+	<h5 class="my-3 border-bottom pb-2">공지사항</h5>
 	<div class="row my-3">
 		<div class="col-6">
-			<a th:href="@{/board/create}" class="btn btn-info">등록</a>
+			<a th:href="@{/notice/create}" class="btn btn-primary">등록</a>
 		</div>
 		<div class="col-6">
 			<div class="input-group">
 				<input type="text" id="search_kw" class="form-control"
 					th:value="${kw}">
-				<button class="btn btn-outline-info" type="button" id="btn_search">찾기</button>
+				<button class="btn btn-outline-secondary" type="button"
+					id="btn_search">찾기</button>
 			</div>
 		</div>
 	</div>
@@ -22,32 +23,24 @@
 				<th>제목</th>
 				<th>작성자</th>
 				<th>작성일</th>
-				<th>조회</th>
-				<th>추천</th>
+				<th>조회수</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:if="${!paging.isEmpty()}" class="text-center"
 				th:each="item, loop : ${paging}">
 				<td
-					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
-				</td>
+					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
 				<td class="text-start"><a
-					th:href="@{|/board/detail/${item.id}|}" th:text="${item.subject}"></a><span
-					class="text-danger small ms-2"
-					th:if="${#lists.size(item.commentList) > 0}"
-					th:text="${#lists.size(item.commentList)}"></span></td>
-
+					th:href="@{|/notice/detail/${item.id}|}" th:text="${item.subject}"></a></td>
 				<td><span th:if="${item.author != null}"
 					th:text="${item.author.username}"></span></td>
 				<td
 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 				<td th:text="${item.viewCount}"></td>
-				<td
-					th:text="${#lists.size(item.voter) > 0 ? #lists.size(item.voter) : 0}"></td>
 			</tr>
 			<tr th:if="${paging.isEmpty()}">
-				<td colspan="6">게시글이 존재하지 않습니다.</td>
+				<td colspan="5">공지사항이 존재하지 않습니다.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -67,12 +60,11 @@
 			<li class="page-item"
 				th:classappend="${!paging.hasNext} ? 'disabled'"><a
 				class="page-link" href="javascript:void(0)"
-				th:data-page="${paging.number+1}"> <span>다음</span>
-			</a></li>
+				th:data-page="${paging.number+1}"><span>다음</span> </a></li>
 		</ul>
 	</div>
 
-	<form th:action="@{/board/list}" method="get" id="searchForm">
+	<form th:action="@{/notice/list}" method="get" id="searchForm">
 		<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input
 			type="hidden" id="page" name="page" th:value="${paging.number}">
 	</form>

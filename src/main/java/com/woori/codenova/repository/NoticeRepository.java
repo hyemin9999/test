@@ -10,4 +10,5 @@ import com.woori.codenova.entity.Notice;
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
 	// 페이징 + 검색
 	Page<Notice> findAll(Specification<Notice> specification, Pageable pageable);
+
 }

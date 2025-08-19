@@ -1,7 +1,7 @@
 <nav th:fragment="navbarFragment"
-	class="navbar navbar-expand-lg navbar-light bg-info-subtle border-bottom">
+	class="navbar navbar-expand-lg navbar-light bg-secondary border-bottom">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="/">CodeNova</a>
+		<a class="navbar-brand" href="/">CodeNova</a> <a class="navbar-brand" href="/admin">관리자페이지</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 			data-bs-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -10,21 +10,18 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
 				<li class="nav-item"><a class="nav-link"
-					sec:authorize="isAuthenticated()" th:href="@{/user/info}"
-					th:text="${#authentication.name}">마이페이지</a></li>
-				<li class="nav-item"><a class="nav-link"
-					sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a><a
+					sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a> <a
 					class="nav-link" sec:authorize="isAuthenticated()"
 					th:href="@{/user/logout}">로그아웃</a></li>
 				<li class="nav-item"><a class="nav-link"
-					th:href="@{/user/signup}" sec:authorize="isAnonymous()">회원가입</a></li>
+					th:href="@{/admin/user/list}">회원 관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					th:href="@{/notice/list}">공지사항</a></li>
+					th:href="@{/admin/category/list}">게시판 관리</a></li>
+				<li class="nav-item"><a class="nav-link" href="#">게시글 관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					th:href="@{/board/list}">게시판</a></li>
-				<li class="nav-item" sec:authorize="hasRole('ADMIN')"><a
-					class="nav-link" th:href="@{/admin}">관리자 페이지</a></li>
+					th:href="@{/admin/notice/list}">공지사항 관리</a></li>
 			</ul>
 		</div>
 	</div>
