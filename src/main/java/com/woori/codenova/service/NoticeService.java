@@ -35,6 +35,7 @@ public class NoticeService {
 
 	// 목록 - 페이징 - 검색
 	public Page<Notice> getList(int page, String kw) {
+
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 
@@ -49,15 +50,12 @@ public class NoticeService {
 	// 조회 - 상세
 	public Notice getItem(Integer id) {
 
-		// TODO :: 조회수 처리
-
 		return noticeRepository.findById(id).orElse(null);
 	}
 
-	// 조회 - 상세
+	// 조회 - 조회수
 	public void setViewCount(Notice item) {
 
-		// TODO :: 조회수 처리
 		int viewCount = item.getViewCount();
 		item.setViewCount(viewCount + 1);
 		noticeRepository.save(item);
@@ -102,7 +100,7 @@ public class NoticeService {
 	private Specification<Notice> search(String kw) {
 		return new Specification<>() {
 
-			private static final long seriaVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<Notice> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
