@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{admin/layout}">
 <div layout:fragment="content" class="container my-3">
 	<h5 class="my-3 border-bottom pb-2">공지사항</h5>
 	<div class="row my-3">
 		<div class="col-6">
-			<a th:href="@{/notice/create}" class="btn btn-info">등록</a>
+			<a th:href="@{/admin/notice/create}" class="btn btn-info">등록</a>
 		</div>
 		<div class="col-6">
 			<div class="input-group">
 				<input type="text" id="search_kw" class="form-control"
 					th:value="${kw}">
-				<button class="btn btn-outline-info" type="button"
-					id="btn_search">찾기</button>
+				<button class="btn btn-outline-info" type="button" id="btn_search">찾기</button>
 			</div>
 		</div>
 	</div>
 
-	<table class="table">
-		<thead class="table-light">
+	<table class="table notice">
+		<thead class="table-info">
 			<tr class="text-center">
 				<th>번호</th>
 				<th>제목</th>
@@ -32,7 +31,8 @@
 				<td
 					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
 				<td class="text-start"><a
-					th:href="@{|/notice/detail/${item.id}|}" th:text="${item.subject}"></a></td>
+					th:href="@{|/admin/notice/detail/${item.id}|}"
+					th:text="${item.subject}"></a></td>
 				<td><span th:if="${item.author != null}"
 					th:text="${item.author.username}"></span></td>
 				<td
@@ -64,7 +64,7 @@
 		</ul>
 	</div>
 
-	<form th:action="@{/notice/list}" method="get" id="searchForm">
+	<form th:action="@{/admin/notice/list}" method="get" id="searchForm">
 		<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input
 			type="hidden" id="page" name="page" th:value="${paging.number}">
 	</form>

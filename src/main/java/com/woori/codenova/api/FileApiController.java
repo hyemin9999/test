@@ -42,7 +42,8 @@ public class FileApiController {
 	 */
 	@PostMapping("/image-upload")
 	public UploadFile uploadEditorImage(Model model, @RequestParam(value = "image") final MultipartFile image,
-			@RequestParam(value = "type") final String type, @RequestParam(value = "mode") final String mode) {
+			@RequestParam(value = "type", defaultValue = "") final String type,
+			@RequestParam(value = "mode", defaultValue = "") final String mode) {
 
 		if (image.isEmpty()) {
 			return null;

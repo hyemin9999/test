@@ -77,7 +77,7 @@ public class AdminUserController {
 			return "admin/user_form";
 		}
 
-		return "redirect:/admin";
+		return "redirect:/admin/user/list";
 	}
 
 	@PreAuthorize("isAuthenticated()")

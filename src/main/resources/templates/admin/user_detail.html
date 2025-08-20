@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html layout:decorate="~{admin/layout}">
-<body>
-	<div layout:fragment="content" class="container my-3">
-		<form th:object="${adminUserModifyForm}" method="post"
-			th:action="@{|/admin/user/detail/${item.id}|}">
-			<div class="mb-3">
-				<label class="form-label">사용자ID</label> <label class="form-control">[[*{username}]]</label>
-			</div>
-			<div class="mb-3 pwd" id="pwd">
-				<label for="pwd" class="form-label">비밀번호</label> <a
-					href="javascript:onDisplay();" class="btn btn-sm btn-outline-info">비밀번호
-					변경</a>
-			</div>
-			<input type="hidden" th:name="${_csrf.parameterName}"
-				th:value="${_csrf.token}" />
-			<div th:replace="~{form_errors :: formErrorsFragment}"></div>
-			<div class="mb-3 pwdchange">
-				<label for="password1" class="form-label">변경 비밀번호</label><input
-					type="password" th:field="*{password1}" class="form-control" />
-			</div>
-			<div class="mb-3 pwdchange">
-				<button type="submit" class="btn btn-sm btn-info">변경</button>
-				<a href="javascript:onDisplay(false);"
-					class="btn btn-sm btn-outline-info">취소</a>
-			</div>
-			<div class="mb-3">
-				<label for="email" class="form-label">이메일</label><label type="email"
-					class="form-control">[[*{email}]]</label>
-			</div>
-			<a class="btn btn-sm btn-outline-info" th:href="@{/admin/user/list}">취소</a>
-		</form>
-	</div>
-	<script layout:fragment="script" type="text/javascript"
-		th:inline="javascript">
+
+<div layout:fragment="content" class="container my-3">
+	<form th:object="${adminUserModifyForm}" method="post"
+		th:action="@{|/admin/user/detail/${item.id}|}">
+		<div class="mb-3">
+			<label class="form-label">사용자ID</label> <label class="form-control">[[*{username}]]</label>
+		</div>
+		<div class="mb-3 pwd" id="pwd">
+			<label for="pwd" class="form-label">비밀번호</label> <a
+				href="javascript:onDisplay();" class="btn btn-sm btn-outline-info">비밀번호
+				변경</a>
+		</div>
+		<input type="hidden" th:name="${_csrf.parameterName}"
+			th:value="${_csrf.token}" />
+		<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+		<div class="mb-3 pwdchange">
+			<label for="password1" class="form-label">변경 비밀번호</label><input
+				type="password" th:field="*{password1}" class="form-control" />
+		</div>
+		<div class="mb-3 pwdchange">
+			<button type="submit" class="btn btn-sm btn-info">변경</button>
+			<a href="javascript:onDisplay(false);"
+				class="btn btn-sm btn-outline-info">취소</a>
+		</div>
+		<div class="mb-3">
+			<label for="email" class="form-label">이메일</label><label type="email"
+				class="form-control">[[*{email}]]</label>
+		</div>
+		<a class="btn btn-sm btn-outline-info" th:href="@{/admin/user/list}">취소</a>
+	</form>
+</div>
+<script layout:fragment="script" type="text/javascript"
+	th:inline="javascript">
 		function onDisplay() {
 			const pwd_elements = document.getElementsByClassName("pwd");
 			Array.from(pwd_elements).forEach(function(element) {
@@ -68,6 +68,4 @@
 			doDisply(true);
 		}
 	</script>
-
-</body>
 </html>
