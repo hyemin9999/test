@@ -21,24 +21,19 @@
 							th:if="${item.author != null and #authentication.getPrincipal().getUsername() == item.author.username}"
 							th:text="삭제"></a>
 					</div>
-					<div>
-						<div th:if="${item.modifyDate != null}"
-							class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start me-2">
-							<div class="mb-2">modify at</div>
-							<div
-								th:text="${#temporals.format(item.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+					<div
+						class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start">
+						<div class="mb-2" th:if="${item.author !=null}">
+							<span th:text="${item.author.username}"></span>
 						</div>
 						<div
-							class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start">
-							<div class="mb-2" th:if="${item.author !=null}">
-								<span th:text="${item.author.username}"></span>
-							</div>
-							<div
-								th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-						</div>
+							th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></div>
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="align-r">
+			<a class="btn btn-info" th:href="@{/notice/list}">목록</a>
 		</div>
 	</div>
 	<script layout:fragment="script" type="text/javascript">

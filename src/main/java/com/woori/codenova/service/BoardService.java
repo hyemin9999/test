@@ -83,6 +83,14 @@ public class BoardService {
 		return boardRepository.findById(id).orElse(null);
 	}
 
+	// 조회 - 조회수
+	public void setViewCount(Board item) {
+
+		int viewCount = item.getViewCount();
+		item.setViewCount(viewCount + 1);
+		boardRepository.save(item);
+	}
+
 	// 등록
 	public void create(String subject, String contents, SiteUser uesr) {
 		Board item = new Board();

@@ -15,12 +15,11 @@
 		<div class="mb-3">
 			<label for="content" class="form-label">내용</label>
 			<div id="content" name="content" class="form-control"></div>
-			<input type="textarea" name="content" id="ecp" hidden><input
+			<input type="hidden" name="content" id="ecp"><input
 				type="hidden" id="ecp1" th:field="*{content}">
 		</div>
-		<input type="submit" value="저장" class="btn btn-info my-2"> <input
-			type="hidden" id="mode" value="${mode}"><input type="hidden"
-			id="id" value="${id}">
+		<input type="submit" value="저장" class="btn btn-info my-2"> <a
+			class="btn btn-outline-info" th:href="@{/board/list}">취소</a>
 	</form>
 </div>
 <script layout:fragment="script" type="text/javascript"
@@ -40,9 +39,7 @@
 		                    const formData = new FormData();
 		                    formData.append('image', blob);
 		                    formData.append('type', "board");
-		                    formData.append('mode', [(mode)]);
-
-		                    console.log('image :: '+ blob);
+		                    formData.append('mode', [[${mode}]]);
 
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',
