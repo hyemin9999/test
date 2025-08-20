@@ -84,13 +84,13 @@ public class AdminUserController {
 	@GetMapping(value = "/detail/{id}")
 	public String detail(Model model, AdminUserModifyForm adminUserModifyForm, Principal principal,
 			@PathVariable("id") Long id) {
+		model.addAttribute("mode", "detail");
 
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지않는 회원입니다.");
 		}
 
-		model.addAttribute("mode", "detail");
 		model.addAttribute("item", item);
 
 		adminUserModifyForm.setId(item.getId());

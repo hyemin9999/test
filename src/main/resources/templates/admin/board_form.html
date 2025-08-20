@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html layout:decorate="~{admin/layout}">
+<html layout:decorate="~{admin/layout}"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content" class="container">
 	<h5 class="my-3 border-bottom pb-2">게시판</h5>
@@ -14,7 +16,7 @@
 		</div>
 		<div class="mb-3">
 			<label for="content" class="form-label">내용</label>
-			<div id="content" name="content" class="form-control"></div>
+			<div id="content" class="form-control"></div>
 			<input type="hidden" name="content" id="ecp"><input
 				type="hidden" id="ecp1" th:field="*{content}">
 		</div>
@@ -39,7 +41,7 @@
 		                    const formData = new FormData();
 		                    formData.append('image', blob);
 		                    formData.append('type', "board");
-		                    formData.append('mode', [[${mode}]]);
+		                    formData.append('mode', /*[[${mode}]]*/'');
 
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',
