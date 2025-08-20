@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" style="height: 100% !important;" data-bs-theme="light"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta name="viewport" charset="utf-8"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,7 +10,7 @@
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 	<nav th:replace="~{admin/navbar :: navbarFragment}"></nav>
 
 	<th:block layout:fragment="content"></th:block>
@@ -20,6 +22,6 @@
 
 	<th:block layout:fragment="script"></th:block>
 
-	<div th:replace="~{footer :: footer}"></div>
+	<footer th:replace="~{footer :: footer}"></footer>
 </body>
 </html>
