@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content" class="container">
 	<h5 class="my-3 border-bottom pb-2">게시판</h5>
@@ -39,7 +40,7 @@
 		                    const formData = new FormData();
 		                    formData.append('image', blob);
 		                    formData.append('type', "board");
-		                    formData.append('mode', [[${mode}]]);
+		                    formData.append('mode',  /*[[${mode}]]*/'');
 
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',
@@ -76,5 +77,4 @@
 					document.querySelector('#ecp').value = encodedC;
 				});
 	</script>
-
 </html>
