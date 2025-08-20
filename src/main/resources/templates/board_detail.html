@@ -31,27 +31,22 @@
 						th:if="${item.author != null and #authentication.getPrincipal().getUsername() == item.author.username}"
 						th:text="삭제"></a>
 				</div>
-				<div>
-					<div th:if="${item.modifyDate != null}"
-						class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start me-2">
-						<div class="mb-2">modify at</div>
-						<div
-							th:text="${#temporals.format(item.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+				<div
+					class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start">
+					<div class="mb-2" th:if="${item.author !=null}">
+						<span th:text="${item.author.username}"></span>
 					</div>
 					<div
-						class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start">
-						<div class="mb-2" th:if="${item.author !=null}">
-							<span th:text="${item.author.username}"></span>
-						</div>
-						<div
-							th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-					</div>
+						th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></div>
 				</div>
+
 			</div>
 		</div>
 	</div>
-	<h5 class="border-bottm my-3 py-2"
-		th:text="|${#lists.size(item.commentList)}개의 댓글이 있습니다.|"></h5>
+	<div class="d-flex justify-content-between mt-2 align-b">
+		<span th:text="|${#lists.size(item.commentList)}개의 댓글이 있습니다.|"></span>
+		<a class="btn btn-info" th:href="@{/board/list}">목록</a>
+	</div>
 	<div class="card my-3" th:each="citem, list : ${item.commentList}"
 		th:if="${citem != null and !citem.isDelete}"
 		th:classappend="${list.count % 2 == 1} ? bg-light">
@@ -82,21 +77,14 @@
 						th:if="${citem.author != null and #authentication.getPrincipal.getUsername() == citem.author.username}"
 						th:text="삭제"></a>
 				</div>
-				<div>
-					<div th:if="${citem.modifyDate != null}"
-						class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start me-2">
-						<div class="mb-2">modify at</div>
-						<div
-							th:text="${#temporals.format(citem.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+				<div
+					class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start">
+					<div class="mb-2" th:if="${citem.author !=null}">
+						<span th:text="${citem.author.username}"></span>
 					</div>
 					<div
-						class="badge bg-secondary bg-opacity-10 text-dark p-2 text-start">
-						<div class="mb-2" th:if="${citem.author !=null}">
-							<span th:text="${citem.author.username}"></span>
-						</div>
-						<div
-							th:text="${#temporals.format(citem.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-					</div>
+						th:text="${#temporals.format(citem.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+
 				</div>
 			</div>
 		</div>
