@@ -3,11 +3,7 @@
 
 <div layout:fragment="content" class="container my-3 signup"
 	style="max-width: 512px; margin: 0 auto;">
-	<div class="my-3 border-bottom">
-		<div>
-			<h4>회원 관리</h4>
-		</div>
-	</div>
+	<h5 class="my-3 border-bottom pb-2">회원 관리</h5>
 	<form th:action="@{/admin/user/create}" th:object="${adminUserForm}"
 		method="post">
 		<div th:replace="~{form_errors :: formErrorsFragment}"></div>
