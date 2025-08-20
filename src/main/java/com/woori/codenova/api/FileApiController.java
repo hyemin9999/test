@@ -88,7 +88,7 @@ public class FileApiController {
 			item.setSaveFilename(saveFilename);
 			item.setExtension(extension);
 			item.setFileSize(image.getSize()); // TODO :: 이미지 크기
-			item.setStoredFilepath(path);
+			item.setSaveFilepath(path);
 			item.setUploadDate(LocalDateTime.now());
 
 			return uploadFileRepository.save(item);

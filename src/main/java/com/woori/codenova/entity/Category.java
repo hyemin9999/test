@@ -42,6 +42,9 @@ public class Category {
 	@OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
 	private List<Notice> noticeList;
 
+	@OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+	private List<SearchText> searchtextList;
+
 	// 사용여부?? (생성한 카테고리의 사용여부를 설정할수 있어야 할까?)
 
 	// 권한

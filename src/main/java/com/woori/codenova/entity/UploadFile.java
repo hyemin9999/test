@@ -27,7 +27,7 @@ public class UploadFile {
 	private String saveFilename;
 
 	@Column(nullable = false)
-	private String storedFilepath;
+	private String saveFilepath;
 
 	@Column(nullable = false)
 	private String extension;

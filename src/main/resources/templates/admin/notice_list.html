@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{admin/layout}">
 <div layout:fragment="content" class="container my-3">
-	<h5 class="my-3 border-bottom pb-2">공지사항</h5>
+	<h5 class="my-3 border-bottom pb-2">공지사항 관리</h5>
 	<div class="row my-3">
 		<div class="col-6">
 			<a th:href="@{/admin/notice/create}" class="btn btn-info">등록</a>
@@ -10,7 +10,7 @@
 			<div class="input-group">
 				<input type="text" id="search_kw" class="form-control"
 					th:value="${kw}">
-				<button class="btn btn-outline-info" type="button" id="btn_search">찾기</button>
+				<button class="btn btn-outline-info" type="button" id="btn_search">검색</button>
 			</div>
 		</div>
 	</div>
@@ -39,7 +39,7 @@
 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 				<td th:text="${item.viewCount}"></td>
 			</tr>
-			<tr th:if="${paging.isEmpty()}">
+			<tr class="text-center" th:if="${paging.isEmpty()}">
 				<td colspan="5">공지사항이 존재하지 않습니다.</td>
 			</tr>
 		</tbody>
@@ -70,21 +70,6 @@
 	</form>
 </div>
 
-<script layout:fragment="script" type='text/javascript'>
-	const page_elements = document.getElementsByClassName("page-link");
-	Array.from(page_elements).forEach(function(element) {
-		element.addEventListener('click', function() {
-			document.getElementById('page').value = this.dataset.page;
-			document.getElementById('searchForm').submit();
-		});
-	});
-	const btn_search = document.getElementById("btn_search");
-	btn_search.addEventListener('click', function() {
-		document.getElementById('kw').value = document
-				.getElementById('search_kw').value;
-		document.getElementById('page').value = 0;
-		document.getElementById('searchForm').submit();
-	});
-</script>
-
+<script layout:fragment="script" type='text/javascript'
+	th:src="@{/list_search.js}"></script>
 </html>

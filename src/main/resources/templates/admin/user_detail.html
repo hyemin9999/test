@@ -2,6 +2,7 @@
 <html layout:decorate="~{admin/layout}">
 
 <div layout:fragment="content" class="container my-3">
+	<h5 class="my-3 border-bottom pb-2">회원 관리</h5>
 	<form th:object="${adminUserModifyForm}" method="post"
 		th:action="@{|/admin/user/detail/${item.id}|}">
 		<div class="mb-3">
