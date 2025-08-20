@@ -11,19 +11,6 @@ input[type=submit] {
 	min-height: 300px;
 }
 
-/* .card d-flex>div { */
-/* 	min-width: 100px; */
-/* 	width: 200px; */
-/* } */
-
-/* .card d-flex div:nth-child(2) { */
-/* 	min-width: 250px; */
-/* 	text-align: right; */
-/* } */
-.btn-outline-secondary {
-	background-color: white;
-}
-
 .placeholder {
 	background-color: inherit;
 }
@@ -40,18 +27,16 @@ input[type=submit] {
 	align-items: flex-end;
 }
 
-/* 이 아래는 주석 */
-
-/* 목록 헤드 와 하단 선 */
-/* .table>:not(caption)>*>* { */
-/* 	--bs-table-color: var(--bs-info-text-emphasis) !important; */
-/* } */
 .table th {
 	border-top-width: var(--bs-border-width) !important;
 }
 
 .table tr:last-child:has(>td) {
 	border-bottom-width: var(--bs-border-width) !important;
+}
+
+.table.notice tr th:list-child {
+	width: 80px;
 }
 
 .btn-info {

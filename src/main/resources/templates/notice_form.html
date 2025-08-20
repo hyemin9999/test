@@ -36,8 +36,7 @@
 			async addImageBlobHook(blob, callback) {
 				try {
 					const formData = new FormData();
-					formData.append('image', blob);
-					formData.append('type', "notice");
+					formData.append('image', blob);					
 					formData.append('mode', [[${mode}]]);
 					
 					const response = await fetch('/tui-editor/image-upload', {
@@ -46,15 +45,16 @@
 						headers: {'X-CSRF-Token':  $('#_csrf').attr('value')}});
 					
 					const json = await response.json();
-					// console.log("filename :: "+json.saveFilename);
-		                    
+					        
 					// TODO :: 업로드한 파일정보를 공지사항 저장/수정 시 연결해야함.
 					
 					const imageUrl = `/tui-editor/image-print?filename=${json.saveFilename}`;
 					callback(imageUrl, 'image alt attribute');
 					} catch (error) {
-						console.error('업로드 실패 : ', error);
-						}}}
+	                    console.error('업로드 실패 : ', error);
+	                }
+	        	},
+		    },
 	});
 	
 	editor.setMarkdown(document.querySelector('#ecp1').value);
