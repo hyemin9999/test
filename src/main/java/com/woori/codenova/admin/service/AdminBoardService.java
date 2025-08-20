@@ -1,4 +1,4 @@
-package com.woori.codenova.service;
+package com.woori.codenova.admin.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,24 +29,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class BoardService {
+public class AdminBoardService {
 
 	private final BoardRepository boardRepository;
 	private final CategoryRepository categoryRepository;
 	private final CommentRepository commentRepository;
-
-	public List<Board> getList() {
-		return boardRepository.findAll();
-	}
-
-	public Page<Board> getList(int page) {
-		List<Sort.Order> sorts = new ArrayList<>();
-		sorts.add(Sort.Order.desc("createDate"));
-
-		Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
-
-		return boardRepository.findAll(pageable);
-	}
 
 	// 목록 - 페이징 - 검색
 	public Page<Board> getList(int page, String kw) {
@@ -63,21 +50,6 @@ public class BoardService {
 
 	// 조회 - 상세
 	public Board getItem(Integer id) {
-
-//		Board item = boardRepository.findByIdAndNotDelete(id).orElse(null);
-//
-////		if (item != null) {
-////			List<Comment> cList = item.getCommentList();
-////
-////			if (!cList.isEmpty()) {
-////
-////			}
-////		}
-//
-//		return item;
-//		return boardRepository.findByIdAndNotDelete(id).orElse(null);
-
-		// TODO :: 조회수 처리
 
 		return boardRepository.findById(id).orElse(null);
 	}
@@ -120,31 +92,19 @@ public class BoardService {
 
 	// 삭제 - 실제 item 삭제를 안하고, 제목, 작성자, 내용의 데이터를 날림.
 	public void delete(Board item) {
-//		item.setSubject("");
-//		item.setContents("");
-//		item.setDelete(true);
-//		item.setDeleteDate(LocalDateTime.now());
-//		item.setAuthor(null);
-//
-//		// TODO :: 게시글 삭제되어도 게시판과의 연결을 어떻게??
-//		// TODO :: 게시글 삭제시 파일 삭제
-//		boardRepository.save(item);
+//			item.setSubject("");
+//			item.setContents("");
+//			item.setDelete(true);
+//			item.setDeleteDate(LocalDateTime.now());
+//			item.setAuthor(null);
+		//
+//			// TODO :: 게시글 삭제되어도 게시판과의 연결을 어떻게??
+//			// TODO :: 게시글 삭제시 파일 삭제
+//			boardRepository.save(item);
 
 		// isDelete 값 false인것만 가지고 처리하는게 힘들어서 그냥 연결된거 일단 다 날림^^
 
 		boardRepository.delete(item);
-	}
-
-	// 추천
-	public void vote(Board item, SiteUser siteUser) {
-		item.getVoter().add(siteUser);
-		boardRepository.save(item);
-	}
-
-	// 즐겨찾기
-	public void favorites(Board item, SiteUser siteUser) {
-		item.getFavorites().add(siteUser);
-		boardRepository.save(item);
 	}
 
 	// 검색

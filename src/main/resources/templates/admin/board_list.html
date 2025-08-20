@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html layout:decorate="~{admin/layout}">
-
 <div layout:fragment="content" class="container my-3">
-
-	<h5 class="my-3 border-bottom pb-2">회원관리</h5>
-
+	<h5 class="my-3 border-bottom pb-2">게시판</h5>
 	<div class="row my-3">
 		<div class="col-6">
-			<a th:href="@{/admin/user/create}" class="btn btn-info">등록</a>
+			<a th:href="@{/admin/board/create}" class="btn btn-info">등록</a>
 		</div>
 		<div class="col-6">
 			<div class="input-group">
@@ -17,14 +14,16 @@
 			</div>
 		</div>
 	</div>
-	<table class="table user">
+
+	<table class="table board">
 		<thead class="table-info">
 			<tr class="text-center">
 				<th>번호</th>
-				<th>역할</th>
-				<th>사용자 ID</th>
-				<th>Email</th>
-				<th>가입일</th>
+				<th>제목</th>
+				<th>작성자</th>
+				<th>작성일</th>
+				<th>조회수</th>
+				<th>추천</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,15 +32,22 @@
 				<td
 					th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
 				</td>
-				<td><a th:text="${!item.authority.isEmpty() ? '관리자':''}"></a></td>
-				<td><a th:href="@{|/admin/user/detail/${item.id}|}"
-					th:text="${item.username}"></a></td>
-				<td><span th:text="${item.email}"></span></td>
+				<td class="text-start"><a
+					th:href="@{|/admin/board/detail/${item.id}|}"
+					th:text="${item.subject}"></a><span class="text-danger small ms-2"
+					th:if="${#lists.size(item.commentList) > 0}"
+					th:text="${#lists.size(item.commentList)}"></span></td>
+
+				<td><span th:if="${item.author != null}"
+					th:text="${item.author.username}"></span></td>
 				<td
 					th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+				<td th:text="${item.viewCount}"></td>
+				<td
+					th:text="${#lists.size(item.voter) > 0 ? #lists.size(item.voter) : 0}"></td>
 			</tr>
 			<tr th:if="${paging.isEmpty()}">
-				<td colspan="5">회원이 존재하지 않습니다.</td>
+				<td colspan="6">게시글이 존재하지 않습니다.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -66,11 +72,12 @@
 		</ul>
 	</div>
 
-	<form th:action="@{/admin/user/list}" method="get" id="searchForm">
+	<form th:action="@{/admin/board/list}" method="get" id="searchForm">
 		<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input
 			type="hidden" id="page" name="page" th:value="${paging.number}">
 	</form>
 </div>
+
 <script layout:fragment="script" type='text/javascript'>
 	const page_elements = document.getElementsByClassName("page-link");
 	Array.from(page_elements).forEach(function(element) {
@@ -85,15 +92,6 @@
 				.getElementById('search_kw').value;
 		document.getElementById('page').value = 0;
 		document.getElementById('searchForm').submit();
-	});
-
-	const search_kw = document.getElementById("search_kw");
-	search_kw.addEventListener('keypress', function() {
-		if (event.keyCode === 13) {
-			document.getElementById('kw').value = this.value;
-			document.getElementById('page').value = 0;
-			document.getElementById('searchForm').submit();
-		}
 	});
 </script>
 

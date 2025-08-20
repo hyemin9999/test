@@ -35,4 +35,9 @@ public class MainController {
 	public String adminCategory() {
 		return "redirect:/admin/category/list";
 	}
+
+	@GetMapping(value = { "/admin/board", "/admin/board/" })
+	public String adminBoard() {
+		return "redirect:/admin/board/list";
+	}
 }
