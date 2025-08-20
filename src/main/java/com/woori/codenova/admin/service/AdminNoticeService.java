@@ -1,4 +1,4 @@
-package com.woori.codenova.service;
+package com.woori.codenova.admin.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,8 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class NoticeService {
-
+public class AdminNoticeService {
 	private final NoticeRepository noticeRepository;
 
 	// 목록 - 페이징 - 검색
@@ -99,6 +98,7 @@ public class NoticeService {
 
 				q.distinct(true); // 중복을 제거
 
+				// TODO :: 내용에 이미지가 있는경우 저장파일이름에서는 검색이 안됐으면좋겠다.
 				Join<Notice, SiteUser> u = r.join("author", JoinType.LEFT);// 공지와 작성자
 
 				// TODO:: 제목, 내용, 작성자ID
@@ -107,4 +107,5 @@ public class NoticeService {
 			}
 		};
 	}
+
 }
