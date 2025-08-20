@@ -22,6 +22,7 @@ import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.form.BoardForm;
 import com.woori.codenova.form.CommentForm;
 import com.woori.codenova.service.BoardService;
+import com.woori.codenova.service.SearchTextService;
 import com.woori.codenova.service.UserService;
 
 import jakarta.validation.Valid;
@@ -34,6 +35,7 @@ public class BoardController {
 
 	private final BoardService boardService;
 	private final UserService userService;
+	private final SearchTextService searchTextService;
 
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
@@ -44,6 +46,9 @@ public class BoardController {
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 
+		if (!kw.isBlank()) {
+			searchTextService.create(kw, null);
+		}
 		return "board_list";
 	}
 

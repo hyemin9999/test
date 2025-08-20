@@ -8,7 +8,7 @@ public class MainController {
 
 	@GetMapping("/")
 	public String root() {
-		return "redirect:/board/list";
+		return "index";
 	}
 
 	@GetMapping(value = { "/notice", "/notice/" })
