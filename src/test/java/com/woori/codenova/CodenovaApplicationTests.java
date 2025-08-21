@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.woori.codenova.admin.service.AdminRoleService;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
@@ -18,7 +19,6 @@ import com.woori.codenova.repository.CategoryRepository;
 import com.woori.codenova.repository.RoleRepository;
 import com.woori.codenova.repository.UserRepository;
 import com.woori.codenova.service.CategoryService;
-import com.woori.codenova.service.RoleService;
 import com.woori.codenova.service.UserService;
 
 @SpringBootTest
@@ -27,7 +27,7 @@ class CodenovaApplicationTests {
 	@Autowired
 	private RoleRepository roleReporitory;
 	@Autowired
-	private RoleService roleService;
+	private AdminRoleService roleService;
 
 	@Autowired
 	private UserRepository userReporitory;

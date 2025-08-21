@@ -1,4 +1,4 @@
-package com.woori.codenova.service;
+package com.woori.codenova.admin.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class RoleService {
+public class AdminRoleService {
 
 	// 초기에 시스템 관리자와 일반 사용자의 역할이 저장되어야 하는게 아닐까??
 
@@ -33,7 +33,7 @@ public class RoleService {
 
 		// 정렬
 		List<Sort.Order> solist = new ArrayList<>();
-		solist.add(Sort.Order.asc("grade")); // 등급
+//		solist.add(Sort.Order.asc("grade")); // 등급
 		solist.add(Sort.Order.asc("createDate")); // 등록일
 		// 페이징
 		Pageable pa = PageRequest.of(page, 20, Sort.by(solist));
@@ -86,8 +86,8 @@ public class RoleService {
 
 				q.distinct(true); // 중복을 제거
 
-				// TODO :: 명칭, 등급
-				return cb.or(cb.like(r.get("name"), "%" + kw + "%"), cb.like(r.get("grade"), "%" + kw + "%"));
+				// TODO :: 명칭, 등급 //, cb.like(r.get("grade"), "%" + kw + "%")
+				return cb.or(cb.like(r.get("name"), "%" + kw + "%"));
 			}
 		};
 	}

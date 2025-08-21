@@ -84,7 +84,6 @@ public class AdminUserController {
 	@GetMapping(value = "/detail/{id}")
 	public String detail(Model model, AdminUserModifyForm adminUserModifyForm, Principal principal,
 			@PathVariable("id") Long id) {
-		model.addAttribute("mode", "detail");
 
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {
@@ -92,6 +91,7 @@ public class AdminUserController {
 		}
 
 		model.addAttribute("item", item);
+		model.addAttribute("mode", "detail");
 
 		adminUserModifyForm.setId(item.getId());
 		adminUserModifyForm.setUsername(item.getUsername());
@@ -122,7 +122,6 @@ public class AdminUserController {
 		}
 
 		this.adminUserService.modify(item, adminUserModifyForm.getPassword1());
-		model.addAttribute("mode", "info");
 		return String.format("redirect:/admin/user/list");
 	}
 
