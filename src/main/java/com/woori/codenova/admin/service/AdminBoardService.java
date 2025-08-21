@@ -17,7 +17,6 @@ import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CategoryRepository;
-import com.woori.codenova.repository.CommentRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -33,7 +32,6 @@ public class AdminBoardService {
 
 	private final BoardRepository boardRepository;
 	private final CategoryRepository categoryRepository;
-	private final CommentRepository commentRepository;
 
 	// 목록 - 페이징 - 검색
 	public Page<Board> getList(int page, String kw) {

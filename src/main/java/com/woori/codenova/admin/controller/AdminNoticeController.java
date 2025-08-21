@@ -34,6 +34,7 @@ public class AdminNoticeController {
 	private final UserService userService;
 
 	@GetMapping("/list")
+	@PreAuthorize("isAuthenticated()")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw) {
 
@@ -46,6 +47,7 @@ public class AdminNoticeController {
 	}
 
 	@GetMapping(value = "/detail/{id}")
+	@PreAuthorize("isAuthenticated()")
 	public String detail(Model model, @PathVariable("id") Integer id) {
 
 		Notice item = this.noticeService.getItem(id);

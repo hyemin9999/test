@@ -17,7 +17,6 @@ import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CategoryRepository;
-import com.woori.codenova.repository.CommentRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -33,7 +32,6 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 	private final CategoryRepository categoryRepository;
-	private final CommentRepository commentRepository;
 
 	public List<Board> getList() {
 		return boardRepository.findAll();
