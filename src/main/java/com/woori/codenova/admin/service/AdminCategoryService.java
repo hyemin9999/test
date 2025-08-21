@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class AadminCategoryService {
+public class AdminCategoryService {
 	private final CategoryRepository categoryRepository;
 
 	// 목록 - 페이징 - 검색
@@ -36,6 +36,19 @@ public class AadminCategoryService {
 		Specification<Category> spec = search(kw);
 
 		return categoryRepository.findAll(spec, pageable);
+	}
+
+	// 목록 - 페이징
+	public List<Category> getlist() {
+		Sort sort = Sort.by(Sort.Direction.ASC, "name");
+		List<Category> list = categoryRepository.findAll(sort);
+
+		Category citem = new Category();
+		citem.setId(0);
+		citem.setName("전체");
+		list.add(0, citem);
+
+		return list;
 	}
 
 	// 조회 - 상세

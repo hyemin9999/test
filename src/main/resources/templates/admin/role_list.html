@@ -2,7 +2,7 @@
 <html layout:decorate="~{admin/layout}"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<div layout:fragment="content" class="container my-3">
+<div layout:fragment="content" class="container-fluid my-3 px-4">
 	<h5 class="my-3 border-bottom pb-2">역할 관리</h5>
 	<div class="row">
 		<div class="col-6">
@@ -45,41 +45,66 @@
 					</tr>
 				</tbody>
 			</table>
-			<!-- 			<div th:if="${!paging.isEmpty()}"> -->
-			<!-- 				<ul class="pagination justify-content-center"> -->
-			<!-- 					<li class="page-item" -->
-			<!-- 						th:classappend="${!paging.hasPrevious} ? 'disabled'"><a -->
-			<!-- 						class="page-link" href="javascript:void(0);" -->
-			<!-- 						th:data-page="${paging.number-1}"> <span>이전</span> -->
-			<!-- 					</a></li> -->
-			<!-- 					<li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}" -->
-			<!-- 						th:if="${page >= paging.number-5 and page <= paging.number+5}" -->
-			<!-- 						th:classappend="${page == paging.number} ? 'active'" -->
-			<!-- 						class="page-item"><a th:text="${page + 1}" class="page-link" -->
-			<!-- 						href="javascript:void(0);" th:data-page="${page}"></a></li> -->
-			<!-- 					<li class="page-item" -->
-			<!-- 						th:classappend="${!paging.hasNext} ? 'disabled'"><a -->
-			<!-- 						class="page-link" href="javascript:void(0);" -->
-			<!-- 						th:data-page="${paging.number+1}"> <span>다음</span> -->
-			<!-- 					</a></li> -->
-			<!-- 				</ul> -->
-			<!-- 			</div> -->
+			<div th:if="${!paging.isEmpty()}">
+				<ul class="pagination justify-content-center">
+					<li class="page-item"
+						th:classappend="${!paging.hasPrevious} ? 'disabled'"><a
+						class="page-link" href="javascript:void(0);"
+						th:data-page="${paging.number-1}"> <span>이전</span>
+					</a></li>
+					<li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+						th:if="${page >= paging.number-5 and page <= paging.number+5}"
+						th:classappend="${page == paging.number} ? 'active'"
+						class="page-item"><a th:text="${page + 1}" class="page-link"
+						href="javascript:void(0);" th:data-page="${page}"></a></li>
+					<li class="page-item"
+						th:classappend="${!paging.hasNext} ? 'disabled'"><a
+						class="page-link" href="javascript:void(0);"
+						th:data-page="${paging.number+1}"> <span>다음</span>
+					</a></li>
+				</ul>
+			</div>
 			<form th:action="@{/admin/role/list}" method="get" id="searchForm">
 				<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input
 					type="hidden" id="page" name="page" th:value="${paging.number}">
 			</form>
 		</div>
-		<!-- 		<div class="col-6"> -->
-		<!-- 			<div class="card my-3"> -->
-		<!-- 				<div class="card-body"> -->
-		<!-- 					<form method="post" th:object="${adminRoleForm}"> -->
-		<!-- 						<input type="hidden" th:name="${_csrf.parameterName}" -->
-		<!-- 							th:value="${_csrf.token}" id="_csrf" /> -->
-		<!-- 						<div th:replace="~{form_errors :: formErrorsFragment}"></div> -->
-		<!-- 					</form> -->
-		<!-- 				</div> -->
-		<!-- 			</div> -->
-		<!-- 		</div> -->
+		<div class="col-6">
+			<form method="post" th:object="${adminRoleForm}">
+				<h6 class="my-3 border-bottom pb-2 pt-2 title">[[*{name}]]</h6>
+				<div class="card my-3">
+					<div class="card-body">
+						<input type="hidden" th:name="${_csrf.parameterName}"
+							th:value="${_csrf.token}" id="_csrf" />
+						<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+
+						<div class="mb-3">
+							<label for="name" class="form-label">역할 이름</label><input
+								type="text" th:field="*{name}" class="form-control">
+						</div>
+						<div class="mb-3">
+							<!-- 							<div class="border-bottom"> -->
+							<!-- 								<label class="form-label">게시판</label> -->
+							<!-- 							</div> -->
+
+							<div th:if="${!clist.isEmpty()}">
+								<div class="form-check form-check-inline"
+									th:each="citem, clist : ${clist}">
+									<input class="form-check-input" type="checkbox"
+										th:value="${citem.id}" th:id="${'item' + clist.index}">
+									<label class="form-check-label"
+										th:for="${'item' + clist.index}" th:text="${citem.name}"></label>
+								</div>
+							</div>
+						</div>
+						<div class="align-r">
+							<input type="submit" value="저장" class="btn btn-info my-2">
+							<a class="btn btn-outline-info" th:href="@{/admin/role/list}">취소</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
 <script layout:fragment="script" type='text/javascript'
