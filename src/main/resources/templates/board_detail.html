@@ -23,13 +23,13 @@
 						class="favorite btn btn-sm btn-outline-info"
 						th:data-uri="@{|/board/favorites/${item.id}|}"> <span
 						className='star_icon'> <svg
-								xmlns='http://www.w3.org/2000/svg' width='19' height='18'
-								viewBox='0 0 14 13'>
-                    <path id='star' transform='translate(-2 -2)'
+								xmlns='http://www.w3.org/2000/svg' width='20' height='21'
+								viewBox='0 0 18 18'>
+<!--                    transform='translate(-2 -2)' -->
+                    <path id='star'
 									d='M9,2l2.163,4.279L16,6.969,12.5,10.3l.826,4.7L9,12.779,4.674,15,5.5,10.3,2,6.969l4.837-.69Z' />
                 </svg>
-					</span> <span class="badge rounded-pill bg-info"
-						th:text="${#lists.size(item.favorites)}"></span>
+					</span> <!-- 					<span class="badge rounded-pill bg-info" --> <!-- 						></span> -->
 					</a> <a th:href="@{|/board/modify/${item.id}|}"
 						class="btn btn-sm btn-outline-info"
 						sec:authorize="isAuthenticated()"

@@ -9,6 +9,8 @@
 <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <title>CodeNova</title>
 </head>
 <body class="d-flex flex-column h-100">
@@ -16,11 +18,10 @@
 
 	<th:block layout:fragment="content"></th:block>
 
-	<script th:src="@{/bootstrap.min.js}"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-	<script
+	<script type="text/javascript" th:src="@{/bootstrap.min.js}"></script>
+	<script type="text/javascript"
 		src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-	<script th:src="@{/detail.js}"></script>
+	<script type="text/javascript" th:src="@{/detail.js}"></script>
 
 	<th:block layout:fragment="script"></th:block>
 

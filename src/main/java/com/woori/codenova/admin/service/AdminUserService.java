@@ -48,7 +48,7 @@ public class AdminUserService {
 	// 조회 - 상세
 	public SiteUser getItem(Long id) {
 
-		return userReporitory.findById(id).orElseThrow(() -> new RuntimeException("존재하지않는 회원입니다."));
+		return userReporitory.findById(id).orElse(null);
 	}
 
 	// 등록

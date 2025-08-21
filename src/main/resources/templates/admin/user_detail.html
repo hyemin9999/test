@@ -5,8 +5,8 @@
 
 <div layout:fragment="content" class="container my-3">
 	<h5 class="my-3 border-bottom pb-2">회원 관리</h5>
-	<form th:object="${adminUserModifyForm}" method="post"
-		th:action="@{|/admin/user/detail/${item.id}|}">
+	<form th:if="${item != null}" th:object="${adminUserModifyForm}"
+		method="post" th:action="@{|/admin/user/detail/${item.id}|}">
 		<input type="hidden" th:name="${_csrf.parameterName}"
 			th:value="${_csrf.token}" />
 		<div class="mb-3">
@@ -37,6 +37,16 @@
 			<a class="btn btn-sm btn-outline-info" th:href="@{/admin/user/list}">취소</a>
 		</div>
 	</form>
+	<div id="modal" class="modal fade" tabindex="-1" style="display: none;"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body text-center alert-danger">
+					<span id="message"></span>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script layout:fragment="script" type="text/javascript"
@@ -70,5 +80,19 @@
 	if (mode == 'modify') {
 		onDisplay(true);
 	}
+
+	$(document).ready(function() {
+		const message = /*[[${message}]]*/'';
+		if (message != null) {
+			$('#message').text(message);
+			$('#modal').modal('show');
+		}
+
+		$('#modal').on('hide.bs.modal', function(event) {
+
+			console.log('dddd');
+			window.location.href = '/admin/user';
+		});
+	});
 </script>
 </html>
