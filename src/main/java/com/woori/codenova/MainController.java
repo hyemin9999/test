@@ -33,7 +33,7 @@ public class MainController {
 
 	@GetMapping(value = { "/admin/r", "/admin/role", "/admin/role/" })
 	public String adminRole() {
-		return "redirect:/admin/roles/list";
+		return "redirect:/admin/role/list";
 	}
 
 	@GetMapping(value = { "/admin/n", "/admin/notice", "/admin/notice/" })

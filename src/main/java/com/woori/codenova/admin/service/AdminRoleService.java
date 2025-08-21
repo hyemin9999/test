@@ -34,10 +34,10 @@ public class AdminRoleService {
 		// 정렬
 		List<Sort.Order> solist = new ArrayList<>();
 //		solist.add(Sort.Order.asc("grade")); // 등급
-		solist.add(Sort.Order.asc("createDate")); // 등록일
+		solist.add(Sort.Order.desc("createDate")); // 등록일
 		// 페이징
 		Pageable pa = PageRequest.of(page, 20, Sort.by(solist));
-		// 검색
+		// 검색 - 슈퍼관리자 제외
 		Specification<Role> spec = search(kw);
 
 		return roleReporitory.findAll(spec, pa);
@@ -87,7 +87,7 @@ public class AdminRoleService {
 				q.distinct(true); // 중복을 제거
 
 				// TODO :: 명칭, 등급 //, cb.like(r.get("grade"), "%" + kw + "%")
-				return cb.or(cb.like(r.get("name"), "%" + kw + "%"));
+				return cb.and(cb.like(r.get("name"), "%" + kw + "%"), cb.notEqual(r.get("grade"), "1"));
 			}
 		};
 	}
