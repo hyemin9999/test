@@ -4,9 +4,7 @@ import java.security.Principal;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.woori.codenova.admin.form.AdminUserForm;
 import com.woori.codenova.admin.form.AdminUserModifyForm;
@@ -31,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class AdminUserController {
 
 	private final AdminUserService adminUserService;
-	private final PasswordEncoder passwordEncoder;
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/list")
@@ -41,7 +37,6 @@ public class AdminUserController {
 		Page<SiteUser> paging = adminUserService.getList(page, kw);
 
 		model.addAttribute("paging", paging);
-		// 입력한 검색어를 화면에 그대로 유지
 		model.addAttribute("kw", kw);
 
 		return "admin/user_list";
@@ -87,7 +82,8 @@ public class AdminUserController {
 
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지않는 회원입니다.");
+			model.addAttribute("message", "존재하지 않는 회원 입니다.");
+			return "admin/user_detail";
 		}
 
 		model.addAttribute("item", item);
@@ -107,7 +103,8 @@ public class AdminUserController {
 
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지않는 회원입니다.");
+			model.addAttribute("message", "존재하지 않는 회원 입니다.");
+			bindingResult.reject("존재하지 않는 회원 입니다.");
 		}
 
 		model.addAttribute("mode", "modify");

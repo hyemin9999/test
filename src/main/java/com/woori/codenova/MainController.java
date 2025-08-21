@@ -21,9 +21,14 @@ public class MainController {
 		return "redirect:/board/list";
 	}
 
-	@GetMapping(value = { "/admin", "/admin/", "/admin/u", "/admin/user", "/admin/user/" })
+	@GetMapping(value = { "/admin", "/admin/", "/admin/u", "/admin/user", "/admin/user/", })
 	public String admin() {
 		return "redirect:/admin/user/list";
+	}
+
+	@GetMapping(value = { "/admin/user/d", "/admin/user/detail", "/admin/user/detail/" })
+	public String adminUserDeatil() {
+		return "redirect:/admin/user/detail/0";
 	}
 
 	@GetMapping(value = { "/admin/r", "/admin/role", "/admin/role/" })
