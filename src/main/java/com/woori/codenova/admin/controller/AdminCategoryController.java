@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.woori.codenova.admin.form.AdminCategoryForm;
 import com.woori.codenova.entity.Category;
+import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.service.CategoryService;
 import com.woori.codenova.service.UserService;
 
@@ -30,73 +31,68 @@ public class AdminCategoryController {
 	private final UserService userService;
 
 	@GetMapping("/list")
+	@PreAuthorize("isAuthenticated()")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
+			@RequestParam(value = "kw", defaultValue = "") String kw, AdminCategoryForm adminCategoryForm,
+			BindingResult bindingResult) {
+
+		Page<Category> paging = categoryService.getlist(page, kw);
+
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "info");
+
+		return "admin/category_list";
+	}
+
+	@GetMapping("/list/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public String detail(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw, AdminCategoryForm adminCategoryForm,
+			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
 		Page<Category> paging = categoryService.getlist(page, kw);
 
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 
-		return "admin/category_list";
-	}
-
-	@GetMapping(value = "/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Integer id) {
-
 		Category item = this.categoryService.getitem(id);
 
 		if (item != null) {
-			model.addAttribute("item", item);
+			adminCategoryForm.setName(item.getName());
 		}
-		return "admin/category_detail";
+
+		SiteUser user = this.userService.getItem(principal.getName());
+		if (user != null && !user.getAuthority().isEmpty()
+				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
+			model.addAttribute("mode", "modify");
+		}
+
+		return "admin/category_list";
 	}
 
+	@PostMapping("/list")
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/create")
-	public String create(Model model, AdminCategoryForm adminCategoryForm) {
-
-		model.addAttribute("mode", "create");
-		return "admin/category_form";
-	}
-
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/create")
-	public String create(Model model, @Valid AdminCategoryForm adminCategoryForm, BindingResult bindingResult,
-			Principal principal) {
+	public String create(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminCategoryForm adminCategoryForm,
+			BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("mode", "create");
-			return "admin/category_form";
+			return "admin/category_list";
 		}
 
 		this.categoryService.create(adminCategoryForm.getName());
 		return "redirect:/admin/category/list";
 	}
 
+	@PostMapping("/list/{id}")
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/modify/{id}")
-	public String modify(Model model, AdminCategoryForm adminCategoryForm, @PathVariable("id") Integer id,
-			Principal principal) {
-
-		model.addAttribute("mode", "modify");
-		Category item = this.categoryService.getitem(id);
-//		if (!item.getAuthor().getUsername().equals(principal.getName())) {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//		}
-		adminCategoryForm.setName(item.getName());
-
-		return "admin/category_form";
-	}
-
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/modify/{id}")
-	public String modify(Model model, @Valid AdminCategoryForm adminCategoryForm, BindingResult bindingResult,
-			Principal principal, @PathVariable("id") Integer id) {
+	public String modify(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminCategoryForm adminCategoryForm,
+			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("mode", "mofidy");
-			return "admin/category_form";
+			return "admin/category_list";
 		}
 
 		Category item = this.categoryService.getitem(id);
@@ -105,7 +101,7 @@ public class AdminCategoryController {
 //		}
 
 		this.categoryService.modify(item, adminCategoryForm.getName());
-		return String.format("redirect:/admin/category/detail/%s", id);
+		return "redirect:/admin/category/list";
 	}
 
 	@PreAuthorize("isAuthenticated()")

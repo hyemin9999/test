@@ -21,8 +21,10 @@
 			<label for="email" class="form-label">이메일</label><input type="email"
 				th:field="*{email}" class="form-control" />
 		</div>
-		<button type="submit" class="btn btn-info">등록</button>
-		<a class="btn btn-outline-info" th:href="@{/admin/user/list}">취소</a>
+		<div class="align-r">
+			<button type="submit" class="btn btn-info">등록</button>
+			<a class="btn btn-outline-info" th:href="@{/admin/user/list}">취소</a>
+		</div>
 	</form>
 </div>
 

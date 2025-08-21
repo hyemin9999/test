@@ -19,8 +19,10 @@
 			<input type="hidden" name="content" id="ecp"><input
 				type="hidden" id="ecp1" th:field="*{content}">
 		</div>
-		<input type="submit" value="저장" class="btn btn-info my-2"> <a
-			class="btn btn-outline-info" th:href="@{/notice/list}">취소</a>
+		<div class="align-r">
+			<input type="submit" value="저장" class="btn btn-info my-2"> <a
+				class="btn btn-outline-info" th:href="@{/notice/list}">취소</a>
+		</div>
 	</form>
 </div>
 <script layout:fragment="script" type="text/javascript"

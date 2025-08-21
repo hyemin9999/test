@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.RoleRepository;
 import com.woori.codenova.repository.UserRepository;
@@ -60,15 +59,15 @@ public class AdminUserService {
 		item.setPassword(passwordEncoder.encode(password));
 		item.setEmail(email);
 		item.setCreateDate(LocalDateTime.now());
-		userReporitory.save(item);
+//		userReporitory.save(item);
 
 		System.out.println("user insert :: " + item.getId());
 
-		// 관리자 페이지에서 등록한 사용자는 매니저 권한을 기본으로 가지고 있음.
-		Role role = this.roleReporitory.findByGrade(2).orElse(null);
-		if (role != null) {
-			item.getAuthority().add(role);
-		}
+//		// 관리자 페이지에서 등록한 사용자는 매니저 권한을 기본으로 가지고 있음.
+//		Role role = this.roleReporitory.findByGrade(2).orElse(null);
+//		if (role != null) {
+//			item.getAuthority().add(role);
+//		}
 
 		return userReporitory.save(item);
 	}
