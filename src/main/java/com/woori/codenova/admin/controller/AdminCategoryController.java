@@ -37,7 +37,6 @@ public class AdminCategoryController {
 			BindingResult bindingResult) {
 
 		Page<Category> paging = categoryService.getlist(page, kw);
-
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 		model.addAttribute("mode", "info");
@@ -52,12 +51,10 @@ public class AdminCategoryController {
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
 		Page<Category> paging = categoryService.getlist(page, kw);
-
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 
 		Category item = this.categoryService.getitem(id);
-
 		if (item != null) {
 			adminCategoryForm.setName(item.getName());
 		}
@@ -77,6 +74,11 @@ public class AdminCategoryController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminCategoryForm adminCategoryForm,
 			BindingResult bindingResult) {
 
+		Page<Category> paging = categoryService.getlist(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "info");
+
 		if (bindingResult.hasErrors()) {
 			return "admin/category_list";
 		}
@@ -91,11 +93,27 @@ public class AdminCategoryController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminCategoryForm adminCategoryForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
+		Page<Category> paging = categoryService.getlist(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+
+		Category item = this.categoryService.getitem(id);
+
+		if (item != null) {
+			adminCategoryForm.setName(item.getName());
+		}
+
+		SiteUser user = this.userService.getItem(principal.getName());
+		if (user != null && !user.getAuthority().isEmpty()
+				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
+			model.addAttribute("mode", "modify");
+		}
+
 		if (bindingResult.hasErrors()) {
 			return "admin/category_list";
 		}
 
-		Category item = this.categoryService.getitem(id);
+//		Category item = this.categoryService.getitem(id);
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //		}
@@ -112,6 +130,9 @@ public class AdminCategoryController {
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //		}
+
+		// TODO :: 카테고리 삭제시 게시글 (댓글)삭제됨, 검색어도 삭제여부 확인
+
 		this.categoryService.delete(item);
 		return "redirect:/admin/category/list";
 	}

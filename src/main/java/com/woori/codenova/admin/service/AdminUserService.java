@@ -12,12 +12,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.RoleRepository;
 import com.woori.codenova.repository.UserRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
@@ -45,10 +48,22 @@ public class AdminUserService {
 
 	}
 
+// 역할이 연결되어 있는 사용자 목록 반환
+	public List<SiteUser> getList(Integer roleId) {
+
+		Specification<SiteUser> spec = search(roleId);
+		return userReporitory.findAll(spec);
+	}
+
 	// 조회 - 상세
 	public SiteUser getItem(Long id) {
 
 		return userReporitory.findById(id).orElse(null);
+	}
+
+	// 조회 - 사용자ID
+	public SiteUser getItem(String username) {
+		return userReporitory.findByUsername(username).orElse(null);
 	}
 
 	// 등록
@@ -100,6 +115,21 @@ public class AdminUserService {
 
 				// TODO :: 사용자 ID, email
 				return cb.or(cb.like(r.get("username"), "%" + kw + "%"), cb.like(r.get("email"), "%" + kw + "%"));
+			}
+		};
+	}
+
+	// 검색
+	private Specification<SiteUser> search(Integer roleId) {
+		return new Specification<>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Predicate toPredicate(Root<SiteUser> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
+
+				q.distinct(true); // 중복을 제거
+				Join<SiteUser, Role> role = r.join("authority", JoinType.LEFT);
+				return cb.equal(role.get("Id"), roleId); // role id
 			}
 		};
 	}

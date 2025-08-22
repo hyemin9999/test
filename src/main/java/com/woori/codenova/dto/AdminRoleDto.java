@@ -1,0 +1,5 @@
+package com.woori.codenova.dto;
+
+public class AdminRoleDto {
+
+}

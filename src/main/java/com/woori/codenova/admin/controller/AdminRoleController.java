@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.woori.codenova.admin.form.AdminRoleForm;
 import com.woori.codenova.admin.service.AdminCategoryService;
 import com.woori.codenova.admin.service.AdminRoleService;
+import com.woori.codenova.admin.service.AdminUserService;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class AdminRoleController {
 
 	private final AdminRoleService adminRoleService;
 	private final AdminCategoryService adminCategoryService;
-	private final UserService userService;
+	private final AdminUserService adminUserService;
 
 	@GetMapping("/list")
 	@PreAuthorize("isAuthenticated()")
@@ -40,14 +40,7 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
 
-		Page<Role> paging = adminRoleService.getList(page, kw);
-
-		model.addAttribute("paging", paging);
-		model.addAttribute("kw", kw);
-		model.addAttribute("mode", "info");
-
-		List<Category> clist = this.adminCategoryService.getlist();
-		model.addAttribute("clist", clist);
+		list(model, page, kw);
 
 		return "admin/role_list";
 	}
@@ -58,25 +51,7 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminRoleForm adminRoleForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
-		Page<Role> paging = adminRoleService.getList(page, kw);
-
-		model.addAttribute("paging", paging);
-		model.addAttribute("kw", kw);
-
-		Role item = this.adminRoleService.getItem(id);
-
-		if (item != null) {
-			adminRoleForm.setName(item.getName());
-
-			List<Category> clist = this.adminCategoryService.getlist();
-			model.addAttribute("clist", clist);
-		}
-
-		SiteUser user = this.userService.getItem(principal.getName());
-		if (user != null && !user.getAuthority().isEmpty()
-				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
-			model.addAttribute("mode", "modify");
-		}
+		list(model, page, kw, principal, adminRoleForm, id);
 
 		return "admin/role_list";
 	}
@@ -86,6 +61,10 @@ public class AdminRoleController {
 	public String create(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
+
+		System.out.println("create :: ");
+
+		list(model, page, kw);
 
 		if (bindingResult.hasErrors()) {
 			return "admin/role_list";
@@ -101,15 +80,19 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
+		System.out.println("modify :: ");
+
+		list(model, page, kw, principal, adminRoleForm, id);
+
 		if (bindingResult.hasErrors()) {
 			return "admin/role_list";
 		}
 
-		Role item = this.adminRoleService.getItem(id);
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //		}
 
+		Role item = this.adminRoleService.getItem(id);
 		this.adminRoleService.modify(item, adminRoleForm.getName(), item.getGrade());
 		return "redirect:/admin/role/list";
 	}
@@ -122,7 +105,52 @@ public class AdminRoleController {
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //		}
+
+		// TODO :: 역할 삭제시 연결된 게시판과 사용자 없애기(삭제 x)
+
+		List<Category> clist = this.adminCategoryService.getlist(id);
+		for (Category category : clist) {
+			category.getAuthority().remove(item);
+		}
+
+		List<SiteUser> ulist = this.adminUserService.getList(id);
+		for (SiteUser siteUser : ulist) {
+			siteUser.getAuthority().remove(item);
+		}
+
 		this.adminRoleService.delete(item);
 		return "redirect:/admin/role/list";
 	}
+
+	public void list(Model model, Integer page, String kw) {
+		Page<Role> paging = adminRoleService.getList(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "info");
+
+		List<Category> clist = this.adminCategoryService.getlist();
+		model.addAttribute("clist", clist);
+	}
+
+	public void list(Model model, Integer page, String kw, Principal principal, AdminRoleForm adminRoleForm,
+			Integer id) {
+		Page<Role> paging = adminRoleService.getList(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+
+		Role item = this.adminRoleService.getItem(id);
+		if (item != null) {
+			adminRoleForm.setName(item.getName());
+
+			List<Category> clist = this.adminCategoryService.getlist();
+			model.addAttribute("clist", clist);
+		}
+
+		SiteUser user = this.adminUserService.getItem(principal.getName());
+		if (user != null && !user.getAuthority().isEmpty()
+				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
+			model.addAttribute("mode", "modify");
+		}
+	}
+
 }
