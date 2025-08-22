@@ -12,11 +12,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.Category;
+import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.CategoryRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +35,6 @@ public class AdminCategoryService {
 		sorts.add(Sort.Order.desc("createDate"));
 
 		Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
-
 		Specification<Category> spec = search(kw);
 
 		return categoryRepository.findAll(spec, pageable);
@@ -51,9 +53,14 @@ public class AdminCategoryService {
 		return list;
 	}
 
+	// 목록
+	public List<Category> getlist(int roleId) {
+		Specification<Category> spec = search(roleId);
+		return categoryRepository.findAll(spec);
+	}
+
 	// 조회 - 상세
 	public Category getitem(Integer id) {
-
 		return categoryRepository.findById(id).orElse(null);
 	}
 
@@ -70,6 +77,7 @@ public class AdminCategoryService {
 	public void modify(Category item, String name) {
 		item.setName(name);
 		item.setModifyDate(LocalDateTime.now());
+
 		categoryRepository.save(item);
 	}
 
@@ -85,22 +93,34 @@ public class AdminCategoryService {
 	// 즐겨찾기
 	public void favorites(Category item, SiteUser siteUser) {
 		item.getFavorites().add(siteUser);
+
 		categoryRepository.save(item);
 	}
 
 	// 검색
 	private Specification<Category> search(String kw) {
 		return new Specification<>() {
-
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<Category> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
 
 				q.distinct(true); // 중복을 제거
-
-				// 게시판 이름
 				return cb.or(cb.like(r.get("name"), "%" + kw + "%"));
+			}
+		};
+	}
+
+	private Specification<Category> search(Integer roleId) {
+		return new Specification<>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Predicate toPredicate(Root<Category> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
+
+				q.distinct(true); // 중복을 제거
+				Join<SiteUser, Role> role = r.join("authority", JoinType.LEFT);// 게시글과 작성자
+				return cb.equal(role.get("Id"), roleId); // role id;
 			}
 		};
 	}

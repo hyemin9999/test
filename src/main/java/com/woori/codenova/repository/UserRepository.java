@@ -1,5 +1,6 @@
 package com.woori.codenova.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.woori.codenova.entity.SiteUser;
 
 public interface UserRepository extends JpaRepository<SiteUser, Long> {
+
 	// 페이징 + 검색
 	Page<SiteUser> findAll(Specification<SiteUser> specification, Pageable pageable);
 
@@ -20,4 +22,7 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
 	// 비밀번호 찾기 - 변경을 위한 선처리
 	Optional<SiteUser> findByUsernameAndEmail(String username, String email);
+
+	List<SiteUser> findAll(Specification<SiteUser> specification);
+
 }

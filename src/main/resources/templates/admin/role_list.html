@@ -21,8 +21,8 @@
 					<tr class="text-center">
 						<th>번호</th>
 						<th>역할 이름</th>
-						<th>생성일</th>
-						<th></th>
+						<th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">생성일</th>
+						<th th:if="${#authorization.expression('hasRole(''ADMIN'')')}"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -34,11 +34,10 @@
 							th:href="@{|/admin/role/list/${item.id}|}" th:text="${item.name}"></a></td>
 						<td
 							th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-						<td><a href="javascript:void(0);"
+						<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a
+							href="javascript:void(0);"
 							class="delete btn btn-sm btn-outline-info"
-							th:data-uri="@{|/admin/role/delete/${item.id}|}"
-							th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-							th:text="삭제"></a></td>
+							th:data-uri="@{|/admin/role/delete/${item.id}|}" th:text="삭제"></a></td>
 					</tr>
 					<tr class="text-center" th:if="${paging.isEmpty()}">
 						<td colspan="4">역할이 존재하지 않습니다.</td>
@@ -87,13 +86,20 @@
 							<!-- 								<label class="form-label">게시판</label> -->
 							<!-- 							</div> -->
 
+<!-- th:classappend="${list.index == 0 ? role}" -->
+
 							<div th:if="${!clist.isEmpty()}">
 								<div class="form-check form-check-inline"
-									th:each="citem, clist : ${clist}">
-									<input class="form-check-input" type="checkbox"
-										th:value="${citem.id}" th:id="${'item' + clist.index}">
-									<label class="form-check-label"
-										th:for="${'item' + clist.index}" th:text="${citem.name}"></label>
+									th:each="item, list : ${clist}">
+									<input class="form-check-input"
+									th:classappend="${list.index != 0} ? role"
+										
+										data-toggle="toggle" th:rId="${item.id}"
+										th:onchange="onChange(this.getAttribute('rId'), this)"
+										type="checkbox" th:value="${item.id}"
+										th:id="${'item' + list.index}"> <label
+										class="form-check-label" th:for="${'item' + list.index}"
+										th:text="${item.name}"></label>
 								</div>
 							</div>
 						</div>
