@@ -23,3 +23,47 @@ search_kw.addEventListener('keypress', function() {
 		document.getElementById('searchForm').submit();
 	}
 });
+
+
+function onChange(roleId, checkBox) {
+	if (roleId == 0) { //전체
+
+		console.log("checkBox :: " + $(checkBox).prop("checked"));
+
+		if ($(checkBox).prop("checked")) {
+			$('.role').prop('checked', true);
+		} else {
+			$('.role').prop('checked', false);
+		}
+
+
+
+		//		if ($(checkBox).prop("checked")) { //체크가 true이면
+		//			console.log("checkBox :: true");
+		//			
+		//			
+		//		} else {
+		//			console.log("checkBox :: false");
+		//			
+		//			
+		//		}
+	}
+
+}
+
+$(document).ready(function() {
+
+	//    $("input[type='checkbox'].allrole").on('change', function() {
+	//        // this.checked는 현재 체크박스의 체크 여부를 반환합니다.
+	//        
+	//        $("input[type='checkbox'].role")
+	//        
+	//        if (this.checked) {
+	//            console.log("체크박스가 체크되었습니다.");
+	//            // 여기서 원하는 로직을 실행합니다.
+	////        } else {
+	//            console.log("체크박스가 해제되었습니다.");
+	//            // 여기서 원하는 로직을 실행합니다.
+	//        }
+	//    });
+});
