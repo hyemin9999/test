@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.woori.codenova.dto.AdminCategoryDto;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
@@ -41,28 +40,9 @@ public class AdminCategoryService {
 		return categoryRepository.findAll(spec, pageable);
 	}
 
-	// 목록 - 정렬 - 역할관리 사용
-	public List<AdminCategoryDto> getlist() {
-
-//		List<Category> list = categoryRepository.findAll();
-		List<AdminCategoryDto> list = new ArrayList<>();
-//		List<AdminCategoryDto> list = categoryRepository.findAllByAuthority();
-//
-//		AdminCategoryDto item = new AdminCategoryDto();
-//		item.setId(0);
-//		item.setName("전체");
-//		item.setIsCheck(false);
-//		list.add(0, item);
-
-//		for (Category item : list) {
-//
-//		}
-
-//		Category item = new Category();
-//		item.setId(0);
-//		item.setName("전체");
-//		list.add(0, item);
-
+	// 목록 - 정렬 - 역할관리에서 사용
+	public List<Category> getlist() {
+		List<Category> list = categoryRepository.findAllByName();
 		return list;
 	}
 

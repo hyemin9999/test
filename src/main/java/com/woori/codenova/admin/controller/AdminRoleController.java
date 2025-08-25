@@ -18,6 +18,7 @@ import com.woori.codenova.admin.form.AdminRoleForm;
 import com.woori.codenova.admin.service.AdminCategoryService;
 import com.woori.codenova.admin.service.AdminRoleService;
 import com.woori.codenova.admin.service.AdminUserService;
+import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
 
@@ -39,7 +40,7 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
 
-		list(model, page, kw, adminRoleForm);
+		list(model, page, kw, adminRoleForm, "list");
 
 		return "admin/role_list";
 	}
@@ -50,15 +51,13 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
 
-		System.out.println("create :: ");
-
-		list(model, page, kw, adminRoleForm);
+		list(model, page, kw, adminRoleForm, "create");
 
 		if (bindingResult.hasErrors()) {
 			return "admin/role_list";
 		}
 
-		this.adminRoleService.create(adminRoleForm.getName(), 2);
+		this.adminRoleService.create(adminRoleForm.getName(), 2, adminRoleForm.getSelectedList());
 		return "redirect:/admin/role/list";
 	}
 
@@ -68,7 +67,7 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminRoleForm adminRoleForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
-		listById(model, page, kw, principal, adminRoleForm, id);
+		listById(model, page, kw, principal, adminRoleForm, id, "list");
 
 		return "admin/role_list";
 	}
@@ -79,9 +78,13 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
-		System.out.println("modify :: ");
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+			bindingResult.reject("존재하지 않는 역할 입니다.");
+		}
 
-		listById(model, page, kw, principal, adminRoleForm, id);
+		listById(model, page, kw, principal, adminRoleForm, id, "modify");
 
 		if (bindingResult.hasErrors()) {
 			return "admin/role_list";
@@ -91,8 +94,7 @@ public class AdminRoleController {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //		}
 
-		Role item = this.adminRoleService.getItem(id);
-		this.adminRoleService.modify(item, adminRoleForm.getName(), item.getGrade());
+		this.adminRoleService.modify(item, adminRoleForm.getName(), item.getGrade(), adminRoleForm.getSelectedList());
 		return "redirect:/admin/role/list";
 	}
 
@@ -101,15 +103,10 @@ public class AdminRoleController {
 	public String delete(Principal principal, @PathVariable("id") Integer id) {
 
 		Role item = this.adminRoleService.getItem(id);
+//		item.getAuthority().clear();
+
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//		}
-
-		// TODO :: 역할 삭제시 연결된 게시판과 사용자 없애기(삭제 x)
-
-//		List<Category> clist = this.adminCategoryService.getlist(id);
-//		for (Category category : clist) {
-//			category.getAuthority().remove(item);
 //		}
 
 		List<SiteUser> ulist = this.adminUserService.getList(id);
@@ -121,21 +118,18 @@ public class AdminRoleController {
 		return "redirect:/admin/role/list";
 	}
 
-	public void list(Model model, Integer page, String kw, AdminRoleForm adminRoleForm) {
+	public void list(Model model, Integer page, String kw, AdminRoleForm adminRoleForm, String mode) {
 		Page<Role> paging = adminRoleService.getList(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
-		model.addAttribute("mode", "info");
+		model.addAttribute("mode", "create");
 
-//		List<AdminCategoryDto> clist = adminCategoryService.getlist();
-//		clist.add(new AdminCategoryDto(0, "전체", false));
-
-//		adminRoleForm.setClist(clist);
-//		model.addAttribute("clist", clist);
+		List<Category> optionList = adminCategoryService.getlist();
+		adminRoleForm.setOptionList(optionList);
 	}
 
 	public void listById(Model model, Integer page, String kw, Principal principal, AdminRoleForm adminRoleForm,
-			Integer id) {
+			Integer id, String mode) {
 		Page<Role> paging = adminRoleService.getList(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);

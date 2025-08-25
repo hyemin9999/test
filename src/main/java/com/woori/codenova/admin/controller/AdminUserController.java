@@ -54,7 +54,6 @@ public class AdminUserController {
 		list(model, page, kw, adminUserForm, "create");
 
 		if (bindingResult.hasErrors()) {
-
 			return "admin/user_list";
 		}
 
@@ -104,7 +103,6 @@ public class AdminUserController {
 		listById(model, page, kw, principal, adminUserModifyForm, id, "modify");
 
 		if (bindingResult.hasErrors()) {
-
 			return "admin/user_list";
 		}
 
@@ -112,18 +110,38 @@ public class AdminUserController {
 		return String.format("redirect:/admin/user/list");
 	}
 
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/delete/{id}")
+	public String delete(Model model, BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
+
+		SiteUser item = this.adminUserService.getItem(id);
+//		if (!item.getAuthor().getUsername().equals(principal.getName())) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+//		}
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 회원 입니다.");
+			bindingResult.reject("존재하지 않는 회원 입니다.");
+		}
+//		
+//		List<Role> rlist = this.adminRoleService.getList(id);
+//		for (SiteUser siteUser : ulist) {
+//			siteUser.getAuthority().remove(item);
+//		}
+
+//		this.adminUserService.delete(item);
+		return "redirect:/admin/user/list";
+	}
+
 	public void list(Model model, Integer page, String kw, AdminUserForm adminUserForm, String mode) {
 
 		Page<SiteUser> paging = adminUserService.getList(page, kw);
-
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 		model.addAttribute("mode", "create");
 
-		if (mode == "list") {
-			List<Role> rlist = adminRoleService.getlist();
-			adminUserForm.setOptionList(rlist);
-		}
+		List<Role> optionList = adminRoleService.getlist();
+		adminUserForm.setOptionList(optionList);
+
 	}
 
 	public void listById(Model model, Integer page, String kw, Principal principal,
@@ -148,96 +166,14 @@ public class AdminUserController {
 //				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
 //			model.addAttribute("mode", "modify");
 //		}
+		List<Role> optionList = adminRoleService.getlist();
+		adminUserModifyForm.setOptionList(optionList);
 
 		if (mode == "list") {
-			List<Role> optionList = adminRoleService.getlist();
-			adminUserModifyForm.setOptionList(optionList);
 
 			List<Role> selectedlist = new ArrayList<>(item.getAuthority()); // 사용자에게 할당된 역할목록?
 			adminUserModifyForm.setSelectedList(selectedlist);
 		}
 	}
-
-//	@PreAuthorize("isAuthenticated()")
-//	@GetMapping("/create")
-//	public String create(AdminUserForm adminUserForm) {
-//
-//		return "admin/user_form";
-//	}
-
-//	@PreAuthorize("isAuthenticated()")
-//	@PostMapping("/create")
-//	public String create(@Valid AdminUserForm adminUserForm, BindingResult bindingResult) {
-//
-//		if (bindingResult.hasErrors()) {
-//			return "admin/user_form";
-//		}
-//
-//		try {
-//			this.adminUserService.create(adminUserForm.getUsername(), adminUserForm.getPassword1(),
-//					adminUserForm.getEmail());
-//		} catch (DataIntegrityViolationException e) {
-//			e.printStackTrace();
-//			bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
-//
-//			return "admin/user_form";
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			bindingResult.reject("signupFailed", e.getMessage());
-//
-//			return "admin/user_form";
-//		}
-//
-//		return "redirect:/admin/user/list";
-//	}
-
-//	@PreAuthorize("isAuthenticated()")
-//	@GetMapping(value = "/detail/{id}")
-//	public String detail(Model model, AdminUserModifyForm adminUserModifyForm, Principal principal,
-//			@PathVariable("id") Long id) {
-//
-//		SiteUser item = this.adminUserService.getItem(id);
-//		if (item == null) {
-//			model.addAttribute("message", "존재하지 않는 회원 입니다.");
-//			return "admin/user_detail";
-//		}
-//
-//		model.addAttribute("item", item);
-//		model.addAttribute("mode", "detail");
-//
-//		adminUserModifyForm.setId(item.getId());
-//		adminUserModifyForm.setUsername(item.getUsername());
-//		adminUserModifyForm.setEmail(item.getEmail());
-//
-//		return "admin/user_detail";
-//	}
-//
-//	
-//	
-//	@PreAuthorize("isAuthenticated()")
-//	@PostMapping(value = "/detail/{id}")
-//	public String detail(Model model, @Valid AdminUserModifyForm adminUserModifyForm, BindingResult bindingResult,
-//			Principal principal, @PathVariable("id") Long id) {
-//
-//		SiteUser item = this.adminUserService.getItem(id);
-//		if (item == null) {
-//			model.addAttribute("message", "존재하지 않는 회원 입니다.");
-//			bindingResult.reject("존재하지 않는 회원 입니다.");
-//		}
-//
-//		model.addAttribute("mode", "modify");
-//		model.addAttribute("item", item);
-//
-//		adminUserModifyForm.setId(item.getId());
-//		adminUserModifyForm.setUsername(item.getUsername());
-//		adminUserModifyForm.setEmail(item.getEmail());
-//
-//		if (bindingResult.hasErrors()) {
-//			return "admin/user_detail";
-//		}
-//
-//		this.adminUserService.modify(item, adminUserModifyForm.getPassword1());
-//		return String.format("redirect:/admin/user/list");
-//	}
 
 }
