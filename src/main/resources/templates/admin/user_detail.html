@@ -37,16 +37,16 @@
 			<a class="btn btn-sm btn-outline-info" th:href="@{/admin/user/list}">취소</a>
 		</div>
 	</form>
-	<div id="modal" class="modal fade" tabindex="-1" style="display: none;"
-		aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-body text-center alert-danger">
-					<span id="message"></span>
-				</div>
-			</div>
-		</div>
-	</div>
+<!-- 	<div id="modal" class="modal fade" tabindex="-1" style="display: none;" -->
+<!-- 		aria-hidden="true"> -->
+<!-- 		<div class="modal-dialog modal-dialog-centered"> -->
+<!-- 			<div class="modal-content"> -->
+<!-- 				<div class="modal-body text-center alert-danger"> -->
+<!-- 					<span id="message"></span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
 </div>
 
 <script layout:fragment="script" type="text/javascript"
@@ -81,17 +81,17 @@
 		onDisplay(true);
 	}
 
-	$(document).ready(function() {
-		const message = /*[[${message}]]*/'';
-		if (message != null) {
-			$('#message').text(message);
-			$('#modal').modal('show');
-		}
+// 	$(document).ready(function() {
+// 		const message = /*[[${message}]]*/'';
+// 		if (message != null) {
+// 			$('#message').text(message);
+// 			$('#modal').modal('show');
+// 		}
 
-		$('#modal').on('hide.bs.modal', function(event) {
-			console.log('dddd');
-			window.location.href = '/admin/user';
-		});
-	});
+// 		$('#modal').on('hide.bs.modal', function(event) {
+// 			console.log('dddd');
+// 			window.location.href = '/admin/user';
+// 		});
+// 	});
 </script>
 </html>

@@ -12,4 +12,7 @@ public class AdminRoleForm {
 	@NotEmpty(message = "역할 이름은 필수항목입니다.")
 	private String name;
 
+	private Boolean isChecked;
+
+//	private List<AdminCategoryDto> clist;
 }

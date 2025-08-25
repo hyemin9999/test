@@ -18,9 +18,20 @@
 
 	<th:block layout:fragment="content"></th:block>
 
-	<script type="text/javascript" th:src="@{/bootstrap.min.js}"></script>
+	<div id="modal" class="modal fade" tabindex="-1" style="display: none;"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body text-center alert-danger">
+					<span id="message"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<script type="text/javascript"
 		src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+	<script type="text/javascript" th:src="@{/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/detail.js}"></script>
 
 	<th:block layout:fragment="script"></th:block>

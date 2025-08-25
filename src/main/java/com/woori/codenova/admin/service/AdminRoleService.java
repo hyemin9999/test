@@ -27,6 +27,7 @@ public class AdminRoleService {
 	// 초기에 시스템 관리자와 일반 사용자의 역할이 저장되어야 하는게 아닐까??
 
 	private final RoleRepository roleReporitory;
+	private final AdminCategoryService adminCategoryService;
 
 	// 목록 - 페이징 - 검색
 	public Page<Role> getList(int page, String kw) {
@@ -43,6 +44,24 @@ public class AdminRoleService {
 		return roleReporitory.findAll(spec, pa);
 	}
 
+	// 목록 - 정렬 - 회원관리에서 사용
+	public List<Role> getlist() {
+		List<Role> list = roleReporitory.findAllByGrade();
+		return list;
+	}
+
+//	// 목록 - 정렬 - 회원관리에서 사용
+//	public List<AdminRoleDto> getlist() {
+//
+//		List<AdminRoleDto> list = roleReporitory.findAllByAuthority();
+//
+////		for (Category item : list) {
+////
+////		}
+//
+//		return list;
+//	}
+
 	// 조회 - 상세
 	public Role getItem(Integer id) {
 		return roleReporitory.findById(id).orElse(null);
@@ -56,6 +75,19 @@ public class AdminRoleService {
 		item.setGrade(grade);
 		item.setCreateDate(LocalDateTime.now());
 
+//		// TODO :: 선택된 카테고리 처리
+//
+//		List<AdminCategoryDto> aclist = _aclist.stream().filter(f -> f.getIsCheck().equals(true))
+//				.collect(Collectors.toList());
+//
+//		List<Category> clist = adminCategoryService.getlist();
+//
+//		for (AdminCategoryDto _acitem : aclist) {
+//
+//		}
+
+//				(a-> a.getIsCheck().equals(true));
+
 		return roleReporitory.save(item);
 	}
 
@@ -64,6 +96,8 @@ public class AdminRoleService {
 		item.setName(name);
 		item.setGrade(grade);
 		item.setModifyDate(LocalDateTime.now());
+
+		// TODO :: 선택된 카테고리 수정
 
 		return roleReporitory.save(item);
 	}
