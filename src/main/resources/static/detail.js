@@ -40,3 +40,19 @@ if (viewerElement) {
 		initialValue: document.querySelector('#ecp1').value
 	});
 }
+
+
+$(document).ready(function() {
+	const message = /*[[${message}]]*/'';
+
+	if (message.length != 0) {
+
+		$('#message').text(message);
+		$('#modal').modal('show');
+	}
+
+	$('#modal').on('hide.bs.modal', function(event) {
+		console.log('dddd');
+		//window.location.href = '/admin/user';
+	});
+});

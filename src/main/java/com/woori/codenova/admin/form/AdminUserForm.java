@@ -1,5 +1,9 @@
 package com.woori.codenova.admin.form;
 
+import java.util.List;
+
+import com.woori.codenova.entity.Role;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -19,4 +23,8 @@ public class AdminUserForm {
 	@NotEmpty(message = "이메일은 필수항목입니다.")
 	@Email
 	private String email;
+
+	private List<Role> optionList;
+	private List<Role> selectedList;
+
 }
