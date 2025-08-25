@@ -35,18 +35,6 @@ function onChange(roleId, checkBox) {
 		} else {
 			$('.role').prop('checked', false);
 		}
-
-
-
-		//		if ($(checkBox).prop("checked")) { //체크가 true이면
-		//			console.log("checkBox :: true");
-		//			
-		//			
-		//		} else {
-		//			console.log("checkBox :: false");
-		//			
-		//			
-		//		}
 	}
 
 }

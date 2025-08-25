@@ -77,9 +77,7 @@ public class AdminUserService {
 		userReporitory.save(item);
 
 		if (rlist != null) {
-			for (Role role : rlist) {
-				item.getAuthority().add(role);
-			}
+			item.getAuthority().addAll(rlist);
 		}
 
 		return userReporitory.save(item);
@@ -95,12 +93,8 @@ public class AdminUserService {
 		item.setModifyDate(LocalDateTime.now());
 		item.getAuthority().clear();
 
-		System.out.println(item.getAuthority());
-
 		if (rlist != null) {
-			for (Role role : rlist) {
-				item.getAuthority().add(role);
-			}
+			item.getAuthority().addAll(rlist);
 		}
 
 		userReporitory.save(item);
@@ -110,6 +104,7 @@ public class AdminUserService {
 	public void delete(SiteUser item) {
 
 		// TODO :: 작성한 게시글, 댓글, (관리자)공지사항 처리 여부
+
 		userReporitory.delete(item);
 	}
 
