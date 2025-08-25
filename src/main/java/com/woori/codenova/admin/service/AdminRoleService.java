@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.repository.RoleRepository;
 
@@ -50,54 +51,36 @@ public class AdminRoleService {
 		return list;
 	}
 
-//	// 목록 - 정렬 - 회원관리에서 사용
-//	public List<AdminRoleDto> getlist() {
-//
-//		List<AdminRoleDto> list = roleReporitory.findAllByAuthority();
-//
-////		for (Category item : list) {
-////
-////		}
-//
-//		return list;
-//	}
-
 	// 조회 - 상세
 	public Role getItem(Integer id) {
 		return roleReporitory.findById(id).orElse(null);
 	}
 
 	// 등록
-	public Role create(String name, Integer grade) {
+	public Role create(String name, Integer grade, List<Category> clist) {
 
 		Role item = new Role();
 		item.setName(name);
 		item.setGrade(grade);
 		item.setCreateDate(LocalDateTime.now());
+		roleReporitory.save(item);
 
-//		// TODO :: 선택된 카테고리 처리
-//
-//		List<AdminCategoryDto> aclist = _aclist.stream().filter(f -> f.getIsCheck().equals(true))
-//				.collect(Collectors.toList());
-//
-//		List<Category> clist = adminCategoryService.getlist();
-//
-//		for (AdminCategoryDto _acitem : aclist) {
-//
-//		}
-
-//				(a-> a.getIsCheck().equals(true));
-
+		if (clist != null) {
+			item.getAuthority().addAll(clist);
+		}
 		return roleReporitory.save(item);
 	}
 
 	// 수정
-	public Role modify(Role item, String name, Integer grade) {
+	public Role modify(Role item, String name, Integer grade, List<Category> clist) {
 		item.setName(name);
 		item.setGrade(grade);
 		item.setModifyDate(LocalDateTime.now());
+		item.getAuthority().clear();
 
-		// TODO :: 선택된 카테고리 수정
+		if (clist != null) {
+			item.getAuthority().addAll(clist);
+		}
 
 		return roleReporitory.save(item);
 	}

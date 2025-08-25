@@ -39,13 +39,14 @@ input[type=submit] {
 	width: 100px;
 }
 
-.table.notice th:nth-child(4), .table.board th:nth-child(4), .table.user th:last-child,
-	.table.category th:nth-child(3), .table.role th:nth-child(3) {
+.table.notice th:nth-child(4), .table.board th:nth-child(4), .table.category th:nth-child(3),
+	.table.role th:nth-child(3) {
 	width: 150px;
 }
 
 .table.notice th:last-child, .table.board th:nth-child(5), .table.user th:nth-child(2),
-	.table.category th:last-child, .table.role th:last-child {
+	.table.user th:last-child, .table.category th:last-child, .table.role th:last-child
+	{
 	width: 80px;
 }
 
