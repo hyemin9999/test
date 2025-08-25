@@ -67,31 +67,41 @@ public class AdminUserService {
 	}
 
 	// 등록
-	public SiteUser create(String username, String password, String email) {
+	public SiteUser create(String username, String password, String email, List<Role> rlist) {
 
 		SiteUser item = new SiteUser();
 		item.setUsername(username);
 		item.setPassword(passwordEncoder.encode(password));
 		item.setEmail(email);
 		item.setCreateDate(LocalDateTime.now());
-//		userReporitory.save(item);
+		userReporitory.save(item);
 
-		System.out.println("user insert :: " + item.getId());
-
-//		// 관리자 페이지에서 등록한 사용자는 매니저 권한을 기본으로 가지고 있음.
-//		Role role = this.roleReporitory.findByGrade(2).orElse(null);
-//		if (role != null) {
-//			item.getAuthority().add(role);
-//		}
+		if (rlist != null) {
+			for (Role role : rlist) {
+				item.getAuthority().add(role);
+			}
+		}
 
 		return userReporitory.save(item);
 	}
 
 	// 수정 - 비밀번호 변경, 회원가입에 사용자ID, 비밀번호, email만 받으면, 수정할수있는게 비밀번호뿐.
-	public void modify(SiteUser item, String password) {
+	public void modify(SiteUser item, String password, List<Role> rlist) {
 
-		item.setPassword(passwordEncoder.encode(password));
+		if (!password.isEmpty()) {
+			item.setPassword(passwordEncoder.encode(password));
+		}
+
 		item.setModifyDate(LocalDateTime.now());
+		item.getAuthority().clear();
+
+		System.out.println(item.getAuthority());
+
+		if (rlist != null) {
+			for (Role role : rlist) {
+				item.getAuthority().add(role);
+			}
+		}
 
 		userReporitory.save(item);
 	}

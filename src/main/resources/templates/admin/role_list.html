@@ -2,9 +2,10 @@
 <html layout:decorate="~{admin/layout}"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	
 <div layout:fragment="content" class="container-fluid my-3 px-4">
 	<h5 class="my-3 border-bottom pb-2">역할 관리</h5>
-	<div class="row">
+	<div class="row my-3">
 		<div class="col-6">
 			<div class="row my-3">
 				<div class="col-6"></div>
@@ -21,7 +22,7 @@
 					<tr class="text-center">
 						<th>번호</th>
 						<th>역할 이름</th>
-						<th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">생성일</th>
+						<th>생성일</th>
 						<th th:if="${#authorization.expression('hasRole(''ADMIN'')')}"></th>
 					</tr>
 				</thead>
@@ -81,28 +82,28 @@
 							<label for="name" class="form-label">역할 이름</label><input
 								type="text" th:field="*{name}" class="form-control">
 						</div>
-						<div class="mb-3">
+<!-- 						<div class="mb-3"> -->
 							<!-- 							<div class="border-bottom"> -->
 							<!-- 								<label class="form-label">게시판</label> -->
 							<!-- 							</div> -->
 
-<!-- th:classappend="${list.index == 0 ? role}" -->
+							<!-- th:classappend="${list.index == 0 ? role}" -->
 
-							<div th:if="${!clist.isEmpty()}">
-								<div class="form-check form-check-inline"
-									th:each="item, list : ${clist}">
-									<input class="form-check-input"
-									th:classappend="${list.index != 0} ? role"
-										
-										data-toggle="toggle" th:rId="${item.id}"
-										th:onchange="onChange(this.getAttribute('rId'), this)"
-										type="checkbox" th:value="${item.id}"
-										th:id="${'item' + list.index}"> <label
-										class="form-check-label" th:for="${'item' + list.index}"
-										th:text="${item.name}"></label>
-								</div>
-							</div>
-						</div>
+<!-- 							<div th:if="*{!clist.isEmpty()}"> -->
+<!-- 								<div class="form-check form-check-inline" -->
+<!-- 									th:each="item, list : *{clist}"> -->
+
+<!-- 									<input type="checkbox" data-toggle="toggle" -->
+<!-- 										class="form-check-input"  -->
+<!-- 										th:classappend="${list.index != 0} ? role" th:rId="${item.id}" -->
+<!-- 										th:id="${'item' + list.index}" th:value="${item.id}" -->
+<!-- 										th:checked="${item.isCheck}" -->
+<!-- 										th:onchange="onChange(this.getAttribute('rId'), this)"> -->
+<!-- 									<label class="form-check-label" th:for="${'item' + list.index}" -->
+<!-- 										th:text="${item.name}"></label> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
 						<div class="align-r">
 							<input type="submit" value="저장" class="btn btn-info my-2">
 							<a class="btn btn-outline-info" th:href="@{/admin/role/list}">취소</a>

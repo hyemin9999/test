@@ -47,10 +47,6 @@ public class Category {
 
 	// 사용여부?? (생성한 카테고리의 사용여부를 설정할수 있어야 할까?)
 
-	// 권한
-	@ManyToMany
-	Set<Role> authority;
-
 	// 즐겨찾기
 	@ManyToMany
 	Set<SiteUser> favorites;
