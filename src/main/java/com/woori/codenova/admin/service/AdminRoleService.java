@@ -2,6 +2,7 @@ package com.woori.codenova.admin.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -66,9 +67,13 @@ public class AdminRoleService {
 		roleReporitory.save(item);
 
 		if (clist != null) {
+			if (item.getAuthority() == null) {
+				item.setAuthority(new HashSet<>());
+			}
 			item.getAuthority().addAll(clist);
+			return roleReporitory.save(item);
 		}
-		return roleReporitory.save(item);
+		return item;
 	}
 
 	// 수정
