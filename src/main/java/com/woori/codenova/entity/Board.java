@@ -73,7 +73,7 @@ public class Board {
 
 	// 업로드 파일
 	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-	private List<UploadFile> uploadFils;
+	private List<UploadFile> uploadFile;
 
 	// 추천
 	@ManyToMany
