@@ -78,7 +78,7 @@ public class AdminRoleService {
 		item.setModifyDate(LocalDateTime.now());
 		item.getAuthority().clear();
 
-		if (clist != null) {
+		if (clist != null && !clist.isEmpty()) {
 			item.getAuthority().addAll(clist);
 		}
 

@@ -43,6 +43,17 @@ public class AdminCategoryService {
 	// 목록 - 정렬 - 역할관리에서 사용
 	public List<Category> getlist() {
 		List<Category> list = categoryRepository.findAllByName();
+
+		return list;// addAllItem(list);
+	}
+
+	public List<Category> addAllItem(List<Category> list) {
+
+		Category item = new Category();
+		item.setName("전체");
+		item.setId(0);
+		list.add(0, item);
+
 		return list;
 	}
 
