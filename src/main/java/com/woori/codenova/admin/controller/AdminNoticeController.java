@@ -129,7 +129,7 @@ public class AdminNoticeController {
 		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 		}
-		this.noticeService.delete(item);
+//		this.noticeService.delete(item);
 		return "redirect:/admin/notice/list";
 	}
 }

@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.woori.codenova.admin.form.AdminUserForm;
 import com.woori.codenova.admin.form.AdminUserModifyForm;
+import com.woori.codenova.admin.service.AdminBoardService;
+import com.woori.codenova.admin.service.AdminCommentService;
 import com.woori.codenova.admin.service.AdminRoleService;
 import com.woori.codenova.admin.service.AdminUserService;
+import com.woori.codenova.entity.Board;
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
 
@@ -31,14 +34,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminUserController {
 
-	private final AdminUserService adminUserService;
-	private final AdminRoleService adminRoleService;
+	private final AdminUserService adminUserService; // 사용자
+	private final AdminRoleService adminRoleService; // 역할
+	private final AdminBoardService adminBoardService; // 게시글
+	private final AdminCommentService adminCommentService;// 댓글
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminUserForm adminUserForm,
 			BindingResult bindingResult) {
+
+		System.out.println("list :: GET ::");
 
 		list(model, page, kw, adminUserForm, "list");
 
@@ -50,6 +57,8 @@ public class AdminUserController {
 	public String create(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminUserForm adminUserForm,
 			BindingResult bindingResult) {
+
+		System.out.println("list :: POST ::");
 
 		list(model, page, kw, adminUserForm, "create");
 
@@ -83,6 +92,8 @@ public class AdminUserController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminUserModifyForm adminUserModifyForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
 
+		System.out.println("list/id :: GET ::");
+
 		listById(model, page, kw, principal, adminUserModifyForm, id, "list");
 
 		return "admin/user_list";
@@ -93,6 +104,8 @@ public class AdminUserController {
 	public String modify(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminUserModifyForm adminUserModifyForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
+
+		System.out.println("list/id :: POST ::");
 
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {
@@ -112,7 +125,7 @@ public class AdminUserController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete/{id}")
-	public String delete(Model model, BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
+	public String delete(Model model, Principal principal, @PathVariable("id") Long id) {
 
 		SiteUser item = this.adminUserService.getItem(id);
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
@@ -120,9 +133,30 @@ public class AdminUserController {
 //		}
 		if (item == null) {
 			model.addAttribute("message", "존재하지 않는 회원 입니다.");
-			bindingResult.reject("존재하지 않는 회원 입니다.");
 		}
-//		
+
+		// 사용자 삭제시
+
+		// 게시글 - 추천/즐겨찾기
+		List<Board> blist = adminBoardService.getListByAuthor(item);
+
+		if (blist != null && !blist.isEmpty()) {
+			adminBoardService.deleteList(blist);
+
+		}
+//		List<Board> bvlist = adminBoardService.getListByVorter(id);
+//		List<Board> bflist = adminBoardService.getListByFavorites(id);
+
+		// 댓글 삭제
+//		List<Comment> clist = adminCommentService.getListByAuthorId(id);
+
+		// 좋아요 - 게시글, 댓글, 게시판
+
+		// 추천 삭제 - 게시글, 댓글
+
+		// 역할 삭제
+		item.getAuthority().clear();
+//
 //		List<Role> rlist = this.adminRoleService.getList(id);
 //		for (SiteUser siteUser : ulist) {
 //			siteUser.getAuthority().remove(item);
@@ -158,9 +192,10 @@ public class AdminUserController {
 		model.addAttribute("kw", kw);
 		model.addAttribute("mode", "modify");
 
-		adminUserModifyForm.setUsername(item.getUsername());
-		adminUserModifyForm.setEmail(item.getEmail());
-
+		if (mode == "list") {
+			adminUserModifyForm.setUsername(item.getUsername());
+			adminUserModifyForm.setEmail(item.getEmail());
+		}
 //		SiteUser user = this.adminUserService.getItem(principal.getName());
 //		if (user != null && !user.getAuthority().isEmpty()
 //				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {

@@ -133,7 +133,7 @@ public class AdminCategoryController {
 
 		// TODO :: 카테고리 삭제시 게시글 (댓글)삭제됨, 검색어도 삭제여부 확인
 
-		this.categoryService.delete(item);
+//		this.categoryService.delete(item);
 		return "redirect:/admin/category/list";
 	}
 

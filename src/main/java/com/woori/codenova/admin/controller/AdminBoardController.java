@@ -129,7 +129,8 @@ public class AdminBoardController {
 		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 		}
-		this.boardService.delete(item);
+//		this.boardService.delete(item);
 		return "redirect:/admin/board/list";
 	}
+
 }

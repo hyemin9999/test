@@ -29,7 +29,7 @@
 							<th>사용자 ID</th>
 							<th>Email</th>
 							<th>가입일</th>
-							<th></th>
+							<!-- 							<th></th> -->
 						</tr>
 					</thead>
 					<tbody>
@@ -44,13 +44,13 @@
 							<td><span th:text="${item.email}"></span></td>
 							<td
 								th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-							<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a
-								href="javascript:void(0);" th:if="${item.username != 'admin'}"
-								class="delete btn btn-sm btn-outline-info"
-								th:data-uri="@{|/admin/user/delete/${item.id}|}" th:text="삭제"></a></td>
+							<!-- 							<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a -->
+							<!-- 								href="javascript:void(0);" th:if="${item.username != 'admin'}" -->
+							<!-- 								class="delete btn btn-sm btn-outline-info" -->
+							<!-- 								th:data-uri="@{|/admin/user/delete/${item.id}|}" th:text="삭제"></a></td> -->
 						</tr>
 						<tr class="text-center" th:if="${paging.isEmpty()}">
-							<td colspan="6">회원이 존재하지 않습니다.</td>
+							<td colspan="5">회원이 존재하지 않습니다.</td>
 						</tr>
 					</tbody>
 				</table>
@@ -84,8 +84,7 @@
 			<form th:if="${mode == 'create'}" th:object="${adminUserForm}"
 				method="post">
 
-				<h6 class="my-3 border-bottom pb-2 pt-2 title">회원 정보
-					/*[[${mode}]]*/''</h6>
+				<h6 class="my-3 border-bottom pb-2 pt-2 title">회원 정보</h6>
 				<div class="card my-3">
 					<div class="card-body">
 						<input type="hidden" th:name="${_csrf.parameterName}"
@@ -109,9 +108,9 @@
 							<h6 class="my-3 border-bottom pb-2 pt-2 title">역할</h6>
 							<div class="form-check form-check-inline"
 								th:each="option, options : *{optionList}">
-
+								<!-- th:field="*{selectedList}" -->
 								<input type="checkbox" class="form-check-input"
-									th:value="${option.id}" th:field="*{selectedList}"
+									th:value="${option.id}" th:id="${'item' + options.index}"
 									th:disabled="*{username == 'admin'}"> <label
 									class="form-check-label" th:for="${'item' + options.index}"
 									th:text="${option.name}"></label>
@@ -127,8 +126,7 @@
 			<form th:unless="${mode == 'create'}"
 				th:object="${adminUserModifyForm}" method="post">
 
-				<h6 class="my-3 border-bottom pb-2 pt-2 title">회원
-					정보/*[[${mode}]]*/''</h6>
+				<h6 class="my-3 border-bottom pb-2 pt-2 title">회원</h6>
 				<div class="card my-3">
 					<div class="card-body">
 						<input type="hidden" th:name="${_csrf.parameterName}"
@@ -156,8 +154,8 @@
 								<input type="checkbox" class="form-check-input"
 									th:value="${option.id}" th:field="*{selectedList}"
 									th:disabled="*{username == 'admin'}"> <label
-									class="form-check-label" th:for="${'item' + options.index}"
-									th:text="${option.name}"></label>
+									class="form-check-label" th:text="${option.name}"
+									th:field="*{selectedList}"></label>
 							</div>
 						</div>
 						<div class="align-r">
@@ -173,6 +171,6 @@
 </div>
 <script layout:fragment="script" type='text/javascript'
 	th:src="@{/list_search.js}">
-	// 	const message = /*[[${message}]]*/'';
+	
 </script>
 </html>
