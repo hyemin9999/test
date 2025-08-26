@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content" class="container my-3">
 	<form th:action="@{/user/login}" method="post">
@@ -14,7 +15,10 @@
 			<label for="password" class="form-label">비밀번호</label><input
 				type="password" name="password" id="password" class="form-control" />
 		</div>
-		<button type="submit" class="btn btn-info">로그인</button>
+		<div class="align-r">
+			<button type="submit" class="btn btn-info">로그인</button>
+			<a th:href="@{/}" class="btn btn-outline-info">취소</a>
+		</div>
 	</form>
 </div>
 

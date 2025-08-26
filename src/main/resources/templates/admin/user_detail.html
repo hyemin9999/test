@@ -1,77 +1,97 @@
 <!DOCTYPE html>
-<html layout:decorate="~{admin/layout}">
-<body>
-	<div layout:fragment="content" class="container my-3">
-		<form th:object="${userModifyForm}" method="post"
-			th:action="@{|/admin/user/detail/${item.id}|}">
-			<div class="mb-3">
-				<label class="form-label">사용자ID</label> <label class="form-control">[[*{username}]]</label>
-			</div>
-			<div class="mb-3 pwd" id="pwd">
-				<label for="pwd" class="form-label">비밀번호</label> <a
-					href="javascript:onDisplay();"
-					class="btn btn-sm btn-outline-secondary">비밀번호 변경</a>
-			</div>
-			<input type="hidden" th:name="${_csrf.parameterName}"
-				th:value="${_csrf.token}" />
+<html layout:decorate="~{admin/layout}"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div layout:fragment="content" class="container my-3">
+	<h5 class="my-3 border-bottom pb-2">회원 관리</h5>
+	<form th:if="${item != null}" th:object="${adminUserModifyForm}"
+		method="post" th:action="@{|/admin/user/detail/${item.id}|}">
+		<input type="hidden" th:name="${_csrf.parameterName}"
+			th:value="${_csrf.token}" />
+		<div class="mb-3">
+			<label for="username" class="form-label">사용자ID</label> <input
+				class="form-control" type="text" readonly="readonly"
+				th:field="*{username}" />
+		</div>
+		<div class="mb-3 pwd" id="pwd">
+			<label class="form-label" for="pwnChange">비밀번호</label> <a
+				href="javascript:onDisplay(true);"
+				class="btn btn-sm btn-outline-info">비밀번호 변경</a>
+		</div>
+		<div class="mb-3 pwdchange">
 			<div th:replace="~{form_errors :: formErrorsFragment}"></div>
-			<div class="mb-3 pwdchange">
-				<label for="password" class="form-label">현재 비밀번호</label><input
-					type="password" th:field="*{password}" class="form-control " />
-			</div>
-			<div class="mb-3 pwdchange">
-				<label for="password1" class="form-label">변경 비밀번호</label><input
-					type="password" th:field="*{password1}" class="form-control" />
-			</div>
-			<div class="mb-3 pwdchange">
-				<label for="password2" class="form-label">변경 비밀번호 확인</label><input
-					type="password" th:field="*{password2}" class="form-control" />
-			</div>
-			<div class="mb-3 pwdchange">
-				<button type="submit" class="btn btn-primary">변경</button>
-				<a href="javascript:onDisplay();"
-					class="btn btn-sm btn-outline-secondary">취소</a>
-			</div>
-			<div class="mb-3">
-				<label for="email" class="form-label">이메일</label><label type="email"
-					class="form-control">[[*{email}]]</label>
-			</div>
-		</form>
-	</div>
-	<script layout:fragment="script" type="text/javascript"
-		th:inline="javascript">
-		function onDisplay() {
-			const pwd_elements = document.getElementsByClassName("pwd");
-			Array.from(pwd_elements).forEach(function(element) {
-				if (element.style.display == 'none') {
-					element.style.display = 'block';
-					doDisply(false);
-				} else {
-					element.style.display = 'none';
-					doDisply(true);
-				}
-			});
-		}
-		function doDisply(d) {
-			const pwdchange_elements = document
-					.getElementsByClassName("pwdchange");
-			Array.from(pwdchange_elements).forEach(function(element) {
-				if (d) {
-					element.style.display = 'block';
-				} else {
-					element.style.display = 'none';
-				}
-			});
+			<label for="password1" class="form-label">변경 비밀번호</label><input
+				type="password" th:field="*{password1}" class="form-control" />
+		</div>
+		<div class="mb-3 pwdchange">
+			<button type="submit" class="btn btn-sm btn-info">변경</button>
+			<a href="javascript:onDisplay(false);"
+				class="btn btn-sm btn-outline-info">취소</a>
+		</div>
+		<div class="mb-3">
+			<label for="email" class="form-label">이메일</label><input type="text"
+				class="form-control" th:field="*{email}" readonly="readonly" />
+		</div>
+		<div class="align-r">
+			<a class="btn btn-sm btn-outline-info" th:href="@{/admin/user/list}">취소</a>
+		</div>
+	</form>
+<!-- 	<div id="modal" class="modal fade" tabindex="-1" style="display: none;" -->
+<!-- 		aria-hidden="true"> -->
+<!-- 		<div class="modal-dialog modal-dialog-centered"> -->
+<!-- 			<div class="modal-content"> -->
+<!-- 				<div class="modal-body text-center alert-danger"> -->
+<!-- 					<span id="message"></span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+</div>
+
+<script layout:fragment="script" type="text/javascript"
+	th:inline="javascript">
+	function onDisplay(d) {
+		const pwd_element = document.getElementById("pwd");
+		if (pwd_element) {
+			if (!d) {
+				pwd_element.style.display = 'block';
+			} else {
+				pwd_element.style.display = 'none';
+			}
 		}
 
-		var mode = [ ($mode) ];
+		const pwdchange_elements = document.getElementsByClassName("pwdchange");
+		Array.from(pwdchange_elements).forEach(
+				function(element) {
+					if (d) {
+						element.style.display = 'block';
+					} else {
+						element.style.display = 'none';
+						const alert_elements = document
+								.getElementsByClassName("alert alert-danger");
+						Array.from(alert_elements).forEach(function(element) {
+							element.remove();
+						});
+					}
+				});
+	}
+	const mode = /*[[${mode}]]*/'';
+	if (mode == 'modify') {
+		onDisplay(true);
+	}
 
-		if (mode == 'modify') {
-			const pwd_el = document.getElementById("pwd");
-			pwd_el.style.display = 'none';
-			doDisply(true);
-		}
-	</script>
+// 	$(document).ready(function() {
+// 		const message = /*[[${message}]]*/'';
+// 		if (message != null) {
+// 			$('#message').text(message);
+// 			$('#modal').modal('show');
+// 		}
 
-</body>
+// 		$('#modal').on('hide.bs.modal', function(event) {
+// 			console.log('dddd');
+// 			window.location.href = '/admin/user';
+// 		});
+// 	});
+</script>
 </html>

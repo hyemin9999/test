@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -46,12 +47,12 @@ public class Notice {
 
 	// 작성자
 	@ManyToOne
-//	@JoinColumn(name = "userId")
+	@JoinColumn(name = "userId")
 	private SiteUser author;
 
 	// 게시판(게시글 분류)
 	@ManyToOne // (fetch = FetchType.LAZY)
-//	@JoinColumn(name = "categoryId")
+	@JoinColumn(name = "categoryId")
 	private Category category;
 
 	// 업로드 파일

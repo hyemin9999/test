@@ -37,11 +37,12 @@ public class NoticeController {
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw) {
+
 		Page<Notice> paging = noticeService.getList(page, kw);
 
 		model.addAttribute("paging", paging);
-		// 입력한 검색어를 화면에 그대로 유지
 		model.addAttribute("kw", kw);
+
 		return "notice_list";
 	}
 
@@ -49,9 +50,9 @@ public class NoticeController {
 	public String detail(Model model, @PathVariable("id") Integer id) {
 
 		Notice item = this.noticeService.getItem(id);
+
 		if (item != null) {
 			this.noticeService.setViewCount(item);
-
 			model.addAttribute("item", item);
 		}
 		return "notice_detail";

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.repository.RoleRepository;
 import com.woori.codenova.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class UserSecurityService implements UserDetailsService {
 
 	private final UserRepository userRepository;
-	private final RoleRepository roleRepository;
 
 	@Override
 	@Transactional
@@ -40,8 +38,14 @@ public class UserSecurityService implements UserDetailsService {
 		List<GrantedAuthority> authorities = new ArrayList<>();
 
 		if (!siteUser.getAuthority().isEmpty()) {
+			if (siteUser.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) // 슈퍼관리자
+			{
+				authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+			} else {
+				authorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
+			}
 			System.out.println("siteUser.getAuthority() :: ADMIN");
-			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
 		} else {
 			System.out.println("siteUser.getAuthority() :: USER");
 			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));

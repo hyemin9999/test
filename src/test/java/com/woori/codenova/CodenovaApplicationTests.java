@@ -1,12 +1,17 @@
 package com.woori.codenova;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.woori.codenova.admin.service.AdminRoleService;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
@@ -14,7 +19,6 @@ import com.woori.codenova.repository.CategoryRepository;
 import com.woori.codenova.repository.RoleRepository;
 import com.woori.codenova.repository.UserRepository;
 import com.woori.codenova.service.CategoryService;
-import com.woori.codenova.service.RoleService;
 import com.woori.codenova.service.UserService;
 
 @SpringBootTest
@@ -23,7 +27,7 @@ class CodenovaApplicationTests {
 	@Autowired
 	private RoleRepository roleReporitory;
 	@Autowired
-	private RoleService roleService;
+	private AdminRoleService roleService;
 
 	@Autowired
 	private UserRepository userReporitory;
@@ -42,7 +46,7 @@ class CodenovaApplicationTests {
 
 	}
 
-	@Test
+//	@Test
 	void insertRoles() {
 		// 역할 초기값 ==> 슈퍼 관리자(1) insert
 
@@ -51,15 +55,9 @@ class CodenovaApplicationTests {
 		r2.setGrade(1);
 		r2.setCreateDate(LocalDateTime.now());
 		roleReporitory.save(r2);
-
-		Role r3 = new Role();
-		r3.setName("매니저");
-		r3.setGrade(2);
-		r3.setCreateDate(LocalDateTime.now());
-		roleReporitory.save(r3);
 	}
 
-	@Test
+//	@Test
 	void insertUsers() {
 		// 사용자 초기값 ==> 사용자(user), 관리자(admin) insert
 		SiteUser u1 = new SiteUser();
@@ -78,12 +76,23 @@ class CodenovaApplicationTests {
 	}
 
 	@Test
+	@Transactional // 트랜잭션 추가
+	@Rollback(value = false)
+	void insertUser_Authority() {
+
+		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
+		assertTrue(u1 != null);
+
+		Role r1 = roleReporitory.findByGrade(1).orElse(null);
+		assertTrue(r1 != null);
+
+		u1.getAuthority().add(r1);
+		userReporitory.save(u1);
+
+	}
+
+//	@Test
 	void insertCategory() {
-		// 게시판 초기값 - 공지사항
-//		Category c1 = new Category();
-//		c1.setName("공지사항");
-//		c1.setCreateDate(LocalDateTime.now());
-//		categoryRepository.save(c1);
 
 		// 자유게시판
 		Category c2 = new Category();
