@@ -93,7 +93,7 @@ public class AdminUserService {
 		item.setModifyDate(LocalDateTime.now());
 		item.getAuthority().clear();
 
-		if (rlist != null) {
+		if (rlist != null && !rlist.isEmpty()) {
 			item.getAuthority().addAll(rlist);
 		}
 

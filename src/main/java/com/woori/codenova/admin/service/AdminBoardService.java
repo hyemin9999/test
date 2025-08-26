@@ -48,9 +48,21 @@ public class AdminBoardService {
 
 	// 조회 - 상세
 	public Board getItem(Integer id) {
-
 		return boardRepository.findById(id).orElse(null);
 	}
+
+	// 사용자가 작성한 글 목록 반환
+	public List<Board> getListByAuthor(SiteUser id) {
+		return boardRepository.findByAuthor(id);
+	}
+
+//	public List<Board> getListByVorter(Long id) {
+//		return boardRepository.getVoterId(id);
+//	}
+//
+//	public List<Board> getListByFavorites(Long id) {
+//		return boardRepository.getFavoritesId(id);
+//	}
 
 	// 조회 - 조회수
 	public void setViewCount(Board item) {
@@ -103,6 +115,10 @@ public class AdminBoardService {
 		// isDelete 값 false인것만 가지고 처리하는게 힘들어서 그냥 연결된거 일단 다 날림^^
 
 		boardRepository.delete(item);
+	}
+
+	public void deleteList(List<Board> list) {
+		boardRepository.deleteAll(list);
 	}
 
 	// 검색

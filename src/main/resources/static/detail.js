@@ -55,4 +55,16 @@ $(document).ready(function() {
 		console.log('dddd');
 		//window.location.href = '/admin/user';
 	});
+
+
+
+	$(".dropdown-toggle").dropdown();
+
+
+});
+
+
+var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
+	return new bootstrap.Dropdown(dropdownToggleEl)
 });
