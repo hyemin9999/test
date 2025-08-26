@@ -1,6 +1,7 @@
 package com.woori.codenova.entity;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -9,6 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,4 +39,9 @@ public class Role {
 	private LocalDateTime createDate;
 	// 수정날짜
 	private LocalDateTime modifyDate;
+
+	// 권한
+	@ManyToMany
+	@JoinTable(name = "roleAuthoriry", joinColumns = @JoinColumn(name = "roleId"), inverseJoinColumns = @JoinColumn(name = "categoryId"))
+	Set<Category> authority;// = new HashSet<>();
 }

@@ -42,7 +42,8 @@ public class FileApiController {
 	 */
 	@PostMapping("/image-upload")
 	public UploadFile uploadEditorImage(Model model, @RequestParam(value = "image") final MultipartFile image,
-			@RequestParam(value = "type") final String type, @RequestParam(value = "mode") final String mode) {
+			@RequestParam(value = "type", defaultValue = "") final String type,
+			@RequestParam(value = "mode", defaultValue = "") final String mode) {
 
 		if (image.isEmpty()) {
 			return null;
@@ -87,7 +88,7 @@ public class FileApiController {
 			item.setSaveFilename(saveFilename);
 			item.setExtension(extension);
 			item.setFileSize(image.getSize()); // TODO :: 이미지 크기
-			item.setStoredFilepath(path);
+			item.setSaveFilepath(path);
 			item.setUploadDate(LocalDateTime.now());
 
 			return uploadFileRepository.save(item);

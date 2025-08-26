@@ -1,12 +1,12 @@
 package com.woori.codenova.admin.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
+import com.woori.codenova.admin.form.AdminUserForm;
+import com.woori.codenova.admin.form.AdminUserModifyForm;
+import com.woori.codenova.admin.service.AdminBoardService;
+import com.woori.codenova.admin.service.AdminCommentService;
+import com.woori.codenova.admin.service.AdminRoleService;
 import com.woori.codenova.admin.service.AdminUserService;
+import com.woori.codenova.entity.Board;
+import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.form.AdminUserForm;
-import com.woori.codenova.form.UserModifyForm;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,108 +34,181 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminUserController {
 
-	private final AdminUserService adminUserService;
-	private final PasswordEncoder passwordEncoder;
+	private final AdminUserService adminUserService; // 사용자
+	private final AdminRoleService adminRoleService; // 역할
+	private final AdminBoardService adminBoardService; // 게시글
+	private final AdminCommentService adminCommentService;// 댓글
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
+			@RequestParam(value = "kw", defaultValue = "") String kw, AdminUserForm adminUserForm,
+			BindingResult bindingResult) {
 
-		Page<SiteUser> paging = adminUserService.getList(page, kw);
+		System.out.println("list user :: GET ::");
 
-		model.addAttribute("paging", paging);
-		// 입력한 검색어를 화면에 그대로 유지
-		model.addAttribute("kw", kw);
+		list(model, page, kw, adminUserForm, "list");
 
 		return "admin/user_list";
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/create")
-	public String create(AdminUserForm adminUserForm) {
+	@PostMapping("/list")
+	public String create(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminUserForm adminUserForm,
+			BindingResult bindingResult) {
 
-		return "admin/user_form";
-	}
+		System.out.println("list user :: POST ::");
 
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/create")
-	public String create(@Valid AdminUserForm adminUserForm, BindingResult bindingResult) {
+		list(model, page, kw, adminUserForm, "create");
 
 		if (bindingResult.hasErrors()) {
-			return "admin/user_form";
+			return "admin/user_list";
 		}
 
 		try {
 			this.adminUserService.create(adminUserForm.getUsername(), adminUserForm.getPassword1(),
-					adminUserForm.getEmail());
+					adminUserForm.getEmail(), adminUserForm.getSelectedList());
+
+			return "redirect:/admin/user/list";
 		} catch (DataIntegrityViolationException e) {
+
 			e.printStackTrace();
 			bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
 
-			return "admin/user_form";
+			return "admin/user_list";
 		} catch (Exception e) {
+
 			e.printStackTrace();
 			bindingResult.reject("signupFailed", e.getMessage());
 
-			return "admin/user_form";
+			return "admin/user_list";
 		}
-
-		return "redirect:/admin";
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping(value = "/detail/{id}")
-	public String detail(Model model, UserModifyForm userModifyForm, Principal principal, @PathVariable("id") Long id) {
+	@GetMapping("/list/{id}")
+	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw, AdminUserModifyForm adminUserModifyForm,
+			BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
 
-		SiteUser item = this.adminUserService.getItem(id);
-		if (item == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지않는 회원입니다.");
-		}
+		System.out.println("list/id user :: GET ::");
 
-		model.addAttribute("mode", "detail");
-		model.addAttribute("item", item);
+		listById(model, page, kw, principal, adminUserModifyForm, id, "list");
 
-		userModifyForm.setId(item.getId());
-		userModifyForm.setUsername(item.getUsername());
-		userModifyForm.setEmail(item.getEmail());
-
-		return "admin/user_detail";
+		return "admin/user_list";
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping(value = "/detail/{id}")
-	public String detail(Model model, @Valid UserModifyForm userModifyForm, BindingResult bindingResult,
-			Principal principal, @PathVariable("id") Long id) {
+	@PostMapping(value = "/list/{id}")
+	public String modify(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminUserModifyForm adminUserModifyForm,
+			BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
+
+		System.out.println("list/id user :: POST ::");
 
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지않는 회원입니다.");
+			model.addAttribute("message", "존재하지 않는 회원 입니다.");
+			bindingResult.reject("존재하지 않는 회원 입니다.");
 		}
 
-		model.addAttribute("mode", "modify");
-
-		userModifyForm.setId(item.getId());
-		userModifyForm.setUsername(item.getUsername());
-		userModifyForm.setEmail(item.getEmail());
+		listById(model, page, kw, principal, adminUserModifyForm, id, "modify");
 
 		if (bindingResult.hasErrors()) {
-			return "admin/user_detail";
+			return "admin/user_list";
 		}
 
-//		if (!userModifyForm.getPassword1().equals(userModifyForm.getPassword2())) {
-//			bindingResult.rejectValue("password2", "passwordInCorrect", "변경 비밀번호가 일치하지 않습니다.");
-//			return "admin/user_detail";
+		this.adminUserService.modify(item, adminUserModifyForm.getPassword1(), adminUserModifyForm.getSelectedList());
+		return String.format("redirect:/admin/user/list");
+	}
+
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/delete/{id}")
+	public String delete(Model model, Principal principal, @PathVariable("id") Long id) {
+
+		SiteUser item = this.adminUserService.getItem(id);
+//		if (!item.getAuthor().getUsername().equals(principal.getName())) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+//		}
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 회원 입니다.");
+		}
+
+		// 사용자 삭제시
+
+		// 게시글 - 추천/즐겨찾기
+		List<Board> blist = adminBoardService.getListByAuthor(item);
+
+		if (blist != null && !blist.isEmpty()) {
+			adminBoardService.deleteList(blist);
+
+		}
+//		List<Board> bvlist = adminBoardService.getListByVorter(id);
+//		List<Board> bflist = adminBoardService.getListByFavorites(id);
+
+		// 댓글 삭제
+//		List<Comment> clist = adminCommentService.getListByAuthorId(id);
+
+		// 좋아요 - 게시글, 댓글, 게시판
+
+		// 추천 삭제 - 게시글, 댓글
+
+		// 역할 삭제
+		item.getAuthority().clear();
+//
+//		List<Role> rlist = this.adminRoleService.getList(id);
+//		for (SiteUser siteUser : ulist) {
+//			siteUser.getAuthority().remove(item);
 //		}
 
-		if (!passwordEncoder.matches(userModifyForm.getPassword(), item.getPassword())) {
-			bindingResult.rejectValue("password", "passwordInCorrect", "현재 비밀번호가 일치하지 않습니다.");
-			return "admin/user_detail";
+//		this.adminUserService.delete(item);
+		return "redirect:/admin/user/list";
+	}
+
+	public void list(Model model, Integer page, String kw, AdminUserForm adminUserForm, String mode) {
+
+		Page<SiteUser> paging = adminUserService.getList(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "create");
+
+		List<Role> optionList = adminRoleService.getlist();
+		adminUserForm.setOptionList(optionList);
+
+	}
+
+	public void listById(Model model, Integer page, String kw, Principal principal,
+			AdminUserModifyForm adminUserModifyForm, Long id, String mode) {
+
+		SiteUser item = this.adminUserService.getItem(id);
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 회원 입니다.");
+//			model.addAttribute("item", item);
 		}
 
-		this.adminUserService.modify(item, userModifyForm.getPassword1());
-		model.addAttribute("mode", "info");
-		return String.format("redirect:/admin/user/list");
+		Page<SiteUser> paging = adminUserService.getList(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "modify");
+
+		if (mode == "list") {
+			adminUserModifyForm.setUsername(item.getUsername());
+			adminUserModifyForm.setEmail(item.getEmail());
+		}
+//		SiteUser user = this.adminUserService.getItem(principal.getName());
+//		if (user != null && !user.getAuthority().isEmpty()
+//				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
+//			model.addAttribute("mode", "modify");
+//		}
+		List<Role> optionList = adminRoleService.getlist();
+		adminUserModifyForm.setOptionList(optionList);
+
+		if (mode == "list") {
+
+			List<Role> selectedlist = new ArrayList<>(item.getAuthority()); // 사용자에게 할당된 역할목록?
+			adminUserModifyForm.setSelectedList(selectedlist);
+		}
 	}
 
 }

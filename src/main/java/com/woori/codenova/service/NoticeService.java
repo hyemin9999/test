@@ -11,10 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Notice;
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.repository.CategoryRepository;
 import com.woori.codenova.repository.NoticeRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -28,13 +26,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class NoticeService {
-	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
 
 	private final NoticeRepository noticeRepository;
-	private final CategoryRepository categoryRepository;
 
 	// 목록 - 페이징 - 검색
 	public Page<Notice> getList(int page, String kw) {
+
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 
@@ -49,15 +46,12 @@ public class NoticeService {
 	// 조회 - 상세
 	public Notice getItem(Integer id) {
 
-		// TODO :: 조회수 처리
-
 		return noticeRepository.findById(id).orElse(null);
 	}
 
-	// 조회 - 상세
+	// 조회 - 조회수
 	public void setViewCount(Notice item) {
 
-		// TODO :: 조회수 처리
 		int viewCount = item.getViewCount();
 		item.setViewCount(viewCount + 1);
 		noticeRepository.save(item);
@@ -71,10 +65,6 @@ public class NoticeService {
 		item.setCreateDate(LocalDateTime.now());
 		item.setAuthor(uesr);
 		item.setViewCount(0);
-
-		// TODO :: 게시판 - 카테고리 -넘겨받은 게시판으로 저장하기
-		Category citem = categoryRepository.findById(1).orElse(null);
-		item.setCategory(citem);
 
 		noticeRepository.save(item);
 	}
@@ -102,7 +92,7 @@ public class NoticeService {
 	private Specification<Notice> search(String kw) {
 		return new Specification<>() {
 
-			private static final long seriaVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<Notice> r, CriteriaQuery<?> q, CriteriaBuilder cb) {
@@ -110,7 +100,6 @@ public class NoticeService {
 				q.distinct(true); // 중복을 제거
 
 				Join<Notice, SiteUser> u = r.join("author", JoinType.LEFT);// 공지와 작성자
-				Join<Notice, Category> c = r.join("category", JoinType.LEFT);// 공지와 게시판
 
 				// TODO:: 제목, 내용, 작성자ID
 				return cb.or(cb.like(r.get("subject"), "%" + kw + "%"), cb.like(r.get("contents"), "%" + kw + "%"),
