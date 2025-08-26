@@ -179,11 +179,14 @@ input[type=submit] {
 	background-color: var(--bs-info);
 }
 
-select:-internal-list-box:focus option:checked:hover, select:not(:-internal-list-box):not([multiple]) option:enabled:active,
-	select:not(:-internal-list-box):not([multiple]) option:enabled:hover {
-	background-color: var(--bs-info);
-}
+/* select:-internal-list-box:focus option:checked:hover, select:not(:-internal-list-box):not([multiple]) option:enabled:active, */
+/* 	select:not(:-internal-list-box):not([multiple]) option:enabled:hover { */
+/* 	background-color: var(--bs-info); */
+/* } */
 
+/* select option:hover{ */
+
+/* } */
 h6.title {
 	height: 38px;
 }

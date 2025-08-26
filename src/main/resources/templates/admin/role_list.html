@@ -4,12 +4,11 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content" class="container-fluid my-3 px-4">
+
+	<h5 class="border-bottom pb-2">역할 관리</h5>
 	<div class="row">
-		<h5 class="my-3 border-bottom pb-2">역할 관리</h5>
-	</div>
-	<div class="row my-3">
 		<div class="col-6">
-			<div class="row my-3">
+			<div class="row my-2">
 				<div class="col-6"></div>
 				<div class="col-6">
 					<div class="input-group">
@@ -19,6 +18,7 @@
 					</div>
 				</div>
 			</div>
+
 			<table class="table role">
 				<thead class="table-info">
 					<tr class="text-center">
@@ -37,16 +37,17 @@
 							th:href="@{|/admin/role/list/${item.id}|}" th:text="${item.name}"></a></td>
 						<td
 							th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-						<!-- 						<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a -->
-						<!-- 							href="javascript:void(0);" -->
-						<!-- 							class="delete btn btn-sm btn-outline-info" -->
-						<!-- 							th:data-uri="@{|/admin/role/delete/${item.id}|}" th:text="삭제"></a></td> -->
+<!-- 						<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a -->
+<!-- 							href="javascript:void(0);" -->
+<!-- 							class="delete btn btn-sm btn-outline-info" -->
+<!-- 							th:data-uri="@{|/admin/role/delete/${item.id}|}" th:text="삭제"></a></td> -->
 					</tr>
 					<tr class="text-center" th:if="${paging.isEmpty()}">
 						<td colspan="4">역할이 존재하지 않습니다.</td>
 					</tr>
 				</tbody>
 			</table>
+
 			<div th:if="${!paging.isEmpty()}">
 				<ul class="pagination justify-content-center">
 					<li class="page-item"
@@ -71,6 +72,7 @@
 					type="hidden" id="page" name="page" th:value="${paging.number}">
 			</form>
 		</div>
+
 		<div class="col-6">
 			<form method="post" th:object="${adminRoleForm}">
 				<h6 class="my-3 border-bottom pb-2 pt-2 title">역할 정보</h6>

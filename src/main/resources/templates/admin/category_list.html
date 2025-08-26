@@ -3,10 +3,11 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <div layout:fragment="content" class="container-fluid my-3 px-4">
-	<h5 class="my-3 border-bottom pb-2">게시판 관리</h5>
+
+	<h5 class="border-bottom pb-2">게시판 관리</h5>
 	<div class="row">
 		<div class="col-6">
-			<div class="row my-3">
+			<div class="row my-2">
 				<div class="col-6"></div>
 				<div class="col-6">
 					<div class="input-group">
@@ -16,13 +17,14 @@
 					</div>
 				</div>
 			</div>
+
 			<table class="table category">
 				<thead class="table-info">
 					<tr class="text-center">
 						<th>번호</th>
 						<th>게시판 이름</th>
 						<th>생성일</th>
-<!-- 						<th></th> -->
+						<!-- 						<th></th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -35,17 +37,18 @@
 							th:text="${item.name}"></a></td>
 						<td
 							th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-<!-- 						<td><a href="javascript:void(0);" -->
-<!-- 							class="delete btn btn-sm btn-outline-info" -->
-<!-- 							th:data-uri="@{|/admin/category/delete/${item.id}|}" -->
-<!-- 							th:if="${#authorization.expression('hasRole(''ADMIN'')')} and ${item.id != 1} " -->
-<!-- 							th:text="삭제"></a></td> -->
+						<!-- 						<td><a href="javascript:void(0);" -->
+						<!-- 							class="delete btn btn-sm btn-outline-info" -->
+						<!-- 							th:data-uri="@{|/admin/category/delete/${item.id}|}" -->
+						<!-- 							th:if="${#authorization.expression('hasRole(''ADMIN'')')} and ${item.id != 1} " -->
+						<!-- 							th:text="삭제"></a></td> -->
 					</tr>
 					<tr class="text-center" th:if="${paging.isEmpty()}">
 						<td colspan="4">게시판이 존재하지 않습니다.</td>
 					</tr>
 				</tbody>
 			</table>
+
 			<div th:if="${!paging.isEmpty()}">
 				<ul class="pagination justify-content-center">
 					<li class="page-item"
@@ -94,6 +97,7 @@
 		</div>
 	</div>
 </div>
+
 <script layout:fragment="script" type='text/javascript'
 	th:src="@{/list_search.js}"></script>
 </html>

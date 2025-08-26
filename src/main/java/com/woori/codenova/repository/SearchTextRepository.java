@@ -10,8 +10,6 @@ import com.woori.codenova.entity.SearchText;
 
 public interface SearchTextRepository extends JpaRepository<SearchText, Integer> {
 
-//	List<SearchText> findAll(Specification<SearchText> specification);
-
 	@Query("SELECT new com.woori.codenova.dto.SearchTextDto(s.text, COUNT(s)) FROM SearchText s GROUP BY s.text")
 	List<SearchTextDto> findSearchTextCountsByText();
 

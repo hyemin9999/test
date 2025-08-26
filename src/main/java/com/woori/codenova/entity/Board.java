@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -57,12 +59,12 @@ public class Board {
 	// @ManyToOne(optional = false, fetch = FetchType.EAGER)
 	// 작성자
 	@ManyToOne
-//	@JoinColumn(name = "userId")
+	@JoinColumn(name = "userId")
 	private SiteUser author;
 
 	// 게시판(게시글 분류)
 	@ManyToOne // (fetch = FetchType.LAZY)
-//	@JoinColumn(name = "categoryId", nullable = false)
+	@JoinColumn(name = "categoryId", nullable = false)
 	private Category category;
 
 	// 댓글
@@ -75,10 +77,12 @@ public class Board {
 
 	// 추천
 	@ManyToMany
+	@JoinTable(name = "boardVoter", joinColumns = @JoinColumn(name = "boardId"), inverseJoinColumns = @JoinColumn(name = "userId"))
 	Set<SiteUser> voter;
 
 	// 즐겨찾기
 	@ManyToMany
+	@JoinTable(name = "boardFavorite", joinColumns = @JoinColumn(name = "boardId"), inverseJoinColumns = @JoinColumn(name = "userId"))
 	Set<SiteUser> favorites;
 
 }

@@ -55,12 +55,6 @@ class CodenovaApplicationTests {
 		r2.setGrade(1);
 		r2.setCreateDate(LocalDateTime.now());
 		roleReporitory.save(r2);
-
-//		Role r3 = new Role();
-//		r3.setName("매니저");
-//		r3.setGrade(2);
-//		r3.setCreateDate(LocalDateTime.now());
-//		roleReporitory.save(r3);
 	}
 
 //	@Test
@@ -99,11 +93,6 @@ class CodenovaApplicationTests {
 
 //	@Test
 	void insertCategory() {
-		// 게시판 초기값 - 공지사항
-//		Category c1 = new Category();
-//		c1.setName("공지사항");
-//		c1.setCreateDate(LocalDateTime.now());
-//		categoryRepository.save(c1);
 
 		// 자유게시판
 		Category c2 = new Category();

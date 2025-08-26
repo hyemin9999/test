@@ -21,7 +21,6 @@ import com.woori.codenova.admin.service.AdminRoleService;
 import com.woori.codenova.admin.service.AdminUserService;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
-import com.woori.codenova.entity.SiteUser;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -118,10 +117,10 @@ public class AdminRoleController {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //		}
 
-		List<SiteUser> ulist = this.adminUserService.getList(id);
-		for (SiteUser siteUser : ulist) {
-			siteUser.getAuthority().remove(item);
-		}
+//		List<SiteUser> ulist = this.adminUserService.getList(id);
+//		for (SiteUser siteUser : ulist) {
+//			siteUser.getAuthority().remove(item);
+//		}
 
 //		this.adminRoleService.delete(item);
 		return "redirect:/admin/role/list";

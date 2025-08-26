@@ -2,6 +2,7 @@ package com.woori.codenova.admin.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -77,10 +78,15 @@ public class AdminUserService {
 		userReporitory.save(item);
 
 		if (rlist != null) {
+			if (item.getAuthority() == null) {
+				item.setAuthority(new HashSet<>());
+			}
+
 			item.getAuthority().addAll(rlist);
+			return userReporitory.save(item);
 		}
 
-		return userReporitory.save(item);
+		return item;
 	}
 
 	// 수정 - 비밀번호 변경, 회원가입에 사용자ID, 비밀번호, email만 받으면, 수정할수있는게 비밀번호뿐.
