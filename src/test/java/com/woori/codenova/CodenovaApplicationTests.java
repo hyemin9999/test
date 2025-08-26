@@ -30,7 +30,7 @@ class CodenovaApplicationTests {
 	private AdminRoleService roleService;
 
 	@Autowired
-	private UserRepository userReporitory;
+	private UserRepository userRepository;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -65,14 +65,14 @@ class CodenovaApplicationTests {
 		u1.setPassword(passwordEncoder.encode("1234"));
 		u1.setEmail("admin@email.com");
 		u1.setCreateDate(LocalDateTime.now());
-		userReporitory.save(u1);
+		userRepository.save(u1);
 
 		SiteUser u2 = new SiteUser();
 		u2.setUsername("user");
 		u2.setPassword(passwordEncoder.encode("1234"));
 		u2.setEmail("user@email.com");
 		u2.setCreateDate(LocalDateTime.now());
-		userReporitory.save(u2);
+		userRepository.save(u2);
 	}
 
 	@Test
@@ -80,14 +80,14 @@ class CodenovaApplicationTests {
 	@Rollback(value = false)
 	void insertUser_Authority() {
 
-		SiteUser u1 = userReporitory.findByUsername("admin").orElse(null);
+		SiteUser u1 = userRepository.findByUsername("admin").orElse(null);
 		assertTrue(u1 != null);
 
 		Role r1 = roleReporitory.findByGrade(1).orElse(null);
 		assertTrue(r1 != null);
 
 		u1.getAuthority().add(r1);
-		userReporitory.save(u1);
+		userRepository.save(u1);
 
 	}
 
