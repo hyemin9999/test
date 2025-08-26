@@ -45,7 +45,7 @@ public class AdminUserController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminUserForm adminUserForm,
 			BindingResult bindingResult) {
 
-		System.out.println("list :: GET ::");
+		System.out.println("list user :: GET ::");
 
 		list(model, page, kw, adminUserForm, "list");
 
@@ -58,7 +58,7 @@ public class AdminUserController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminUserForm adminUserForm,
 			BindingResult bindingResult) {
 
-		System.out.println("list :: POST ::");
+		System.out.println("list user :: POST ::");
 
 		list(model, page, kw, adminUserForm, "create");
 
@@ -92,7 +92,7 @@ public class AdminUserController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminUserModifyForm adminUserModifyForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
 
-		System.out.println("list/id :: GET ::");
+		System.out.println("list/id user :: GET ::");
 
 		listById(model, page, kw, principal, adminUserModifyForm, id, "list");
 
@@ -105,7 +105,7 @@ public class AdminUserController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminUserModifyForm adminUserModifyForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Long id) {
 
-		System.out.println("list/id :: POST ::");
+		System.out.println("list/id user :: POST ::");
 
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {

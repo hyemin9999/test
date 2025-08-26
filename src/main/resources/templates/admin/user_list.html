@@ -108,11 +108,12 @@
 							<h6 class="my-3 border-bottom pb-2 pt-2 title">역할</h6>
 							<div class="form-check form-check-inline"
 								th:each="option, options : *{optionList}">
-								<!-- th:field="*{selectedList}" -->
+
 								<input type="checkbox" class="form-check-input"
-									th:value="${option.id}" th:id="${'item' + options.index}"
+									th:value="${option.id}" th:field="*{selectedList}"
 									th:disabled="*{username == 'admin'}"> <label
-									class="form-check-label" th:for="${'item' + options.index}"
+									class="form-check-label"
+									th:for="${'selectedList' + (options.index+1)}"
 									th:text="${option.name}"></label>
 							</div>
 						</div>

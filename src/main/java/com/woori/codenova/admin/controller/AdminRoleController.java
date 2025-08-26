@@ -1,6 +1,7 @@
 package com.woori.codenova.admin.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -40,6 +41,8 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
 
+		System.out.println("list role :: GET ::");
+
 		list(model, page, kw, adminRoleForm, "list");
 
 		return "admin/role_list";
@@ -50,6 +53,8 @@ public class AdminRoleController {
 	public String create(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
+
+		System.out.println("list role :: POST ::");
 
 		list(model, page, kw, adminRoleForm, "create");
 
@@ -67,6 +72,8 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminRoleForm adminRoleForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
+		System.out.println("list/id role :: GET ::");
+
 		listById(model, page, kw, principal, adminRoleForm, id, "list");
 
 		return "admin/role_list";
@@ -77,6 +84,8 @@ public class AdminRoleController {
 	public String modify(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
+
+		System.out.println("list/id role :: POST ::");
 
 		Role item = this.adminRoleService.getItem(id);
 		if (item == null) {
@@ -130,26 +139,39 @@ public class AdminRoleController {
 
 	public void listById(Model model, Integer page, String kw, Principal principal, AdminRoleForm adminRoleForm,
 			Integer id, String mode) {
+
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+		}
+
 		Page<Role> paging = adminRoleService.getList(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "modify");
 
-		Role item = this.adminRoleService.getItem(id);
-		if (item != null) {
+		if (mode == "list") {
 			adminRoleForm.setName(item.getName());
-
-//			model.addAttribute("clist", clist);			
-
-//			List<AdminCategoryDto> clist = adminCategoryService.getlist();
-
-//			adminRoleForm.setClist(clist);
 		}
 
-		SiteUser user = this.adminUserService.getItem(principal.getName());
-		if (user != null && !user.getAuthority().isEmpty()
-				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
-			model.addAttribute("mode", "modify");
+		List<Category> optionList = adminCategoryService.getlist();
+		adminRoleForm.setOptionList(optionList);
+
+		if (mode == "list") {
+
+			List<Category> selectedlist = new ArrayList<>(item.getAuthority());
+//			if ((selectedlist.size() + 1) == optionList.size()) {
+//				adminCategoryService.addAllItem(selectedlist);
+//			}
+
+			adminRoleForm.setSelectedList(selectedlist);
 		}
+
+//		SiteUser user = this.adminUserService.getItem(principal.getName());
+//		if (user != null && !user.getAuthority().isEmpty()
+//				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
+//			model.addAttribute("mode", "modify");
+//		}
 	}
 
 }

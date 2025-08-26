@@ -2,9 +2,11 @@
 <html layout:decorate="~{admin/layout}"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-	
+
 <div layout:fragment="content" class="container-fluid my-3 px-4">
-	<h5 class="my-3 border-bottom pb-2">역할 관리</h5>
+	<div class="row">
+		<h5 class="my-3 border-bottom pb-2">역할 관리</h5>
+	</div>
 	<div class="row my-3">
 		<div class="col-6">
 			<div class="row my-3">
@@ -23,7 +25,7 @@
 						<th>번호</th>
 						<th>역할 이름</th>
 						<th>생성일</th>
-<!-- 						<th th:if="${#authorization.expression('hasRole(''ADMIN'')')}"></th> -->
+						<!-- 						<th th:if="${#authorization.expression('hasRole(''ADMIN'')')}"></th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -35,10 +37,10 @@
 							th:href="@{|/admin/role/list/${item.id}|}" th:text="${item.name}"></a></td>
 						<td
 							th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-<!-- 						<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a -->
-<!-- 							href="javascript:void(0);" -->
-<!-- 							class="delete btn btn-sm btn-outline-info" -->
-<!-- 							th:data-uri="@{|/admin/role/delete/${item.id}|}" th:text="삭제"></a></td> -->
+						<!-- 						<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a -->
+						<!-- 							href="javascript:void(0);" -->
+						<!-- 							class="delete btn btn-sm btn-outline-info" -->
+						<!-- 							th:data-uri="@{|/admin/role/delete/${item.id}|}" th:text="삭제"></a></td> -->
 					</tr>
 					<tr class="text-center" th:if="${paging.isEmpty()}">
 						<td colspan="4">역할이 존재하지 않습니다.</td>
@@ -70,7 +72,7 @@
 			</form>
 		</div>
 		<div class="col-6">
-			<form method="post" th:object="${adminRoleForm}" >
+			<form method="post" th:object="${adminRoleForm}">
 				<h6 class="my-3 border-bottom pb-2 pt-2 title">역할 정보</h6>
 				<div class="card my-3">
 					<div class="card-body">
@@ -82,28 +84,22 @@
 							<label for="name" class="form-label">역할 이름</label><input
 								type="text" th:field="*{name}" class="form-control">
 						</div>
-<!-- 						<div class="mb-3"> -->
-							<!-- 							<div class="border-bottom"> -->
-							<!-- 								<label class="form-label">게시판</label> -->
-							<!-- 							</div> -->
+						<div th:if="*{!optionList.isEmpty()}">
+							<h6 class="my-3 border-bottom pb-2 pt-2 title">게시판</h6>
+							<div class="form-check form-check-inline"
+								th:each="option, options : *{optionList}">
 
-							<!-- th:classappend="${list.index == 0 ? role}" -->
+								<input type="checkbox" class="form-check-input"
+									th:value="${option.id}" th:field="*{selectedList}"
+									th:rId="${option.id}"
+									th:classappend="${options.index != 0} ? role"
+									th:onchange="onChange(this.getAttribute('rId'), this)">
+								<label class="form-check-label"
+									th:for="${'selectedList' + (options.index+1)}"
+									th:text="${option.name}"></label>
+							</div>
+						</div>
 
-<!-- 							<div th:if="*{!clist.isEmpty()}"> -->
-<!-- 								<div class="form-check form-check-inline" -->
-<!-- 									th:each="item, list : *{clist}"> -->
-
-<!-- 									<input type="checkbox" data-toggle="toggle" -->
-<!-- 										class="form-check-input"  -->
-<!-- 										th:classappend="${list.index != 0} ? role" th:rId="${item.id}" -->
-<!-- 										th:id="${'item' + list.index}" th:value="${item.id}" -->
-<!-- 										th:checked="${item.isCheck}" -->
-<!-- 										th:onchange="onChange(this.getAttribute('rId'), this)"> -->
-<!-- 									<label class="form-check-label" th:for="${'item' + list.index}" -->
-<!-- 										th:text="${item.name}"></label> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
 						<div class="align-r">
 							<input type="submit" value="저장" class="btn btn-info my-2">
 							<a class="btn btn-outline-info" th:href="@{/admin/role/list}">취소</a>
