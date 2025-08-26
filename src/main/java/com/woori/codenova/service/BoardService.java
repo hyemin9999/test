@@ -17,7 +17,6 @@ import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CategoryRepository;
-import com.woori.codenova.repository.CommentRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -30,11 +29,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class BoardService {
-	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
 
 	private final BoardRepository boardRepository;
 	private final CategoryRepository categoryRepository;
-	private final CommentRepository commentRepository;
 
 	public List<Board> getList() {
 		return boardRepository.findAll();
@@ -83,6 +80,14 @@ public class BoardService {
 		return boardRepository.findById(id).orElse(null);
 	}
 
+	// 조회 - 조회수
+	public void setViewCount(Board item) {
+
+		int viewCount = item.getViewCount();
+		item.setViewCount(viewCount + 1);
+		boardRepository.save(item);
+	}
+
 	// 등록
 	public void create(String subject, String contents, SiteUser uesr) {
 		Board item = new Board();
@@ -108,13 +113,6 @@ public class BoardService {
 		Category citem = categoryRepository.findById(1).orElse(null);
 		item.setCategory(citem);
 
-		boardRepository.save(item);
-	}
-
-	// 수정 - 조회수 증가
-	public void modifyViewCount(Board item) {
-		int vcnt = item.getViewCount();
-		item.setViewCount(++vcnt);
 		boardRepository.save(item);
 	}
 

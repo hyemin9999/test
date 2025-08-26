@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -42,13 +44,13 @@ public class Category {
 	@OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
 	private List<Notice> noticeList;
 
-	// 사용여부?? (생성한 카테고리의 사용여부를 설정할수 있어야 할까?)
+	@OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+	private List<SearchText> searchtextList;
 
-	// 권한
-	@ManyToMany
-	Set<Role> authority;
+	// 사용여부?? (생성한 카테고리의 사용여부를 설정할수 있어야 할까?)
 
 	// 즐겨찾기
 	@ManyToMany
+	@JoinTable(name = "categoryFavorite", joinColumns = @JoinColumn(name = "CategoryId"), inverseJoinColumns = @JoinColumn(name = "userId"))
 	Set<SiteUser> favorites;
 }
