@@ -46,5 +46,5 @@ public class SiteUser {
 	// 권한
 	@ManyToMany
 	@JoinTable(name = "userAuthority", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
-	Set<Role> authority;// = new HashSet<>();
+	Set<Role> authority;
 }

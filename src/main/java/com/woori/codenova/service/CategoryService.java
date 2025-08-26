@@ -73,7 +73,7 @@ public class CategoryService {
 
 	// 즐겨찾기
 	public void favorites(Category item, SiteUser siteUser) {
-		item.getFavorites().add(siteUser);
+		item.getFavorite().add(siteUser);
 		categoryRepository.save(item);
 	}
 
