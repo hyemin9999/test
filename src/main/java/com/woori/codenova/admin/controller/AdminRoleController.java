@@ -114,7 +114,7 @@ public class AdminRoleController {
 			siteUser.getAuthority().remove(item);
 		}
 
-		this.adminRoleService.delete(item);
+//		this.adminRoleService.delete(item);
 		return "redirect:/admin/role/list";
 	}
 
