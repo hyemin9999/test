@@ -97,7 +97,10 @@ public class AdminUserService {
 		}
 
 		item.setModifyDate(LocalDateTime.now());
-		item.getAuthority().clear();
+
+		if (item.getId() != 1) { // 슈퍼관리자 권한 삭제안되도록
+			item.getAuthority().clear();
+		}
 
 		if (rlist != null && !rlist.isEmpty()) {
 			item.getAuthority().addAll(rlist);
