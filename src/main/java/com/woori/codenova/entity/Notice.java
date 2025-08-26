@@ -57,6 +57,6 @@ public class Notice {
 
 	// 업로드 파일
 	@OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE)
-	private List<UploadFile> uploadFils;
+	private List<UploadFile> uploadFile;
 
 }
