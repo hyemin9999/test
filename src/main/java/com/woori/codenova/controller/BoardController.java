@@ -3,6 +3,7 @@ package com.woori.codenova.controller;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+<<<<<<< HEAD
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,108 @@ public class BoardController {
 		Board item = this.boardService.getItem(id);
 		this.boardService.setViewCount(item);
 		model.addAttribute("item", item);
+=======
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.woori.codenova.entity.Board;
+import com.woori.codenova.entity.Comment;
+import com.woori.codenova.entity.SiteUser;
+import com.woori.codenova.form.BoardForm;
+import com.woori.codenova.form.CommentForm;
+import com.woori.codenova.service.BoardService;
+import com.woori.codenova.service.CommentService;
+import com.woori.codenova.service.SearchTextService;
+import com.woori.codenova.service.UserService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequestMapping("/board")
+@RequiredArgsConstructor
+public class BoardController {
+
+	private final BoardService boardService;
+	private final UserService userService;
+	private final CommentService commentService;
+	private final SearchTextService searchTextService;
+
+	@GetMapping("/list")
+	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "field", defaultValue = "all") String field) {
+
+		Page<Board> paging = boardService.getList(page, kw, field, 0);
+
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("field", field);
+
+		if (!kw.isBlank()) {
+			searchTextService.create(kw, null);
+		}
+		return "board_list";
+	}
+
+	@GetMapping("/list/{cid}")
+	public String listCateogry(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "field", defaultValue = "all") String field, @PathVariable("cid") Integer cid) {
+
+		Page<Board> paging = boardService.getList(page, kw, field, cid);
+
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("field", field);
+
+		if (!kw.isBlank()) {
+			searchTextService.create(kw, null);
+		}
+		return "board_list";
+	}
+
+	@GetMapping(value = "/detail/{id}")
+	public String detail(Model model, @PathVariable("id") Integer id, CommentForm commentForm,
+			@RequestParam(value = "cpage", defaultValue = "0") int cpage, Principal principal) { // ✅ Principal 추가
+
+		Board item = this.boardService.getItem(id);
+		Page<Comment> cpaging = this.commentService.getPageByBoard(item, cpage);
+
+		// ✅ 현재 로그인 유저 (비로그인일 수 있으니 null 체크)
+		SiteUser me = (principal != null) ? this.userService.getItem(principal.getName()) : null;
+
+		// ✅ 게시글 즐겨찾기 여부
+		boolean favoritedBoard = (me != null) && item.getFavorites() != null && item.getFavorites().contains(me);
+
+		// ✅ 댓글별 즐겨찾기 여부 Map<댓글ID, Boolean>
+		Map<Integer, Boolean> commentFavMap = new HashMap<>();
+		if (me != null) {
+			for (Comment c : cpaging.getContent()) {
+				boolean fav = (c.getFavorites() != null) && c.getFavorites().contains(me);
+				commentFavMap.put(c.getId(), fav);
+			}
+		}
+
+		this.boardService.setViewCount(item);
+		model.addAttribute("item", item);
+		model.addAttribute("cpaging", cpaging);
+		model.addAttribute("favoritedBoard", favoritedBoard); // ✅ 추가
+		model.addAttribute("commentFavMap", commentFavMap); // ✅ 추가
+>>>>>>> branch 'develop' of https://github.com/hyemin9999/test.git
 
 		return "board_detail";
 	}
