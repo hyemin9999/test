@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.woori.codenova.admin.form.AdminCategoryForm;
+import com.woori.codenova.admin.service.AdminCategoryService;
+import com.woori.codenova.admin.service.AdminUserService;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.service.CategoryService;
-import com.woori.codenova.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminCategoryController {
 
-	private final CategoryService categoryService;
-	private final UserService userService;
+	private final AdminCategoryService adminCategoryService;
+	private final AdminUserService adminUserService;
 
 	@GetMapping("/list")
 	@PreAuthorize("isAuthenticated()")
@@ -36,7 +36,7 @@ public class AdminCategoryController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminCategoryForm adminCategoryForm,
 			BindingResult bindingResult) {
 
-		Page<Category> paging = categoryService.getlist(page, kw);
+		Page<Category> paging = adminCategoryService.getlist(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 		model.addAttribute("mode", "info");
@@ -50,16 +50,16 @@ public class AdminCategoryController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminCategoryForm adminCategoryForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
-		Page<Category> paging = categoryService.getlist(page, kw);
+		Page<Category> paging = adminCategoryService.getlist(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 
-		Category item = this.categoryService.getitem(id);
+		Category item = this.adminCategoryService.getitem(id);
 		if (item != null) {
 			adminCategoryForm.setName(item.getName());
 		}
 
-		SiteUser user = this.userService.getItem(principal.getName());
+		SiteUser user = this.adminUserService.getItem(principal.getName());
 		if (user != null && !user.getAuthority().isEmpty()
 				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
 			model.addAttribute("mode", "modify");
@@ -74,7 +74,7 @@ public class AdminCategoryController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminCategoryForm adminCategoryForm,
 			BindingResult bindingResult) {
 
-		Page<Category> paging = categoryService.getlist(page, kw);
+		Page<Category> paging = adminCategoryService.getlist(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 		model.addAttribute("mode", "info");
@@ -83,7 +83,7 @@ public class AdminCategoryController {
 			return "admin/category_list";
 		}
 
-		this.categoryService.create(adminCategoryForm.getName());
+		this.adminCategoryService.create(adminCategoryForm.getName());
 		return "redirect:/admin/category/list";
 	}
 
@@ -93,17 +93,17 @@ public class AdminCategoryController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminCategoryForm adminCategoryForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
-		Page<Category> paging = categoryService.getlist(page, kw);
+		Page<Category> paging = adminCategoryService.getlist(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 
-		Category item = this.categoryService.getitem(id);
+		Category item = this.adminCategoryService.getitem(id);
 
 		if (item != null) {
 			adminCategoryForm.setName(item.getName());
 		}
 
-		SiteUser user = this.userService.getItem(principal.getName());
+		SiteUser user = this.adminUserService.getItem(principal.getName());
 		if (user != null && !user.getAuthority().isEmpty()
 				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
 			model.addAttribute("mode", "modify");
@@ -118,7 +118,7 @@ public class AdminCategoryController {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //		}
 
-		this.categoryService.modify(item, adminCategoryForm.getName());
+		this.adminCategoryService.modify(item, adminCategoryForm.getName());
 		return "redirect:/admin/category/list";
 	}
 
@@ -126,7 +126,7 @@ public class AdminCategoryController {
 	@GetMapping("/delete/{id}")
 	public String delete(Principal principal, @PathVariable("id") Integer id) {
 
-		Category item = this.categoryService.getitem(id);
+		Category item = this.adminCategoryService.getitem(id);
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //		}
