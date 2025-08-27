@@ -47,14 +47,14 @@ public class BoardService {
 	}
 
 	// 목록 - 페이징 - 검색
-	public Page<Board> getList(int page, String kw) {
+	public Page<Board> getList(int page, String kw, String field) {
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 
 		Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
 
 		// 게시판 - 카테고리
-		Specification<Board> spec = search(kw);
+		Specification<Board> spec = search(kw, field);
 
 		return boardRepository.findAll(spec, pageable);
 	}
@@ -146,7 +146,7 @@ public class BoardService {
 	}
 
 	// 검색
-	private Specification<Board> search(String kw) {
+	private Specification<Board> search(String kw, String field) {
 		return new Specification<>() {
 
 			private static final long serialVersionUID = 1L;
@@ -156,20 +156,31 @@ public class BoardService {
 
 				q.distinct(true); // 중복을 제거
 
+				Join<Board, SiteUser> u1 = r.join("author", JoinType.LEFT);
+				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);
+				Join<Comment, SiteUser> u2 = c.join("author", JoinType.LEFT);
+
+				Predicate byTitle = cb.like(r.get("subject"), "%" + kw + "%"); // 제목
+				Predicate byContent = cb.like(r.get("contents"), "%" + kw + "%"); // 내용
+				Predicate byAuthor = cb.like(u1.get("username"), "%" + kw + "%"); // 글쓴이(작성자)
+//				Predicate byCmt = cb.like(c.get("contents"), "%" + kw + "%"); // 댓글 내용
+//				Predicate byCmtUser = cb.like(u2.get("username"), "%" + kw + "%"); // 댓글 작성자
+
 				// TODO :: entity class 수정여부에 따라 바뀌어야 할듯?
 
-				Join<Board, SiteUser> u = r.join("author", JoinType.LEFT);// 게시글과 작성자
-				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);// 게시글과 작성자
-				Join<Comment, SiteUser> u1 = c.join("author", JoinType.LEFT);// 댓글과 작성자
-
-				Predicate orP = cb.or(cb.like(r.get("subject"), "%" + kw + "%"), // 게시글 제목
-						cb.like(r.get("contents"), "%" + kw + "%"), // 댓글 내용
-						cb.like(u.get("username"), "%" + kw + "%"), // 게시글 작성자
-						cb.like(c.get("contents"), "%" + kw + "%"), // 댓글 내용
-						cb.like(u1.get("username"), "%" + kw + "%")); // 댓글 작성자
-
-				// 제목, 내용, 작성자ID, 댓글(내용, 작성자ID)
-				return cb.and(cb.equal(r.get("isDelete"), false), orP); // 삭제여부 false인거중에 검색기능 처리
+				// ✅ 선택한 검색대상에 맞춰 조건 분기
+				switch (field) {
+				case "title":
+					return byTitle;
+				case "content":
+					return byContent;
+				case "author":
+					return byAuthor;
+				case "all":
+				default:
+					// 제목+내용(+작성자/댓글/댓글작성자) — 기존처럼 확장 검색
+					return cb.or(byTitle, byContent);
+				}
 			}
 		};
 	}

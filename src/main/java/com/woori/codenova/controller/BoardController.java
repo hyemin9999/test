@@ -39,9 +39,10 @@ public class BoardController {
 
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "field", defaultValue = "all") String field) {
 
-		Page<Board> paging = boardService.getList(page, kw);
+		Page<Board> paging = boardService.getList(page, kw, field);
 
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
