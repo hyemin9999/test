@@ -75,6 +75,7 @@ public class AdminRoleController {
 
 		listById(model, page, kw, principal, adminRoleForm, id, "list");
 
+<<<<<<< HEAD
 		return "admin/role_list";
 	}
 
@@ -171,6 +172,132 @@ public class AdminRoleController {
 //				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
 //			model.addAttribute("mode", "modify");
 //		}
+=======
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			System.out.println("message ::: 존재");
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+//			bindingResult.reject("존재하지 않는 역할 입니다.");
+		}
+
+//		if (bindingResult.hasErrors()) {
+//			System.out.println("message ::: admin/role_list");
+//			return "admin/role_list";
+//		}
+
+		return "admin/role_list";
+	}
+
+	@PostMapping("/list/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public String modify(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
+			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
+
+		System.out.println("list/id role :: POST ::");
+		System.out.println("message :: id ::: " + id);
+
+		listById(model, page, kw, principal, adminRoleForm, id, "modify");
+
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			bindingResult.reject("존재하지 않는 역할 입니다.");
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+//			return "admin/role_list";
+
+		}
+
+		System.out.println("message list ::: " + id);
+
+		if (bindingResult.hasErrors()) {
+//			model.addAttribute("message", "역할 이름은 필수입력입니다.");
+			System.out.println("message ::: admin/role_list");
+			return "admin/role_list";
+		}
+
+//		if (!item.getAuthor().getUsername().equals(principal.getName())) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//		}
+
+		this.adminRoleService.modify(item, adminRoleForm.getName(), item.getGrade(), adminRoleForm.getSelectedList());
+		return "redirect:/admin/role/list";
+	}
+
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/delete/{id}")
+	public String delete(Model model, Principal principal, @PathVariable("id") Integer id,
+			AdminRoleForm adminRoleForm) {
+
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+			list(model, 0, "", adminRoleForm, "list");
+
+			return "admin/role_list";
+		}
+
+//		item.getAuthority().clear();
+
+//		if (!item.getAuthor().getUsername().equals(principal.getName())) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+//		}
+
+//		List<SiteUser> ulist = this.adminUserService.getList(id);
+//		for (SiteUser siteUser : ulist) {
+//			siteUser.getAuthority().remove(item);
+//		}
+
+//		this.adminRoleService.delete(item);
+		return "redirect:/admin/role/list";
+	}
+
+	public void list(Model model, Integer page, String kw, AdminRoleForm adminRoleForm, String mode) {
+		Page<Role> paging = adminRoleService.getList(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "create");
+
+		List<Category> optionList = adminCategoryService.getlist();
+		adminRoleForm.setOptionList(optionList);
+	}
+
+	public void listById(Model model, Integer page, String kw, Principal principal, AdminRoleForm adminRoleForm,
+			Integer id, String mode) {
+
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+		}
+
+		Page<Role> paging = adminRoleService.getList(page, kw);
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("mode", "modify");
+
+		if (mode == "list" && item != null) {
+			adminRoleForm.setName(item.getName());
+		}
+
+		List<Category> optionList = adminCategoryService.getlist();
+		adminRoleForm.setOptionList(optionList);
+
+		if (mode == "list" && item != null) {
+
+			List<Category> selectedlist = new ArrayList<>(item.getAuthority());
+//			if ((selectedlist.size() + 1) == optionList.size()) {
+//				adminCategoryService.addAllItem(selectedlist);
+//			}
+
+			adminRoleForm.setSelectedList(selectedlist);
+		}
+
+//		SiteUser user = this.adminUserService.getItem(principal.getName());
+//		if (user != null && !user.getAuthority().isEmpty()
+//				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
+//			model.addAttribute("mode", "modify");
+//		}
+
+>>>>>>> branch 'develop' of https://github.com/hyemin9999/test.git
 	}
 
 }

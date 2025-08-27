@@ -4,7 +4,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<div layout:fragment="content" class="container my-3">
+<div layout:fragment="content" class="container my-3"
+	th:unless="${item} == null">
 	<h5 class="my-3 border-bottom pb-2">게시판</h5>
 	<div class="card my-3">
 		<div class="card-body">
@@ -73,6 +74,18 @@
 		</div>
 	</div>
 </div>
-<script layout:fragment="script"></script>
+<script layout:fragment="script" type="text/javascript"
+	th:inline="javascript">
+	$(document).ready(function() {
+		const message = /*[[${message}]]*/'';
+		if (message.length != 0) {
+			$('#message').text(message);
+			$('#modal').modal('show');
+		}
 
+		$('#modal').on('hide.bs.modal', function(event) {
+			window.location.href = '/admin/board/';
+		});
+	});
+</script>
 </html>

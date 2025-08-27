@@ -109,6 +109,14 @@ input[type=submit] {
 	stroke-width: 1;
 }
 
+.btn-outline-info .active  path#star {
+	fill: var(--bs-info) !important;
+}
+
+.btn-outline-info:hover .active  path#star {
+	fill: var(--bs-white) !important;
+}
+
 .btn-outline-info-subtle {
 	--bs-btn-border-color: var(--bs-info-border-subtle);
 	--bs-btn-hover-bg: var(--bs-info-border-subtle);
