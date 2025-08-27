@@ -36,14 +36,6 @@ public class NoticeController {
 
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-<<<<<<< HEAD
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
-
-		Page<Notice> paging = noticeService.getList(page, kw);
-
-		model.addAttribute("paging", paging);
-		model.addAttribute("kw", kw);
-=======
 			@RequestParam(value = "kw", defaultValue = "") String kw,
 			@RequestParam(value = "field", defaultValue = "all") String field) {
 
@@ -52,7 +44,6 @@ public class NoticeController {
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
 		model.addAttribute("field", field);
->>>>>>> branch 'develop' of https://github.com/hyemin9999/test.git
 
 		return "notice_list";
 	}
