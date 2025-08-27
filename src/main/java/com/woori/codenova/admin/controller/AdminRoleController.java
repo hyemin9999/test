@@ -75,6 +75,18 @@ public class AdminRoleController {
 
 		listById(model, page, kw, principal, adminRoleForm, id, "list");
 
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			System.out.println("message ::: 존재");
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+//			bindingResult.reject("존재하지 않는 역할 입니다.");
+		}
+
+//		if (bindingResult.hasErrors()) {
+//			System.out.println("message ::: admin/role_list");
+//			return "admin/role_list";
+//		}
+
 		return "admin/role_list";
 	}
 
@@ -85,16 +97,23 @@ public class AdminRoleController {
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
 		System.out.println("list/id role :: POST ::");
-
-		Role item = this.adminRoleService.getItem(id);
-		if (item == null) {
-			model.addAttribute("message", "존재하지 않는 역할 입니다.");
-			bindingResult.reject("존재하지 않는 역할 입니다.");
-		}
+		System.out.println("message :: id ::: " + id);
 
 		listById(model, page, kw, principal, adminRoleForm, id, "modify");
 
+		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			bindingResult.reject("존재하지 않는 역할 입니다.");
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+//			return "admin/role_list";
+
+		}
+
+		System.out.println("message list ::: " + id);
+
 		if (bindingResult.hasErrors()) {
+//			model.addAttribute("message", "역할 이름은 필수입력입니다.");
+			System.out.println("message ::: admin/role_list");
 			return "admin/role_list";
 		}
 
@@ -108,9 +127,17 @@ public class AdminRoleController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete/{id}")
-	public String delete(Principal principal, @PathVariable("id") Integer id) {
+	public String delete(Model model, Principal principal, @PathVariable("id") Integer id,
+			AdminRoleForm adminRoleForm) {
 
 		Role item = this.adminRoleService.getItem(id);
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 역할 입니다.");
+			list(model, 0, "", adminRoleForm, "list");
+
+			return "admin/role_list";
+		}
+
 //		item.getAuthority().clear();
 
 //		if (!item.getAuthor().getUsername().equals(principal.getName())) {
@@ -149,14 +176,14 @@ public class AdminRoleController {
 		model.addAttribute("kw", kw);
 		model.addAttribute("mode", "modify");
 
-		if (mode == "list") {
+		if (mode == "list" && item != null) {
 			adminRoleForm.setName(item.getName());
 		}
 
 		List<Category> optionList = adminCategoryService.getlist();
 		adminRoleForm.setOptionList(optionList);
 
-		if (mode == "list") {
+		if (mode == "list" && item != null) {
 
 			List<Category> selectedlist = new ArrayList<>(item.getAuthority());
 //			if ((selectedlist.size() + 1) == optionList.size()) {
@@ -171,6 +198,7 @@ public class AdminRoleController {
 //				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
 //			model.addAttribute("mode", "modify");
 //		}
+
 	}
 
 }

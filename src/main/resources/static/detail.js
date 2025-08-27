@@ -103,22 +103,23 @@ if (viewerElement) {
 }
 
 
-$(document).ready(function() {
-	const message = /*[[${message}]]*/'';
-
-	if (message.length != 0) {
-		$('#message').text(message);
-		$('#modal').modal('show');
-	}
-
-	$('#modal').on('hide.bs.modal', function(event) {
-		console.log('dddd');
-		//window.location.href = '/admin/user';
-	});
-
-	//	$(".dropdown-toggle").dropdown();
-});
-
+//$(document).ready(function() {
+////	const message = /*[[${message}]]*/'';
+////
+////	console.log(message);
+//
+//	if (message.length != 0) {
+//		$('#message').text(message);
+//		$('#modal').modal('show');
+//	}
+//
+//	$('#modal').on('hide.bs.modal', function(event) {
+//		console.log('dddd');
+//		//	window.location.href = '/admin/user';
+//	});
+//
+//	//	$(".dropdown-toggle").dropdown();
+//});
 
 //var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
 //var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {

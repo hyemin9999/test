@@ -54,8 +54,24 @@ public class AdminBoardController {
 	public String detail(Model model, @PathVariable("id") Integer id, CommentForm commentForm) {
 
 		Board item = this.adminBoardService.getItem(id);
-		this.adminBoardService.setViewCount(item);
-		model.addAttribute("item", item);
+		if (item == null) {
+			System.out.println("message ::: 존재");
+			model.addAttribute("message", "존재하지 않는 게시글 입니다.");
+
+//			Page<Board> paging = adminBoardService.getList(0, "", "");
+//
+//			model.addAttribute("paging", paging);
+//			model.addAttribute("kw", "");
+//			model.addAttribute("field", "");
+//
+//			return "admin/board_list";
+
+//			bindingResult.reject("존재하지 않는 역할 입니다.");
+
+		} else {
+			this.adminBoardService.setViewCount(item);
+			model.addAttribute("item", item);
+		}
 
 		return "admin/board_detail";
 	}

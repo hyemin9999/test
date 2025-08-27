@@ -96,6 +96,12 @@ public class AdminUserController {
 
 		listById(model, page, kw, principal, adminUserModifyForm, id, "list");
 
+		SiteUser item = this.adminUserService.getItem(id);
+		if (item == null) {
+			model.addAttribute("message", "존재하지 않는 회원 입니다.");
+//			bindingResult.reject("존재하지 않는 역할 입니다.");
+		}
+
 		return "admin/user_list";
 	}
 
@@ -192,7 +198,7 @@ public class AdminUserController {
 		model.addAttribute("kw", kw);
 		model.addAttribute("mode", "modify");
 
-		if (mode == "list") {
+		if (mode == "list" && item != null) {
 			adminUserModifyForm.setUsername(item.getUsername());
 			adminUserModifyForm.setEmail(item.getEmail());
 		}
@@ -204,8 +210,7 @@ public class AdminUserController {
 		List<Role> optionList = adminRoleService.getlist();
 		adminUserModifyForm.setOptionList(optionList);
 
-		if (mode == "list") {
-
+		if (mode == "list" && item != null) {
 			List<Role> selectedlist = new ArrayList<>(item.getAuthority()); // 사용자에게 할당된 역할목록?
 			adminUserModifyForm.setSelectedList(selectedlist);
 		}

@@ -47,7 +47,24 @@ public class BoardController {
 			@RequestParam(value = "kw", defaultValue = "") String kw,
 			@RequestParam(value = "field", defaultValue = "all") String field) {
 
-		Page<Board> paging = boardService.getList(page, kw, field);
+		Page<Board> paging = boardService.getList(page, kw, field, 0);
+
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("field", field);
+
+		if (!kw.isBlank()) {
+			searchTextService.create(kw, null);
+		}
+		return "board_list";
+	}
+
+	@GetMapping("/list/{cid}")
+	public String listCateogry(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "field", defaultValue = "all") String field, @PathVariable("cid") Integer cid) {
+
+		Page<Board> paging = boardService.getList(page, kw, field, cid);
 
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);

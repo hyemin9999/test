@@ -47,14 +47,14 @@ public class BoardService {
 	}
 
 	// 목록 - 페이징 - 검색
-	public Page<Board> getList(int page, String kw, String field) {
+	public Page<Board> getList(int page, String kw, String field, Integer cid) {
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 
 		Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
 
 		// 게시판 - 카테고리
-		Specification<Board> spec = search(kw, field);
+		Specification<Board> spec = search(kw, field, cid);
 
 		return boardRepository.findAll(spec, pageable);
 	}
@@ -146,7 +146,7 @@ public class BoardService {
 	}
 
 	// 검색
-	private Specification<Board> search(String kw, String field) {
+	private Specification<Board> search(String kw, String field, Integer cid) {
 		return new Specification<>() {
 
 			private static final long serialVersionUID = 1L;
@@ -160,11 +160,15 @@ public class BoardService {
 				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);
 				Join<Comment, SiteUser> u2 = c.join("author", JoinType.LEFT);
 
+				Join<Board, Category> ca = r.join("category", JoinType.LEFT);
+
 				Predicate byTitle = cb.like(r.get("subject"), "%" + kw + "%"); // 제목
 				Predicate byContent = cb.like(r.get("contents"), "%" + kw + "%"); // 내용
 				Predicate byAuthor = cb.like(u1.get("username"), "%" + kw + "%"); // 글쓴이(작성자)
 //				Predicate byCmt = cb.like(c.get("contents"), "%" + kw + "%"); // 댓글 내용
 //				Predicate byCmtUser = cb.like(u2.get("username"), "%" + kw + "%"); // 댓글 작성자
+
+				Predicate category = cb.equal(ca.get("id"), cid);
 
 				// TODO :: entity class 수정여부에 따라 바뀌어야 할듯?
 
@@ -179,7 +183,14 @@ public class BoardService {
 				case "all":
 				default:
 					// 제목+내용(+작성자/댓글/댓글작성자) — 기존처럼 확장 검색
-					return cb.or(byTitle, byContent);
+					// return cb.or(byTitle, byContent);
+					if (cid != 0) {
+						return cb.and(cb.or(byTitle, byContent), category);
+
+					} else {
+						return cb.or(byTitle, byContent);
+					}
+
 				}
 			}
 		};

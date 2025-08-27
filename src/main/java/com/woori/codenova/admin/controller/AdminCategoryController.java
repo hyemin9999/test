@@ -57,6 +57,9 @@ public class AdminCategoryController {
 		Category item = this.adminCategoryService.getitem(id);
 		if (item != null) {
 			adminCategoryForm.setName(item.getName());
+		} else {
+			System.out.println("message ::: 존재");
+			model.addAttribute("message", "존재하지 않는 게시판 입니다.");
 		}
 
 		SiteUser user = this.adminUserService.getItem(principal.getName());
@@ -98,7 +101,6 @@ public class AdminCategoryController {
 		model.addAttribute("kw", kw);
 
 		Category item = this.adminCategoryService.getitem(id);
-
 		if (item != null) {
 			adminCategoryForm.setName(item.getName());
 		}
