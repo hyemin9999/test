@@ -27,7 +27,7 @@
 						<th>사용자 ID</th>
 						<th>Email</th>
 						<th>가입일</th>
-<!-- 						<th></th> -->
+						<!-- 						<th></th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -42,10 +42,10 @@
 						<td><span th:text="${item.email}"></span></td>
 						<td
 							th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-<!-- 						<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a -->
-<!-- 							href="javascript:void(0);" th:if="${item.username != 'admin'}" -->
-<!-- 							class="delete btn btn-sm btn-outline-info" -->
-<!-- 							th:data-uri="@{|/admin/user/delete/${item.id}|}" th:text="삭제"></a></td> -->
+						<!-- 						<td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a -->
+						<!-- 							href="javascript:void(0);" th:if="${item.username != 'admin'}" -->
+						<!-- 							class="delete btn btn-sm btn-outline-info" -->
+						<!-- 							th:data-uri="@{|/admin/user/delete/${item.id}|}" th:text="삭제"></a></td> -->
 					</tr>
 					<tr class="text-center" th:if="${paging.isEmpty()}">
 						<td colspan="5">회원이 존재하지 않습니다.</td>
@@ -166,8 +166,4 @@
 		</div>
 	</div>
 </div>
-<script layout:fragment="script" type='text/javascript'
-	th:src="@{/list_search.js}">
-	
-</script>
 </html>
