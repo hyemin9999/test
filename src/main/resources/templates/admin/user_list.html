@@ -73,7 +73,8 @@
 				</ul>
 			</div>
 			<form th:action="@{/admin/user/list}" method="get" id="searchForm">
-				<input type="hidden" id="kw" name="kw" th:value="${kw}"> <input
+				<input type="hidden" id="kw" name="kw" th:value="${kw}"><input
+					type="hidden" id="field" name="field" th:value="${field}"><input
 					type="hidden" id="page" name="page" th:value="${paging.number}">
 			</form>
 		</div>

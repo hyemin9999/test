@@ -30,7 +30,7 @@ public class NoticeService {
 	private final NoticeRepository noticeRepository;
 
 	// 목록 - 페이징 - 검색
-	public Page<Notice> getList(int page, String kw) {
+	public Page<Notice> getList(int page, String kw, String field) {
 
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
@@ -38,7 +38,7 @@ public class NoticeService {
 		Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
 
 		// TODO :: 게시판 - 카테고리
-		Specification<Notice> spec = search(kw);
+		Specification<Notice> spec = search(kw, field);
 
 		return noticeRepository.findAll(spec, pageable);
 	}
@@ -89,7 +89,7 @@ public class NoticeService {
 	}
 
 	// 검색
-	private Specification<Notice> search(String kw) {
+	private Specification<Notice> search(String kw, String field) {
 		return new Specification<>() {
 
 			private static final long serialVersionUID = 1L;
@@ -101,9 +101,24 @@ public class NoticeService {
 
 				Join<Notice, SiteUser> u = r.join("author", JoinType.LEFT);// 공지와 작성자
 
+				Predicate byTitle = cb.like(r.get("subject"), "%" + kw + "%"); // 제목
+				Predicate byContent = cb.like(r.get("contents"), "%" + kw + "%"); // 내용
+				Predicate byAuthor = cb.like(u.get("username"), "%" + kw + "%"); // 글쓴이(작성자)
+
 				// TODO:: 제목, 내용, 작성자ID
-				return cb.or(cb.like(r.get("subject"), "%" + kw + "%"), cb.like(r.get("contents"), "%" + kw + "%"),
-						cb.like(u.get("username"), "%" + kw + "%"));
+				// ✅ 선택한 검색대상에 맞춰 조건 분기
+				switch (field) {
+				case "title":
+					return byTitle;
+				case "content":
+					return byContent;
+				case "author":
+					return byAuthor;
+				case "all":
+				default:
+					// 제목+내용(+작성자/댓글/댓글작성자) — 기존처럼 확장 검색
+					return cb.or(byTitle, byContent);
+				}
 			}
 		};
 	}

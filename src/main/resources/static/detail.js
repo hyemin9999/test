@@ -23,7 +23,7 @@ if (btn_search != null) {
 
 		kw_element.value = search_kw_element.value;
 		page_element.value = 0;
-		field_element.value = document.getElementById("search_field_select").value;
+		field_element.value = search_field_element.value;
 		searchForm.submit();
 	});
 }
@@ -33,6 +33,7 @@ if (search_kw_element != null) {
 		if (event.keyCode === 13) {
 			kw_element.value = this.value;
 			page_element.value = 0;
+			field_element.value = search_field_element.value;
 			searchForm.submit();
 		}
 	});

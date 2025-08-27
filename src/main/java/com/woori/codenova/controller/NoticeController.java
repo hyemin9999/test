@@ -36,12 +36,14 @@ public class NoticeController {
 
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "field", defaultValue = "all") String field) {
 
-		Page<Notice> paging = noticeService.getList(page, kw);
+		Page<Notice> paging = noticeService.getList(page, kw, field);
 
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
+		model.addAttribute("field", field);
 
 		return "notice_list";
 	}

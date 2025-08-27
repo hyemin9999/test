@@ -37,12 +37,14 @@ public class AdminBoardController {
 	@GetMapping("/list")
 	@PreAuthorize("isAuthenticated()")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "kw", defaultValue = "") String kw) {
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "field", defaultValue = "") String field) {
 
-		Page<Board> paging = adminBoardService.getList(page, kw);
+		Page<Board> paging = adminBoardService.getList(page, kw, field);
 
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
+		model.addAttribute("field", field);
 
 		return "admin/board_list";
 	}

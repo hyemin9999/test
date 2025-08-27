@@ -46,6 +46,7 @@ public class BoardController {
 
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
+		model.addAttribute("field", field);
 
 		if (!kw.isBlank()) {
 			searchTextService.create(kw, null);
