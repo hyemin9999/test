@@ -83,6 +83,6 @@ public class Board {
 	// 즐겨찾기
 	@ManyToMany
 	@JoinTable(name = "boardFavorite", joinColumns = @JoinColumn(name = "boardId"), inverseJoinColumns = @JoinColumn(name = "userId"))
-	Set<SiteUser> favorites;
+	Set<SiteUser> favorite;
 
 }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.Board;
 import com.woori.codenova.entity.Category;
-import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CategoryRepository;
@@ -142,7 +141,7 @@ public class BoardService {
 
 	// 즐겨찾기
 	public void favorites(Board item, SiteUser siteUser) {
-		item.getFavorites().add(siteUser);
+		item.getFavorite().add(siteUser);
 		boardRepository.save(item);
 	}
 
@@ -158,8 +157,8 @@ public class BoardService {
 				q.distinct(true); // 중복을 제거
 
 				Join<Board, SiteUser> u1 = r.join("author", JoinType.LEFT);
-				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);
-				Join<Comment, SiteUser> u2 = c.join("author", JoinType.LEFT);
+//				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);
+//				Join<Comment, SiteUser> u2 = c.join("author", JoinType.LEFT);
 
 				Join<Board, Category> ca = r.join("category", JoinType.LEFT);
 

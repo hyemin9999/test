@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.Board;
 import com.woori.codenova.entity.Category;
-import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
 import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CategoryRepository;
@@ -133,8 +132,8 @@ public class AdminBoardService {
 				q.distinct(true); // 중복을 제거
 
 				Join<Board, SiteUser> u1 = r.join("author", JoinType.LEFT);
-				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);
-				Join<Comment, SiteUser> u2 = c.join("author", JoinType.LEFT);
+//				Join<Board, Comment> c = r.join("commentList", JoinType.LEFT);
+//				Join<Comment, SiteUser> u2 = c.join("author", JoinType.LEFT);
 
 				Predicate byTitle = cb.like(r.get("subject"), "%" + kw + "%"); // 제목
 				Predicate byContent = cb.like(r.get("contents"), "%" + kw + "%"); // 내용

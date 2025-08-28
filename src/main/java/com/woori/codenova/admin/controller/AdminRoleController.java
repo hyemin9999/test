@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.woori.codenova.admin.form.AdminRoleForm;
 import com.woori.codenova.admin.service.AdminCategoryService;
 import com.woori.codenova.admin.service.AdminRoleService;
-import com.woori.codenova.admin.service.AdminUserService;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 
@@ -32,7 +31,7 @@ public class AdminRoleController {
 
 	private final AdminRoleService adminRoleService;
 	private final AdminCategoryService adminCategoryService;
-	private final AdminUserService adminUserService;
+//	private final AdminUserService adminUserService;
 
 	@GetMapping("/list")
 	@PreAuthorize("isAuthenticated()")
@@ -40,7 +39,7 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
 
-		System.out.println("list role :: GET ::");
+//		System.out.println("list role :: GET ::");
 
 		list(model, page, kw, adminRoleForm, "list");
 
@@ -53,7 +52,7 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult) {
 
-		System.out.println("list role :: POST ::");
+//		System.out.println("list role :: POST ::");
 
 		list(model, page, kw, adminRoleForm, "create");
 
@@ -77,7 +76,7 @@ public class AdminRoleController {
 
 		Role item = this.adminRoleService.getItem(id);
 		if (item == null) {
-			System.out.println("message ::: 존재");
+//			System.out.println("message ::: 존재");
 			model.addAttribute("message", "존재하지 않는 역할 입니다.");
 //			bindingResult.reject("존재하지 않는 역할 입니다.");
 		}
@@ -96,8 +95,8 @@ public class AdminRoleController {
 			@RequestParam(value = "kw", defaultValue = "") String kw, @Valid AdminRoleForm adminRoleForm,
 			BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 
-		System.out.println("list/id role :: POST ::");
-		System.out.println("message :: id ::: " + id);
+//		System.out.println("list/id role :: POST ::");
+//		System.out.println("message :: id ::: " + id);
 
 		listById(model, page, kw, principal, adminRoleForm, id, "modify");
 
@@ -109,11 +108,11 @@ public class AdminRoleController {
 
 		}
 
-		System.out.println("message list ::: " + id);
+//		System.out.println("message list ::: " + id);
 
 		if (bindingResult.hasErrors()) {
 //			model.addAttribute("message", "역할 이름은 필수입력입니다.");
-			System.out.println("message ::: admin/role_list");
+//			System.out.println("message ::: admin/role_list");
 			return "admin/role_list";
 		}
 

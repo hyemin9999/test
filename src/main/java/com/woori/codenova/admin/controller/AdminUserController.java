@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.woori.codenova.admin.form.AdminUserForm;
 import com.woori.codenova.admin.form.AdminUserModifyForm;
 import com.woori.codenova.admin.service.AdminBoardService;
-import com.woori.codenova.admin.service.AdminCommentService;
 import com.woori.codenova.admin.service.AdminRoleService;
 import com.woori.codenova.admin.service.AdminUserService;
 import com.woori.codenova.entity.Board;
@@ -37,7 +36,7 @@ public class AdminUserController {
 	private final AdminUserService adminUserService; // 사용자
 	private final AdminRoleService adminRoleService; // 역할
 	private final AdminBoardService adminBoardService; // 게시글
-	private final AdminCommentService adminCommentService;// 댓글
+//	private final AdminCommentService adminCommentService;// 댓글
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/list")
@@ -190,7 +189,6 @@ public class AdminUserController {
 		SiteUser item = this.adminUserService.getItem(id);
 		if (item == null) {
 			model.addAttribute("message", "존재하지 않는 회원 입니다.");
-//			model.addAttribute("item", item);
 		}
 
 		Page<SiteUser> paging = adminUserService.getList(page, kw);
