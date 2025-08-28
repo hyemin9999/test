@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.woori.codenova.entity.Board;
 import com.woori.codenova.entity.Comment;
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class CommentService {
 	// 초기에 시스템 관리자 정보가 저장되어야 하는게 아닐까??
 
 	private final CommentRepository commentRepository;
-	private final BoardRepository boardRepository;
+//	private final BoardRepository boardRepository;
 
 	// 목록
 	public List<Comment> getList() {

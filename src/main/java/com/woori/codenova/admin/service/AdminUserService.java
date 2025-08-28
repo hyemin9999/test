@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.Role;
 import com.woori.codenova.entity.SiteUser;
-import com.woori.codenova.repository.RoleRepository;
 import com.woori.codenova.repository.UserRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -31,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminUserService {
 
 	private final UserRepository userReporitory;
-	private final RoleRepository roleReporitory;
+//	private final RoleRepository roleReporitory;
 	private final PasswordEncoder passwordEncoder;
 
 	// 목록 - 페이징 - 검색

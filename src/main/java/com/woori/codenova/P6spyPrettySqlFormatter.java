@@ -6,17 +6,17 @@ import org.springframework.util.StringUtils;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 
 public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
-	private String getServiceNameFromStackTrace() {
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-		for (StackTraceElement element : stackTrace) {
-			// 예: "com.example.service" 패키지의 클래스를 서비스로 가정
-			if (element.getClassName().contains("service")) {
-				return element.getClassName() + "." + element.getMethodName();
-			}
-		}
-		return "UnknownService";
-	}
+//	private String getServiceNameFromStackTrace() {
+//		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+//
+//		for (StackTraceElement element : stackTrace) {
+//			// 예: "com.example.service" 패키지의 클래스를 서비스로 가정
+//			if (element.getClassName().contains("service")) {
+//				return element.getClassName() + "." + element.getMethodName();
+//			}
+//		}
+//		return "UnknownService";
+//	}
 
 	@Override
 	public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared,

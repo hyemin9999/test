@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.woori.codenova.admin.form.AdminRoleForm;
 import com.woori.codenova.admin.service.AdminCategoryService;
 import com.woori.codenova.admin.service.AdminRoleService;
-import com.woori.codenova.admin.service.AdminUserService;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.Role;
 
@@ -32,7 +31,7 @@ public class AdminRoleController {
 
 	private final AdminRoleService adminRoleService;
 	private final AdminCategoryService adminCategoryService;
-	private final AdminUserService adminUserService;
+//	private final AdminUserService adminUserService;
 
 	@GetMapping("/list")
 	@PreAuthorize("isAuthenticated()")
