@@ -142,7 +142,7 @@ public class BoardService {
 
 	// 즐겨찾기
 	public void favorites(Board item, SiteUser siteUser) {
-		item.getFavorites().add(siteUser);
+		item.getFavorite().add(siteUser);
 		boardRepository.save(item);
 	}
 

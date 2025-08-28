@@ -87,7 +87,7 @@ public class BoardController {
 		SiteUser me = (principal != null) ? this.userService.getItem(principal.getName()) : null;
 
 		// ✅ 게시글 즐겨찾기 여부
-		boolean favoritedBoard = (me != null) && item.getFavorites() != null && item.getFavorites().contains(me);
+		boolean favoritedBoard = (me != null) && item.getFavorite() != null && item.getFavorite().contains(me);
 
 		// ✅ 댓글별 즐겨찾기 여부 Map<댓글ID, Boolean>
 		Map<Integer, Boolean> commentFavMap = new HashMap<>();
