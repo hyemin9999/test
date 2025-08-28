@@ -51,6 +51,6 @@ public class Category {
 
 	// 즐겨찾기
 	@ManyToMany
-	@JoinTable(name = "categoryFavorite", joinColumns = @JoinColumn(name = "CategoryId"), inverseJoinColumns = @JoinColumn(name = "userId"))
+	@JoinTable(name = "categoryFavorite", joinColumns = @JoinColumn(name = "categoryId"), inverseJoinColumns = @JoinColumn(name = "userId"))
 	Set<SiteUser> favorite;
 }
