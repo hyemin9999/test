@@ -53,7 +53,6 @@ public class AdminCategoryController {
 		if (item != null) {
 			adminCategoryForm.setName(item.getName());
 		} else {
-			System.out.println("message ::: 존재");
 			model.addAttribute("message", "존재하지 않는 게시판 입니다.");
 		}
 
