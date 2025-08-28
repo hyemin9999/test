@@ -80,7 +80,7 @@ public class CommentService {
 	// 즐겨찾기
 	public void favorites(Comment item, SiteUser siteUser) {
 		// TODO :: 즐겨찾기, 취소 처리
-		item.getFavorites().add(siteUser);
+		item.getFavorite().add(siteUser);
 		commentRepository.save(item);
 	}
 

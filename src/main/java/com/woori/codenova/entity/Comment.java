@@ -64,5 +64,5 @@ public class Comment {
 	// 즐겨찾기
 	@ManyToMany
 	@JoinTable(name = "commentFavorite", joinColumns = @JoinColumn(name = "commentId"), inverseJoinColumns = @JoinColumn(name = "userId"))
-	Set<SiteUser> favorites;
+	Set<SiteUser> favorite;
 }

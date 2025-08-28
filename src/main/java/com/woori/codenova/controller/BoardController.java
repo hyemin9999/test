@@ -93,7 +93,7 @@ public class BoardController {
 		Map<Integer, Boolean> commentFavMap = new HashMap<>();
 		if (me != null) {
 			for (Comment c : cpaging.getContent()) {
-				boolean fav = (c.getFavorites() != null) && c.getFavorites().contains(me);
+				boolean fav = (c.getFavorite() != null) && c.getFavorite().contains(me);
 				commentFavMap.put(c.getId(), fav);
 			}
 		}
