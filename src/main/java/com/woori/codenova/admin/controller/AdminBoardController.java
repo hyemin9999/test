@@ -55,7 +55,6 @@ public class AdminBoardController {
 
 		Board item = this.adminBoardService.getItem(id);
 		if (item == null) {
-			System.out.println("message ::: 존재");
 			model.addAttribute("message", "존재하지 않는 게시글 입니다.");
 
 //			Page<Board> paging = adminBoardService.getList(0, "", "");

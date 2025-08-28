@@ -44,10 +44,10 @@ public class UserSecurityService implements UserDetailsService {
 			} else {
 				authorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
 			}
-			System.out.println("siteUser.getAuthority() :: ADMIN");
+//			System.out.println("siteUser.getAuthority() :: ADMIN");
 
 		} else {
-			System.out.println("siteUser.getAuthority() :: USER");
+//			System.out.println("siteUser.getAuthority() :: USER");
 			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		}
 
