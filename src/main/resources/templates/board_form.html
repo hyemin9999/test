@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content" class="container my-3">
-	<h5 class="border-bottom pb-2">게시판</h5>
+	<h5 class="border-bottom pb-2">[[${menuName}]]</h5>
 
 	<div class="row">
 		<div class="col">
@@ -24,7 +24,7 @@
 				</div>
 				<div class="align-r">
 					<input type="submit" value="저장" class="btn btn-info my-2">
-					<a class="btn btn-outline-info" th:href="@{/board/list}">취소</a>
+					<a class="btn btn-outline-info" th:href="@{|/board/list/${cid}|}">취소</a>
 				</div>
 			</form>
 		</div>
@@ -48,6 +48,12 @@
 		                    formData.append('image', blob);
 		                    formData.append('type', "board");
 		                    formData.append('mode',  /*[[${mode}]]*/'');
+		                    formData.append('cid',  /*[[${mode}]]*/'');
+		                    if(/*[[${mode}]]*/'' == "modify")
+		                    	{
+		                    	// 게시글 id
+		                    	//formData.append('cid',  /*[[${mode}]]*/'');	
+		                    	}
 
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',

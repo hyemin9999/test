@@ -23,9 +23,9 @@ public class SecurityConfig {
 
 		http.exceptionHandling(handling -> handling.accessDeniedPage("/"))
 				.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-						.requestMatchers(new AntPathRequestMatcher("/admin/user/**")).hasAnyRole("ADMIN")
-						.requestMatchers(new AntPathRequestMatcher("/admin/role/**")).hasAnyRole("ADMIN")
-						.requestMatchers(new AntPathRequestMatcher("/admin/category/**")).hasAnyRole("ADMIN")
+						.requestMatchers(new AntPathRequestMatcher("/admin/user/**")).hasRole("ADMIN")
+						.requestMatchers(new AntPathRequestMatcher("/admin/role/**")).hasRole("ADMIN")
+						.requestMatchers(new AntPathRequestMatcher("/admin/category/**")).hasRole("ADMIN")
 						.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAnyRole("ADMIN", "MANAGER")
 						.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
 				.csrf((csrf) -> csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))

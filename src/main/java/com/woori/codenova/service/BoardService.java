@@ -89,15 +89,15 @@ public class BoardService {
 	}
 
 	// 등록
-	public void create(String subject, String contents, SiteUser uesr) {
+	public void create(String subject, String contents, SiteUser uesr, Integer cid) {
 		Board item = new Board();
 		item.setSubject(subject);
 		item.setContents(contents);
 		item.setCreateDate(LocalDateTime.now());
 		item.setAuthor(uesr);
 		item.setViewCount(0);
-		// TODO :: 게시판 - 카테고리 // 초기 게시판
-		Category citem = categoryRepository.findById(1).orElse(null);
+
+		Category citem = categoryRepository.findById(cid).orElse(null);
 		item.setCategory(citem);
 
 		boardRepository.save(item);
@@ -108,10 +108,6 @@ public class BoardService {
 		item.setSubject(subject);
 		item.setContents(content);
 		item.setModifyDate(LocalDateTime.now());
-
-		// TODO :: 게시판 - 카테고리 수정도 가능하도록
-		Category citem = categoryRepository.findById(1).orElse(null);
-		item.setCategory(citem);
 
 		boardRepository.save(item);
 	}

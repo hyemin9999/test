@@ -64,6 +64,8 @@ public class BoardController {
 			@RequestParam(value = "kw", defaultValue = "") String kw,
 			@RequestParam(value = "field", defaultValue = "all") String field, @PathVariable("cid") Integer cid) {
 
+		System.out.println("cid :: " + cid);
+
 		Page<Board> paging = boardService.getList(page, kw, field, cid);
 
 		model.addAttribute("paging", paging);
@@ -108,16 +110,17 @@ public class BoardController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/create")
-	public String create(Model model, BoardForm boardForm) {
+	@GetMapping("/create/{cid}")
+	public String create(Model model, BoardForm boardForm, @PathVariable("cid") Integer cid) {
 
 		model.addAttribute("mode", "create");
 		return "board_form";
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/create")
-	public String create(Model model, @Valid BoardForm boardForm, BindingResult bindingResult, Principal principal) {
+	@PostMapping("/create/{cid}")
+	public String create(Model model, @Valid BoardForm boardForm, BindingResult bindingResult, Principal principal,
+			@PathVariable("cid") Integer cid) {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("mode", "create");
@@ -126,10 +129,8 @@ public class BoardController {
 		SiteUser author = this.userService.getItem(principal.getName());
 		String con = URLDecoder.decode(boardForm.getContent(), StandardCharsets.UTF_8);
 
-		// TODO :: 넘겨받은 게시판 값 넘겨줘야 함
-
-		this.boardService.create(boardForm.getSubject(), con, author);
-		return "redirect:/board/list";
+		this.boardService.create(boardForm.getSubject(), con, author, cid);
+		return "redirect:/board/list/" + cid;
 	}
 
 	@PreAuthorize("isAuthenticated()")

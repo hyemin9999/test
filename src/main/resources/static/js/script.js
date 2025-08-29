@@ -56,6 +56,12 @@ function onChange(roleId, checkBox) {
 /**
  * detail.html
  */
+const host = window.location.host;
+const pathname = window.location.pathname;
+
+console.log("host :: " + host);
+console.log("pathname :: " + pathname);
+
 const delete_elements = document.getElementsByClassName("delete");
 if (delete_elements.length > 0) {
 	Array.from(delete_elements).forEach(function(element) {

@@ -28,7 +28,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:if="${!paging.isEmpty()}" class="text-center"
+					<tr th:unless="${#lists.isEmpty(paging)}" class="text-center"
 						th:each="item, loop : ${paging}">
 						<td
 							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
@@ -43,13 +43,13 @@
 						<!-- 							th:if="${#authorization.expression('hasRole(''ADMIN'')')} and ${item.id != 1} " -->
 						<!-- 							th:text="삭제"></a></td> -->
 					</tr>
-					<tr class="text-center" th:if="${paging.isEmpty()}">
+					<tr class="text-center" th:if="${#lists.isEmpty(paging)}">
 						<td colspan="4">게시판이 존재하지 않습니다.</td>
 					</tr>
 				</tbody>
 			</table>
 
-			<div th:if="${!paging.isEmpty()}">
+			<div th:unless="${#lists.isEmpty(paging)}"">
 				<ul class="pagination justify-content-center">
 					<li class="page-item"
 						th:classappend="${!paging.hasPrevious} ? 'disabled'"><a

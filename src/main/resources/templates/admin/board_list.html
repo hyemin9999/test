@@ -9,10 +9,8 @@
 	<div class="row">
 		<div class="col">
 			<div class="row my-2">
-				<div class="col-6">
-					<a th:href="@{/admin/board/create}" class="btn btn-info">등록</a>
-				</div>
-				<div class="col-6">
+				<div class="col-5"></div>
+				<div class="col-7">
 					<div class="input-group">
 						<select id="search_field_select" class="form-select"
 							style="max-width: 140px;">
@@ -36,11 +34,13 @@
 						<th>작성일</th>
 						<th>조회</th>
 						<th>추천</th>
+						<th
+							th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MANAGER'')')}"></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:if="${!paging.isEmpty()}" class="text-center"
-						th:each="item, loop : ${paging}">
+					<tr th:unless="${#lists.isEmpty(paging)}"
+						class="text-center align-middle" th:each="item, loop : ${paging}">
 						<td
 							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
 						</td>
@@ -48,7 +48,7 @@
 							th:href="@{|/admin/board/detail/${item.id}|}"
 							th:text="${item.subject}"></a><span
 							class="text-danger small ms-2"
-							th:if="${#lists.size(item.commentList) > 0}"
+							th:unless="${#lists.isEmpty(item.commentList)}"
 							th:text="${#lists.size(item.commentList)}"></span></td>
 
 						<td><span th:if="${item.author != null}"
@@ -58,14 +58,20 @@
 						<td th:text="${item.viewCount}"></td>
 						<td
 							th:text="${#lists.size(item.voter) > 0 ? #lists.size(item.voter) : 0}"></td>
+						<td
+							th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''MANAGER'')')}"><a
+							href="javascript:void(0);"
+							class="delete btn btn-sm btn-outline-info"
+							th:data-uri="@{|/admin/board/delete/${item.id}|}" th:text="삭제"></a></td>
 					</tr>
-					<tr class="text-center" th:if="${paging.isEmpty()}">
-						<td colspan="6">게시글이 존재하지 않습니다.</td>
+					<tr class="text-center align-middle"
+						th:if="${#lists.isEmpty(paging)}">
+						<td colspan="7">게시글이 존재하지 않습니다.</td>
 					</tr>
 				</tbody>
 			</table>
 
-			<div th:if="${!paging.isEmpty()}">
+			<div th:unless="${#lists.isEmpty(paging)}">
 				<ul class="pagination justify-content-center">
 					<li class="page-item"
 						th:classappend="${!paging.hasPrevious} ? 'disabled'"><a

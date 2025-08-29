@@ -3,7 +3,6 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-
 <div layout:fragment="content" class="container my-3">
 	<h5 class="border-bottom pb-2">게시글 관리</h5>
 	<div class="row">
@@ -32,7 +31,6 @@
 <script layout:fragment="script" type="text/javascript"
 	th:inline="javascript">
 
-	var files;
 		const editor = new toastui.Editor({
 			el : document.querySelector('#content'),
 			height : '500px', 
@@ -82,6 +80,17 @@
 
 					document.querySelector('#ecp').value = encodedC;
 				});
+		$(document).ready(function() {
+			const message = /*[[${message}]]*/'';
+			if (message.length != 0) {
+				$('#message').text(message);
+				$('#modal').modal('show');
+			}
+
+			$('#modal').on('hide.bs.modal', function(event) {
+				window.location.href = '/admin/board/';
+			});
+		});
 	</script>
 
 </html>
