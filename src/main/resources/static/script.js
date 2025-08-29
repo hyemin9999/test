@@ -1,3 +1,6 @@
+/**
+ * list.html - 검색 페이징관련
+ */
 
 const page_element = document.getElementById('page');
 const kw_element = document.getElementById('kw');
@@ -5,8 +8,6 @@ const search_kw_element = document.getElementById('search_kw');
 const field_element = document.getElementById('field');
 const search_field_element = document.getElementById('search_field_select');
 const searchForm = document.getElementById('searchForm');
-
-
 
 const page_elements = document.getElementsByClassName("page-link");
 if (page_elements.length > 0) {
@@ -52,12 +53,9 @@ function onChange(roleId, checkBox) {
 	}
 }
 
-
-
 /**
- * 상세페이지 게시글
+ * detail.html
  */
-
 const delete_elements = document.getElementsByClassName("delete");
 if (delete_elements.length > 0) {
 	Array.from(delete_elements).forEach(function(element) {
@@ -90,14 +88,17 @@ if (favorite_elements.length > 0) {
 		});
 	});
 }
-
+/**
+ * detail.html - editor
+ */
+const ecp1 = document.querySelector('#ecp1');
 const viewerElement = document.querySelector('#viewer');
 if (viewerElement) {
-	//	const viewer = new
+	//	const viewer = new 
 	toastui.Editor.factory({
 		el: viewerElement,
 		viewer: true,
-		initialValue: document.querySelector('#ecp1').value
+		initialValue: ecp1.value
 	});
 }
 
