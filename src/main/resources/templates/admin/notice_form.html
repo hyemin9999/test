@@ -46,7 +46,9 @@
 					try {
 						const formData = new FormData();
 		                    formData.append('image', blob);
+		                    formData.append('type', "notice");
 		                    formData.append('mode',/*[[${mode}]]*/'');
+		                    formData.append('id', /*[[${item.id}]]*/'0');
 		                    
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',

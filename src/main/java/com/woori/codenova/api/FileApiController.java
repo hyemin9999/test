@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woori.codenova.entity.UploadFile;
+import com.woori.codenova.repository.BoardRepository;
+import com.woori.codenova.repository.NoticeRepository;
 import com.woori.codenova.repository.UploadFileRepository;
 
 import ch.qos.logback.core.model.Model;
@@ -34,6 +36,9 @@ public class FileApiController {
 
 	private final UploadFileRepository uploadFileRepository;
 
+	private final BoardRepository boardRepository;
+	private final NoticeRepository noticeRepository;
+
 	/**
 	 * 에디터 이미지 업로드
 	 * 
@@ -43,13 +48,15 @@ public class FileApiController {
 	@PostMapping("/image-upload")
 	public UploadFile uploadEditorImage(Model model, @RequestParam(value = "image") final MultipartFile image,
 			@RequestParam(value = "type", defaultValue = "") final String type,
-			@RequestParam(value = "mode", defaultValue = "") final String mode) {
+			@RequestParam(value = "mode", defaultValue = "") final String mode,
+			@RequestParam(value = "id", defaultValue = "0") final String id) {
 
 		if (image.isEmpty()) {
 			return null;
 		}
 
 		log.info("image :: " + image);
+		log.info("id :: " + id);
 
 		String orgFilename = image.getOriginalFilename();
 		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
@@ -72,12 +79,11 @@ public class FileApiController {
 			image.transferTo(uploadFile);
 
 			UploadFile item = new UploadFile();
-
 			if (mode == "mofidy") { // 수정일때
 				if (type == "board") {// 게시글일때
-					item.setBoard(null);
+					item.setBoard(boardRepository.findById(Integer.parseInt(id)).orElse(null));
 				} else { // 공지사항일때
-					item.setNotice(null);
+					item.setNotice(noticeRepository.findById(Integer.parseInt(id)).orElse(null));
 				}
 			} else { // 등록일때
 				item.setBoard(null);

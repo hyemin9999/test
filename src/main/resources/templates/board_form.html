@@ -25,6 +25,7 @@
 				<div class="align-r">
 					<input type="submit" value="저장" class="btn btn-info my-2">
 					<a class="btn btn-outline-info" th:href="@{|/board/list/${cid}|}">취소</a>
+					<input type="hidden" id="id">
 				</div>
 			</form>
 		</div>
@@ -33,7 +34,7 @@
 <script layout:fragment="script" type="text/javascript"
 	th:inline="javascript">
 
-	var files;
+	var files = new Array();
 		const editor = new toastui.Editor({
 			el : document.querySelector('#content'),
 			height : '500px', 
@@ -48,26 +49,19 @@
 		                    formData.append('image', blob);
 		                    formData.append('type', "board");
 		                    formData.append('mode',  /*[[${mode}]]*/'');
-		                    formData.append('cid',  /*[[${mode}]]*/'');
-		                    if(/*[[${mode}]]*/'' == "modify")
-		                    	{
-		                    	// 게시글 id
-		                    	//formData.append('cid',  /*[[${mode}]]*/'');	
-		                    	}
-
+		                    formData.append('id', /*[[${item.id}]]*/'0');
+		                    
 		                    const response = await fetch('/tui-editor/image-upload', {
 		                        method : 'POST',
 		                        body : formData,
-		                        headers: {
-		                        	 'X-CSRF-Token':  $('#_csrf').attr('value')
-		                        }, 
+		                        headers: { 'X-CSRF-Token':  $('#_csrf').attr('value') }, 
 		                    });
 
-		                    const json = await response.json();		                 
-		                    //console.log("filename :: "+json.saveFilename);
+		                    const json = await response.json();
+		                    files.push(json.id);
+		                    document.querySelector('#id').value =  files;
 		                    
-		                    // TODO :: 업로드한 파일정보를 게시글 저장/수정 시 연결해야함.
-		                    
+// 		                    console.log(files);
 		                    const imageUrl = `/tui-editor/image-print?filename=${json.saveFilename}`;
 		                    callback(imageUrl, 'image alt attribute');
 

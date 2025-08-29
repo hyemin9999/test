@@ -88,10 +88,12 @@ public class AdminCategoryController {
 
 		listById(model, page, kw, principal, adminCategoryForm, id, "modify");
 
+		if (bindingResult.hasErrors()) {
+			return "admin/category_list";
+		}
+
 		Category item = this.adminCategoryService.getitem(id);
-		if (item != null) {
-			adminCategoryForm.setName(item.getName());
-		} else {
+		if (item == null) {
 			model.addAttribute("message", "존재하지 않는 게시판 입니다.");
 		}
 
@@ -99,10 +101,6 @@ public class AdminCategoryController {
 		if (user != null && !user.getAuthority().isEmpty()
 				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
 			model.addAttribute("mode", "modify");
-		}
-
-		if (bindingResult.hasErrors()) {
-			return "admin/category_list";
 		}
 
 //		Category item = this.categoryService.getitem(id);
@@ -116,16 +114,19 @@ public class AdminCategoryController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete/{id}")
-	public String delete(Principal principal, @PathVariable("id") Integer id) {
+	public String delete(Model model, Principal principal, @PathVariable("id") Integer id) {
 
-//		Category item = this.adminCategoryService.getitem(id);
-//		if (!item.getAuthor().getUsername().equals(principal.getName())) {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//		}
+		Category item = this.adminCategoryService.getitem(id);
+
+		SiteUser user = this.adminUserService.getItem(principal.getName());
+		if (user != null && !user.getAuthority().isEmpty()
+				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
+			model.addAttribute("message", "삭제권한이 없습니다.");
+		}
 
 		// TODO :: 카테고리 삭제시 게시글 (댓글)삭제됨, 검색어도 삭제여부 확인
 
-//		this.categoryService.delete(item);
+		this.adminCategoryService.delete(item);
 		return "redirect:/admin/category/list";
 	}
 
@@ -153,13 +154,6 @@ public class AdminCategoryController {
 		if (mode == "list" && item != null) {
 			adminCategoryForm.setName(item.getName());
 		}
-
-//		SiteUser user = this.adminUserService.getItem(principal.getName());
-//		if (user != null && !user.getAuthority().isEmpty()
-//				&& user.getAuthority().stream().anyMatch(a -> a.getGrade().equals(1))) {
-//			model.addAttribute("mode", "modify");
-//		}
-
 	}
 
 }

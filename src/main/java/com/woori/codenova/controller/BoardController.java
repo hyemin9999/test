@@ -120,7 +120,7 @@ public class BoardController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create/{cid}")
 	public String create(Model model, @Valid BoardForm boardForm, BindingResult bindingResult, Principal principal,
-			@PathVariable("cid") Integer cid) {
+			@PathVariable("cid") Integer cid, @RequestParam(value = "filse", defaultValue = "0") String files) {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("mode", "create");
@@ -142,10 +142,9 @@ public class BoardController {
 		if (!item.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
+		model.addAttribute("item", item);
 		boardForm.setSubject(item.getSubject());
 		boardForm.setContent(item.getContents());
-
-		// TODO :: 게시판 수정가능 여부?? - 없으면 좋겠다
 
 		return "board_form";
 	}
