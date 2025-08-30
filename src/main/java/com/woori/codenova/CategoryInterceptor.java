@@ -31,19 +31,21 @@ public class CategoryInterceptor implements HandlerInterceptor {
 
 		String url = request.getRequestURI();
 
-//		System.out.println("===============================================");
-//		System.out.println("==================== BEGIN ====================");
-//		System.out.println("Request URI ===> " + request.getRequestURI());
-		if (url.startsWith("/board/")) {
+		System.out.println("===============================================");
+		System.out.println("==================== BEGIN ====================");
+		System.out.println("Request URI ===> " + request.getRequestURI());
+		if (url.startsWith("/board/") || url.startsWith("/admin/board/") || url.startsWith("/admin/notice/")) {
 
-			String[] str = url.split("/");
-			if (str.length > 0) {
-				Integer cid = Integer.parseInt(str[str.length - 1]);
-
-				Category item = menuList.stream().filter(o -> o.getId().equals(cid)).findAny().orElse(null);
-				request.setAttribute("menuName", item.getName());
-				request.setAttribute("cid", cid);
-			}
+//			String[] str = url.split("/");
+//			if (str.length > 0) {
+//				Integer cid = Integer.parseInt(str[str.length - 1]);
+//				if (url.startsWith("/board/")) {
+//					Category item = menuList.stream().filter(o -> o.getId().equals(cid)).findAny().orElse(null);
+//					request.setAttribute("menuName", item.getName());
+//				}
+//				request.setAttribute("cid", cid);
+//				System.out.println("cidcidcid :: " + cid);
+//			}
 		}
 
 		return HandlerInterceptor.super.preHandle(request, response, handler);

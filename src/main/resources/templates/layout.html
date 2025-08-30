@@ -18,7 +18,10 @@
 <body class="d-flex flex-column h-100">
 	<nav th:replace="~{navbar :: navbarFragment}"></nav>
 
-	<th:block layout:fragment="content"></th:block>
+	<!-- 	<th:block layout:fragment="content"></th:block> -->
+
+	<main layout:fragment="content"></main>
+
 
 	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>

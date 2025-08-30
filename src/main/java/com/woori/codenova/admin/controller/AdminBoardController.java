@@ -83,7 +83,7 @@ public class AdminBoardController {
 
 		// TODO :: 넘겨받은 게시판 값 넘겨줘야 함
 
-		this.adminBoardService.create(boardForm.getSubject(), con, author);
+		this.adminBoardService.create(boardForm.getSubject(), con, author, boardForm.getFileids());
 		return "redirect:/admin/board/list";
 	}
 
@@ -124,7 +124,7 @@ public class AdminBoardController {
 		// TODO :: 게시판 수정가능 여부?? - 없으면 좋겠다
 
 		String con = URLDecoder.decode(boardForm.getContent(), StandardCharsets.UTF_8);
-		this.adminBoardService.modify(item, boardForm.getSubject(), con);
+		this.adminBoardService.modify(item, boardForm.getSubject(), con, boardForm.getFileids());
 		return String.format("redirect:/admin/board/detail/%s", id);
 	}
 

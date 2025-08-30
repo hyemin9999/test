@@ -4,7 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<div layout:fragment="content" class="container my-3"
+<main layout:fragment="content" class="container my-3"
 	th:unless="${item} == null">
 
 	<h5 class="border-bottom pb-2">공지사항 관리</h5>
@@ -43,7 +43,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</main>
 <script layout:fragment="script" th:inline="javascript">
     $(document).ready(function () {
         const error_message = /*[[${message}]]*/'';

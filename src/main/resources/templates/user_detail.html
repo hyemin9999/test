@@ -2,7 +2,7 @@
 <html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<div layout:fragment="content" class="container my-3">
+<main layout:fragment="content" class="container my-3">
 
 	<h5 class="border-bottom pb-2">회원 정보</h5>
 
@@ -65,7 +65,7 @@
 		</div>
 	</div>
 
-</div>
+</main>
 <script layout:fragment="script" th:inline="javascript">
     const mode = /*[[${mode}]]*/'';
     if (mode == 'modify') {

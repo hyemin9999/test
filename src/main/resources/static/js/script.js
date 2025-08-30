@@ -53,11 +53,11 @@ if (search_kw_element != null) {
 /**
  * detail.html
  */
-//const host = window.location.host;
-//const pathname = window.location.pathname;
-//
-//console.log("host :: " + host);
-//console.log("pathname :: " + pathname);
+const host = window.location.host;
+const pathname = window.location.pathname;
+
+console.log("host :: " + host);
+console.log("pathname :: " + pathname);
 
 const delete_elements = document.getElementsByClassName("delete");
 if (delete_elements.length > 0) {

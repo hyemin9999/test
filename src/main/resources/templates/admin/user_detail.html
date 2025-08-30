@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<div layout:fragment="content" class="container my-3">
+<main layout:fragment="content" class="container my-3">
 	<h5 class="my-3 border-bottom pb-2">회원 관리</h5>
 	<form th:if="${item != null}" th:object="${adminUserModifyForm}"
 		method="post" th:action="@{|/admin/user/detail/${item.id}|}">
@@ -47,7 +47,7 @@
 	<!-- 			</div> -->
 	<!-- 		</div> -->
 	<!-- 	</div> -->
-</div>
+</main>
 
 <script layout:fragment="script" th:inline="javascript">
     // 	function onDisplay(d) {

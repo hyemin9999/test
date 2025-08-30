@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 import com.woori.codenova.entity.Board;
 import com.woori.codenova.entity.Category;
 import com.woori.codenova.entity.SiteUser;
+import com.woori.codenova.entity.UploadFile;
 import com.woori.codenova.repository.BoardRepository;
 import com.woori.codenova.repository.CategoryRepository;
+import com.woori.codenova.repository.UploadFileRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -31,6 +33,7 @@ public class AdminBoardService {
 
 	private final BoardRepository boardRepository;
 	private final CategoryRepository categoryRepository;
+	private final UploadFileRepository uploadFileRepository;
 
 	// 목록 - 페이징 - 검색 종류
 	public Page<Board> getList(int page, String kw, String field) {
@@ -72,7 +75,7 @@ public class AdminBoardService {
 	}
 
 	// 등록
-	public void create(String subject, String contents, SiteUser uesr) {
+	public void create(String subject, String contents, SiteUser uesr, List<Long> fileids) {
 		Board item = new Board();
 		item.setSubject(subject);
 		item.setContents(contents);
@@ -84,10 +87,11 @@ public class AdminBoardService {
 		item.setCategory(citem);
 
 		boardRepository.save(item);
+		setFileByBoard(fileids, item);
 	}
 
 	// 수정
-	public void modify(Board item, String subject, String content) {
+	public void modify(Board item, String subject, String content, List<Long> fileids) {
 		item.setSubject(subject);
 		item.setContents(content);
 		item.setModifyDate(LocalDateTime.now());
@@ -97,6 +101,7 @@ public class AdminBoardService {
 		item.setCategory(citem);
 
 		boardRepository.save(item);
+		setFileByBoard(fileids, item);
 	}
 
 	// 삭제 - 실제 item 삭제를 안하고, 제목, 작성자, 내용의 데이터를 날림.
@@ -118,6 +123,18 @@ public class AdminBoardService {
 
 	public void deleteList(List<Board> list) {
 		boardRepository.deleteAll(list);
+	}
+
+	public void setFileByBoard(List<Long> fileids, Board item) {
+		if (fileids != null && fileids.size() != 0) {
+			for (Long fileid : fileids) {
+				UploadFile file = uploadFileRepository.findById(fileid).orElse(null);
+				if (file != null) {
+					file.setBoard(item);
+					uploadFileRepository.save(file);
+				}
+			}
+		}
 	}
 
 	// 검색

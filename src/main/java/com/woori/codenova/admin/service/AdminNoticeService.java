@@ -91,12 +91,12 @@ public class AdminNoticeService {
 		noticeRepository.delete(item);
 	}
 
-	public void setFileByNotice(List<Long> fileids, Notice nitem) {
+	public void setFileByNotice(List<Long> fileids, Notice item) {
 		if (fileids != null && fileids.size() != 0) {
 			for (Long fileid : fileids) {
 				UploadFile file = uploadFileRepository.findById(fileid).orElse(null);
 				if (file != null) {
-					file.setNotice(nitem);
+					file.setNotice(item);
 					uploadFileRepository.save(file);
 				}
 			}

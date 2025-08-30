@@ -2,14 +2,16 @@
 <html layout:decorate="~{admin/layout}"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<div layout:fragment="content" class="container-fluid my-3 px-4">
+<main layout:fragment="content" class="container-fluid my-3 px-4">
 
 	<h5 class="border-bottom pb-2">[[${menuName}]] 게시글 관리</h5>
 
 	<div class="row">
 		<div class="col">
 			<div class="row my-2">
-				<div class="col-5"></div>
+				<div class="col-5">
+					<a th:href="@{|/admin/board/create/${cid}|}" class="btn btn-info">등록</a>
+				</div>
 				<div class="col-7">
 					<div class="input-group">
 						<select id="search_field_select" class="form-select"
@@ -97,5 +99,5 @@
 
 		</div>
 	</div>
-</div>
+</main>
 </html>

@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<div layout:fragment="content" class="container my-3 signup"
+<main layout:fragment="content" class="container my-3 signup"
 	style="max-width: 512px; margin: 0 auto;">
 	<h5 class="my-3 border-bottom pb-2">회원 관리</h5>
 	<form th:action="@{/admin/user/create}" th:object="${adminUserForm}"
@@ -26,6 +26,6 @@
 			<a class="btn btn-outline-info" th:href="@{/admin/user/list}">취소</a>
 		</div>
 	</form>
-</div>
+</main>
 
 </html>
