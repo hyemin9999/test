@@ -36,8 +36,12 @@ public class CategoryInterceptor implements HandlerInterceptor {
 		System.out.println("Request URI ===> " + request.getRequestURI());
 		if (url.startsWith("/board/") || url.startsWith("/admin/board/") || url.startsWith("/admin/notice/")) {
 
-//			String[] str = url.split("/");
-//			if (str.length > 0) {
+			String[] str = url.split("/");
+			if (str.length > 0) {
+
+				request.setAttribute("cid", str[str.length - 1]);
+				System.out.println("cidcidcid :: " + str[str.length - 1]);
+
 //				Integer cid = Integer.parseInt(str[str.length - 1]);
 //				if (url.startsWith("/board/")) {
 //					Category item = menuList.stream().filter(o -> o.getId().equals(cid)).findAny().orElse(null);
@@ -45,7 +49,8 @@ public class CategoryInterceptor implements HandlerInterceptor {
 //				}
 //				request.setAttribute("cid", cid);
 //				System.out.println("cidcidcid :: " + cid);
-//			}
+			}
+
 		}
 
 		return HandlerInterceptor.super.preHandle(request, response, handler);

@@ -38,7 +38,23 @@ public class AdminBoardController {
 			@RequestParam(value = "kw", defaultValue = "") String kw,
 			@RequestParam(value = "field", defaultValue = "") String field) {
 
-		Page<Board> paging = adminBoardService.getList(page, kw, field);
+		Page<Board> paging = adminBoardService.getList(page, kw, field, 0);
+
+		model.addAttribute("paging", paging);
+		model.addAttribute("kw", kw);
+		model.addAttribute("field", field);
+
+		return "admin/board_list";
+	}
+
+	@GetMapping("/list/{cid}")
+	public String listCateogry(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "field", defaultValue = "all") String field, @PathVariable("cid") Integer cid) {
+
+		System.out.println("cid :: " + cid);
+
+		Page<Board> paging = adminBoardService.getList(page, kw, field, cid);
 
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
