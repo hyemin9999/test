@@ -4,7 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <div layout:fragment="content" class="container-fluid my-3 px-4">
 
-	<h5 class="border-bottom pb-2">게시글 관리</h5>
+	<h5 class="border-bottom pb-2">[[${menuName}]] 게시글 관리</h5>
 
 	<div class="row">
 		<div class="col">
@@ -42,8 +42,7 @@
 					<tr th:unless="${#lists.isEmpty(paging)}"
 						class="text-center align-middle" th:each="item, loop : ${paging}">
 						<td
-							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
-						</td>
+							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
 						<td class="text-start"><a
 							th:href="@{|/admin/board/detail/${item.id}|}"
 							th:text="${item.subject}"></a><span
@@ -98,7 +97,5 @@
 
 		</div>
 	</div>
-
 </div>
-
 </html>

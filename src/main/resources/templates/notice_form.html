@@ -34,43 +34,54 @@
 	th:inline="javascript">
 		
 	const editor = new toastui.Editor({
-		el : document.querySelector('#content'),
-		height : '500px',
-		initialEditType : 'markdown', 
-		initialValue : '',
-		previewStyle : 'vertical', 
-		placeholder : '내용을 입력해 주세요.',
-		hooks: { 
+		el: content_element,
+		height: '500px',
+		initialEditType: 'markdown',
+		initialValue: '',
+		previewStyle: 'vertical',
+		placeholder: '내용을 입력해 주세요.',
+		hooks: {
 			async addImageBlobHook(blob, callback) {
 				try {
 					const formData = new FormData();
-					formData.append('image', blob);					
-					formData.append('mode',  /*[[${mode}]]*/'');
-					
+					formData.append('image', blob);
+					formData.append('type', "notice");
+					formData.append('mode',/*[[${mode}]]*/'');
+	
 					const response = await fetch('/tui-editor/image-upload', {
-						method : 'POST',
-						body : formData,
-						headers: {'X-CSRF-Token':  $('#_csrf').attr('value')}});
-					
+						method: 'POST',
+						body: formData,
+						headers: { 'X-CSRF-Token': $('#_csrf').attr('value') },
+					});
 					const json = await response.json();
-					        
-					// TODO :: 업로드한 파일정보를 공지사항 저장/수정 시 연결해야함.
-					
-					const imageUrl = `/tui-editor/image-print?filename=${json.saveFilename}`;
-					callback(imageUrl, 'image alt attribute');
-					} catch (error) {
-	                    console.error('업로드 실패 : ', error);
-	                }
-	        	},
-		    },
+					if (json.id != null) {						
+						files.push(json.id);
+						document.querySelector('#filenames').value = files;
+	
+						const imageUrl = `/tui-editor/image-print?filename=${json.saveFilename}`;
+						callback(imageUrl, 'image alt attribute');
+					} else {
+						modal_show(failed_message);
+					}
+				} catch (error) {
+					modal_show(failed_message);
+					console.error(failed_message + " :: ", error);
+				}
+			},
+		},
 	});
 	
-	editor.setMarkdown(document.querySelector('#ecp1').value);
+	editor.setMarkdown(ecp1.value);
 	
-	document.querySelector('form').addEventListener('submit', function(event) {
-		document.querySelector('#ecp1').value = '';
-		const encodedC = encodeURIComponent(editor.getMarkdown());
-		document.querySelector('#ecp').value = encodedC;
+	$(document).ready(function() {
+		const error_message = /*[[${message}]]*/'';
+		if (error_message != null) {
+			modal_show(error_message);
+		}
+	
+		$('#modal').on('hide.bs.modal', function(event) {
+			window.location.href = '/notice/';
 		});
+	});
 	</script>
 </html>

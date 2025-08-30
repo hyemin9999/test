@@ -79,13 +79,14 @@ public class AdminNoticeController {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("mode", "create");
+			model.addAttribute("item", new Notice());
 			noticeForm.setContent(con);
 
 			return "admin/notice_form";
 		}
 		SiteUser author = this.adminUserService.getItem(principal.getName());
 
-		this.adminNoticeService.create(noticeForm.getSubject(), con, author);
+		this.adminNoticeService.create(noticeForm.getSubject(), con, author, noticeForm.getFileids());
 		return "redirect:/admin/notice/list";
 	}
 
@@ -128,7 +129,7 @@ public class AdminNoticeController {
 
 		// TODO :: 게시판 수정가능 여부?? - 없으면 좋겠다
 
-		this.adminNoticeService.modify(item, noticeForm.getSubject(), con);
+		this.adminNoticeService.modify(item, noticeForm.getSubject(), con, noticeForm.getFileids());
 		return String.format("redirect:/admin/notice/detail/%s", id);
 	}
 

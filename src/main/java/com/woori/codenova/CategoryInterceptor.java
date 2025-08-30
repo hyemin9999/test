@@ -33,7 +33,7 @@ public class CategoryInterceptor implements HandlerInterceptor {
 
 //		System.out.println("===============================================");
 //		System.out.println("==================== BEGIN ====================");
-		System.out.println("Request URI ===> " + request.getRequestURI());
+//		System.out.println("Request URI ===> " + request.getRequestURI());
 		if (url.startsWith("/board/")) {
 
 			String[] str = url.split("/");

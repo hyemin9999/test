@@ -112,13 +112,11 @@
 		</div>
 	</div>
 </div>
-<script layout:fragment="script" type="text/javascript"
-	th:inline="javascript">
+<script layout:fragment="script" th:inline="javascript">
 	$(document).ready(function() {
-		const message = /*[[${message}]]*/'';
-		if (message.length != 0) {
-			$('#message').text(message);
-			$('#modal').modal('show');
+		const error_message = /*[[${message}]]*/'';
+		if (error_message != null) {
+			modal_show(error_message);
 		}
 	});
 </script>

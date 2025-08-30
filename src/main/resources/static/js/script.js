@@ -39,28 +39,25 @@ if (search_kw_element != null) {
 	});
 }
 
-
-function onChange(roleId, checkBox) {
-	if (roleId == 0) { //전체
-
-		console.log("checkBox :: " + $(checkBox).prop("checked"));
-
-		if ($(checkBox).prop("checked")) {
-			$('.role').prop('checked', true);
-		} else {
-			$('.role').prop('checked', false);
-		}
-	}
-}
+//function onChange(roleId, checkBox) {
+//	if (roleId == 0) { //전체
+//		console.log("checkBox :: " + $(checkBox).prop("checked"));
+//		if ($(checkBox).prop("checked")) {
+//			$('.role').prop('checked', true);
+//		} else {
+//			$('.role').prop('checked', false);
+//		}
+//	}
+//}
 
 /**
  * detail.html
  */
-const host = window.location.host;
-const pathname = window.location.pathname;
-
-console.log("host :: " + host);
-console.log("pathname :: " + pathname);
+//const host = window.location.host;
+//const pathname = window.location.pathname;
+//
+//console.log("host :: " + host);
+//console.log("pathname :: " + pathname);
 
 const delete_elements = document.getElementsByClassName("delete");
 if (delete_elements.length > 0) {
@@ -97,7 +94,7 @@ if (favorite_elements.length > 0) {
 /**
  * detail.html - editor
  */
-const ecp1 = document.querySelector('#ecp1');
+const ecp1_element = document.querySelector('#ecp1');
 const viewerElement = document.querySelector('#viewer');
 if (viewerElement) {
 	//	const viewer = new 
@@ -107,4 +104,56 @@ if (viewerElement) {
 		initialValue: ecp1.value
 	});
 }
+
+function onDisplay(d) {
+	const pwd_element = document.getElementById("pwd");
+	if (pwd_element) {
+		if (!d) {
+			pwd_element.style.display = 'flex';
+		} else {
+			pwd_element.style.display = 'none';
+		}
+	}
+
+	const pwdchange_element = document.getElementById("pwdchange");
+	const alert_elements = document.getElementsByClassName("alert alert-danger");
+	if (pwdchange_element) {
+		if (d) {
+			pwdchange_element.style.display = 'flex';
+		} else {
+			pwdchange_element.style.display = 'none';
+			Array.from(alert_elements).forEach(function(element) {
+				element.remove();
+			});
+		}
+	}
+}
+
+/**
+ * modal_show
+ */
+function modal_show(message) {
+	$('#message').text(message);
+	$('#modal').modal('show');
+}
+
+/**
+ * form.html
+ */
+const failed_message = '이미지 업로드가 실패했습니다.';
+const content_element = document.querySelector('#content')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

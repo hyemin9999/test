@@ -16,11 +16,17 @@ input[type=submit] {
 }
 
 .pwd {
-	display: block;
+	display: flex;
 }
 
-.pwdchange {
+#pwdchange {
 	display: none;
+}
+
+.user .col.title {
+	min-width: 100px;
+	max-width: 100px;
+	vertical-align: middle;
 }
 
 .align-b {

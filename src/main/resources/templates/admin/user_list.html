@@ -34,8 +34,7 @@
 					<tr th:unless="${#lists.isEmpty(paging)}" class="text-center"
 						th:each="item, loop : ${paging}">
 						<td
-							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
-						</td>
+							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
 						<td><a
 							th:text="${!item.authority.isEmpty() ? (item.username =='admin' ? '관리자' : '매니저' ) : ''}"></a></td>
 						<td><a th:href="@{|/admin/user/list/${item.id}|}"
@@ -169,14 +168,12 @@
 	</div>
 </div>
 
-<script layout:fragment="script" type="text/javascript"
-	th:inline="javascript">
-	$(document).ready(function() {
-		const message = /*[[${message}]]*/'';
-		if (message.length != 0) {
-			$('#message').text(message);
-			$('#modal').modal('show');
-		}
-	});
+<script layout:fragment="script" th:inline="javascript">
+    $(document).ready(function () {
+        const error_message = /*[[${message}]]*/'';
+        if (error_message != null) {
+            modal_show(error_message);
+        }
+    });
 </script>
 </html>

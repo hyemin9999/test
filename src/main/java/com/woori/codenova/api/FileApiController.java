@@ -97,11 +97,14 @@ public class FileApiController {
 			item.setSaveFilepath(path);
 			item.setUploadDate(LocalDateTime.now());
 
+//			return item;
 			return uploadFileRepository.save(item);
 
 		} catch (IOException e) {
 			// 예외 처리는 따로 해주는 게 좋습니다.
-			throw new RuntimeException(e);
+//			throw new RuntimeException(e);
+
+			return new UploadFile();
 		}
 	}
 
@@ -121,7 +124,8 @@ public class FileApiController {
 		// 파일이 없는 경우 예외 throw
 		File uploadedFile = new File(absolutePath + "/" + path + "/" + filename);
 		if (uploadedFile.exists() == false) {
-			throw new RuntimeException();
+			// throw new RuntimeException();
+			return null;
 		}
 
 		try {
@@ -133,5 +137,4 @@ public class FileApiController {
 			throw new RuntimeException(e);
 		}
 	}
-
 }

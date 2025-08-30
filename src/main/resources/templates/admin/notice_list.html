@@ -53,8 +53,7 @@
 						<td><a href="javascript:void(0);"
 							class="delete btn btn-sm btn-outline-info"
 							th:classappend="${item.author != null and #authentication.getPrincipal().getUsername() != item.author.username} ? disabled-link"
-							th:data-uri="@{|/admin/notice/delete/${item.id}|}" th:text="삭제"
-							></a></td>
+							th:data-uri="@{|/admin/notice/delete/${item.id}|}" th:text="삭제"></a></td>
 					</tr>
 					<tr class="text-center" th:if="${#lists.isEmpty(paging)}">
 						<td colspan="6">공지사항이 존재하지 않습니다.</td>

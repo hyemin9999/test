@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.woori.codenova.entity.Notice;
 import com.woori.codenova.entity.SiteUser;
+import com.woori.codenova.entity.UploadFile;
 import com.woori.codenova.repository.NoticeRepository;
+import com.woori.codenova.repository.UploadFileRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -27,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AdminNoticeService {
 	private final NoticeRepository noticeRepository;
+	private final UploadFileRepository uploadFileRepository;
 
 	// 목록 - 페이징 - 검색
 	public Page<Notice> getList(int page, String kw, String field) {
@@ -57,7 +60,7 @@ public class AdminNoticeService {
 	}
 
 	// 등록
-	public void create(String subject, String contents, SiteUser uesr) {
+	public void create(String subject, String contents, SiteUser uesr, List<Long> fileids) {
 		Notice item = new Notice();
 		item.setSubject(subject);
 		item.setContents(contents);
@@ -66,17 +69,18 @@ public class AdminNoticeService {
 		item.setViewCount(0);
 
 		noticeRepository.save(item);
+		setFileByNotice(fileids, item);
 	}
 
 	// 수정
-	public void modify(Notice item, String subject, String content) {
+	public void modify(Notice item, String subject, String content, List<Long> fileids) {
 		item.setSubject(subject);
 		item.setContents(content);
 		item.setModifyDate(LocalDateTime.now());
-
 		// TODO :: 게시판 수정가능여부
 
 		noticeRepository.save(item);
+		setFileByNotice(fileids, item);
 	}
 
 	// 삭제
@@ -85,6 +89,18 @@ public class AdminNoticeService {
 		// TODO :: 공지사항 삭제시 연결된 게시글과의 관계 제거 필!!!
 
 		noticeRepository.delete(item);
+	}
+
+	public void setFileByNotice(List<Long> fileids, Notice nitem) {
+		if (fileids != null && fileids.size() != 0) {
+			for (Long fileid : fileids) {
+				UploadFile file = uploadFileRepository.findById(fileid).orElse(null);
+				if (file != null) {
+					file.setNotice(nitem);
+					uploadFileRepository.save(file);
+				}
+			}
+		}
 	}
 
 	// 검색

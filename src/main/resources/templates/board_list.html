@@ -2,7 +2,7 @@
 <html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <div layout:fragment="content" class="container my-3">
-	<h5 class="border-bottom pb-2">[[${menuName}]]</h5>
+	<h5 class="border-bottom pb-2">[[${menuName}]] 게시판</h5>
 
 	<div class="row">
 		<div class="col">
@@ -41,8 +41,7 @@
 					<tr th:if="${!paging.isEmpty()}" class="text-center"
 						th:each="item, loop : ${paging}">
 						<td
-							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}">
-						</td>
+							th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
 						<td class="text-start"><a
 							th:href="@{|/board/detail/${item.id}|}" th:text="${item.subject}"></a><span
 							class="text-danger small ms-2"
